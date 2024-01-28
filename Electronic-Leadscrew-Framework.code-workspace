@@ -16,7 +16,13 @@
 			"functional": "cpp",
 			"memory": "cpp",
 			"optional": "cpp"
-		}
+		},
+		"cmake.ctestArgs": [
+			"--output-on-failure",
+			"gtest_break_on_failure"
+		],
+		"cmake.allowCommentsInPresetsFile": true,
+		"cmake.allowUnsupportedPresetsVersions": true
 	},
 	"launch": {
 		"version": "0.2.0",
@@ -35,8 +41,22 @@
 				"type": "cppvsdbg",
 				"request": "launch",
 				// Resolved by CMake Tools:
-				"program": "${cmake.cmakePath}/ctest.exe",
-				"args": [ "${cmake.testArgs}"],
+				"program": "${cmake.testProgram}",
+				"cwd": "${cmake.testWorkingDirectory}",
+				"args": [ "${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure"],
+				// "preLaunchTask": {
+				// 	"type": "shell",
+				// 	"label": "cmake",
+				// 	"command": "build",
+				// 	"args": [
+				// 		"--build",
+				// 		"${workspaceFolder}",
+				// 		"--target",
+				// 		"RUN_TESTS",
+				// 		"--config",
+				// 		"Debug"
+				// 	],
+				// }
 			}
 		],
 		"compounds": []

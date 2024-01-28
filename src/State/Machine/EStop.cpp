@@ -21,7 +21,7 @@ etl::fsm_state_id_t EStopState::on_enter_state()
   etl::fsm_state_id_t EStopState::on_event(const ResetMessage& msg)
   {
     ELSF_LOG_INFO("  S1 : Received message RESET\n");
-    return etl::ifsm_state::No_State_Change; // uhh, maybe we don't need this message, but I need to play with the FSM
+    return MachineStateId::IDLE;
   }
 
   //***************************************************************************

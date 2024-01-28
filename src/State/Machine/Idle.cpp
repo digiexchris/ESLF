@@ -29,7 +29,7 @@
   etl::fsm_state_id_t IdleState::on_event(const StartAtMessage& msg)
   {
     ELSF_LOG_INFO("  S1 : Received message START AT\n");
-    return MachineStateId::RUNNING;
+    return etl::ifsm_state::No_State_Change; //TODO return the child state WAITING_FOR_SYNC
   }
 
   //***************************************************************************

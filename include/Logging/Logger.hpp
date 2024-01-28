@@ -21,7 +21,7 @@
 
 #define ELSF_LOG_MAX_MESSAGE_LENGTH 256
 
-#define ELSF_LOG_INIT(...) LogSingleton::instance().SetBackend(__VA_ARGS__)
+#define ELSF_LOG_INIT(...) Log<ELSF_LOG_MAX_MESSAGE_LENGTH>::Init(__VA_ARGS__)
 #define ELSF_LOG_INFO(...) LogSingleton::instance().Info(__VA_ARGS__)
 #define ELSF_LOG_WARN(...) LogSingleton::instance().Warn(__VA_ARGS__)
 #define ELSF_LOG_ERROR(...) LogSingleton::instance().Error(__VA_ARGS__)
