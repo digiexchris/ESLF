@@ -18,7 +18,9 @@ endif()
 
 project ("ELSF")
 
-add_library(${PROJECT_NAME} INTERFACE)
+file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+
+add_library(${PROJECT_NAME} src/Encoder/IEncoder.cpp src/State/Machine/Machine.cpp src/State/Machine/EStop.cpp src/State/Machine/Idle.cpp src/State/Machine/Running.cpp)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 # This allows users which use the add_subdirectory or FetchContent
 # to use the same target as users which use find_package
@@ -34,7 +36,7 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
 endif()
 
 add_subdirectory(lib/etl)
-target_link_libraries(ELSF INTERFACE etl)
+target_link_libraries(ELSF PRIVATE etl)
 
 # TODO: Add tests and install targets if needed.
 if (BUILD_ESLF_TESTS)

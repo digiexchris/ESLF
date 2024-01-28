@@ -1,21 +1,25 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(elsf_unit_tests LANGUAGES CXX)
+include(CTest)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 FetchContent_Declare(
  googletest
  URL https://github.com/google/googletest/archive/refs/heads/main.zip
 )
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+file(GLOB_RECURSE TESTS ${CMAKE_SOURCE_DIR}/test/*.cpp)
+
 add_executable(elsf_tests
-	Encoder/test_Encoder.cpp
-	State/Machine/test_Init.cpp
+  ${TESTS}
   )
 
 target_compile_definitions(elsf_tests PRIVATE -Delsf_DEBUG)
@@ -27,7 +31,12 @@ target_link_libraries(
   elsf_tests
   GTest::gtest_main
   etl
+  elsf::elsf
 )
 
 include(GoogleTest PUBLIC)
+#  find_package(PkgConfig)
+#  pkg_search_module(GTEST REQUIRED gtest_main)
+#  target_link_libraries(elsf_tests PRIVATE ${GTEST_LDFLAGS})
+#  target_compile_options(elsf_tests PRIVATE ${GTEST_CFLAGS})
 gtest_discover_tests(elsf_tests)

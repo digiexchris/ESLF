@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
-#include "../../include/Encoder/IEncoder.hpp"
+#include "Encoder/IEncoder.hpp"
 #include <stdint.h>
-
 
 class MockEncoder : public Encoder {
      public:

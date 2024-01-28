@@ -6,6 +6,39 @@
 	],
 	"settings": {
 		"cmake.configureOnOpen": true,
-		"cmake.options.statusBarVisibility": "visible"
+		"cmake.options.statusBarVisibility": "visible",
+		"files.associations": {
+			"format": "cpp",
+			"chrono": "cpp",
+			"system_error": "cpp",
+			"any": "cpp",
+			"exception": "cpp",
+			"functional": "cpp",
+			"memory": "cpp",
+			"optional": "cpp"
+		}
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			// {
+			// 	"name": "(ctest gdb) Launch",
+			// 	"type": "cppdbg",
+			// 	"request": "launch",
+			// 	// Resolved by CMake Tools:
+			// 	"cwd": "${cmake.testWorkingDirectory}",
+			// 	"program": "${cmake.testProgram}",
+			// 	"args": [ "${cmake.testArgs}"],
+			// },
+			{
+				"name": "(ctest msvc) Launch",
+				"type": "cppvsdbg",
+				"request": "launch",
+				// Resolved by CMake Tools:
+				"program": "${cmake.cmakePath}/ctest.exe",
+				"args": [ "${cmake.testArgs}"],
+			}
+		],
+		"compounds": []
 	}
 }
