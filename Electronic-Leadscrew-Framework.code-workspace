@@ -15,7 +15,18 @@
 			"exception": "cpp",
 			"functional": "cpp",
 			"memory": "cpp",
-			"optional": "cpp"
+			"optional": "cpp",
+			"type_traits": "cpp",
+			"atomic": "cpp",
+			"deque": "cpp",
+			"forward_list": "cpp",
+			"ios": "cpp",
+			"list": "cpp",
+			"vector": "cpp",
+			"xhash": "cpp",
+			"xiosbase": "cpp",
+			"xstring": "cpp",
+			"xtree": "cpp"
 		},
 		"cmake.ctestArgs": [
 			"--output-on-failure",

@@ -9,16 +9,36 @@
 #include <etl/utility.h>
 #include <etl/iterator.h>
 #include <etl/memory.h> // Include for etl::shared_ptr
+#include <etl/message_packet.h>
+#include "State/Machine/transition.hpp"
 
-TEST(idle_state, one_transition_from_reset) {
-    // Define test cases using etl::shared_ptr
-    etl::vector<etl::pair<etl::shared_ptr<etl::imessage>, MachineStateId>, 6> testCases = {
-        etl::make_pair(etl::shared_ptr<etl::imessage>(new StartMessage()), MachineStateId::RUNNING),
-        etl::make_pair(etl::shared_ptr<etl::imessage>(new StartAtMessage(0)), MachineStateId::IDLE),
-        etl::make_pair(etl::shared_ptr<etl::imessage>(new StopMessage()), MachineStateId::IDLE),
-        etl::make_pair(etl::shared_ptr<etl::imessage>(new StopAtMessage(0)), MachineStateId::IDLE),
-        etl::make_pair(etl::shared_ptr<etl::imessage>(new EStopMessage()), MachineStateId::ESTOP),
-        etl::make_pair(etl::shared_ptr<etl::imessage>(new ResetMessage()), MachineStateId::IDLE)
+class TransitionFromInitTest : public testing::Test {
+protected:
+    // void SetUp() override {
+    //     //transitions.clear();
+    //     //TODO I wonder if it's trying to access uninitialized transitions 
+    //     transitions= etl::vector<TransitionCase,6>( {
+    //         TransitionCase( MachineStateId::IDLE, new StartMessage(), MachineStateId::RUNNING ),
+    //         TransitionCase( MachineStateId::IDLE, new StartAtMessage(0.0), MachineStateId::IDLE ),
+    //         TransitionCase( MachineStateId::IDLE, new StopMessage(), MachineStateId::IDLE ),
+    //         TransitionCase( MachineStateId::IDLE, new StopAtMessage(0.0), MachineStateId::IDLE ),
+    //         TransitionCase( MachineStateId::IDLE, new EStopMessage(), MachineStateId::ESTOP ),
+    //         TransitionCase( MachineStateId::IDLE, new ResetMessage(), MachineStateId::IDLE )
+
+    //     });
+    // };
+};
+
+TEST_F(TransitionFromInitTest, one_transition_from_reset) {
+
+    const etl::pair<MachineMessageInterface&, MachineStateId> transitions[] = 
+    {
+        {StartMessage(), MachineStateId::RUNNING},
+        {StartAtMessage(100), MachineStateId::IDLE},
+        {StopMessage(), MachineStateId::IDLE},
+        {StopAtMessage(200), MachineStateId::IDLE},
+        {EStopMessage(), MachineStateId::ESTOP},
+        {ResetMessage(), MachineStateId::IDLE}
     };
 
     Machine fsm;
@@ -36,21 +56,20 @@ TEST(idle_state, one_transition_from_reset) {
     etl::fsm_state_id_t currentState = fsm.get_state_id();
     EXPECT_EQ(currentState, static_cast<int>(MachineStateId::IDLE)) << "State is not IDLE at start";
 
-    for (auto& testCase : testCases) {
-        size_t index = std::distance(testCases.begin(), &testCase);
-
-        etl::send_message(fsm, ResetMessage());
+    for (int i = 0; i != sizeof(transitions); i++) {
+        fsm.reset();
+        fsm.start();
         fsm.process_queue();
 
         currentState = fsm.get_state_id();
-        EXPECT_EQ(currentState, static_cast<int>(MachineStateId::IDLE)) << "State is not IDLE after reset";
+        EXPECT_EQ(currentState, static_cast<int>(MachineStateId::IDLE)) << "State is not IDLE after reset for case " << i;
 
-        etl::send_message(fsm, *testCase.first);
+        etl::send_message(fsm, transitions[i].first);
 
         fsm.process_queue();
 
         currentState = fsm.get_state_id();
-        EXPECT_EQ(currentState, static_cast<int>(testCase.second)) << "Case " << index << " failed";
+        EXPECT_EQ(currentState, static_cast<int>(transitions[i].second)) << "Case " << i << " failed";
     }
 
     // No need for explicit cleanup; etl::shared_ptrs in the vector will automatically clean up
