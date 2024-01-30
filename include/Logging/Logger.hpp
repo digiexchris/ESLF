@@ -21,32 +21,37 @@
 
 #define ELSF_LOG_MAX_MESSAGE_LENGTH 256
 
-#define ELSF_LOG_INIT(...) Log<ELSF_LOG_MAX_MESSAGE_LENGTH>::Init(__VA_ARGS__)
-#define ELSF_LOG_INFO(...) LogSingleton::instance().Info(__VA_ARGS__)
-#define ELSF_LOG_WARN(...) LogSingleton::instance().Warn(__VA_ARGS__)
-#define ELSF_LOG_ERROR(...) LogSingleton::instance().Error(__VA_ARGS__)
+#define ELSF_LOG_INIT(...) Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>::Init(__VA_ARGS__)
+#define ELSF_LOG_INFO(...) Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>::Info(__VA_ARGS__)
+#define ELSF_LOG_WARN(...) Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>::Warn(__VA_ARGS__)
+#define ELSF_LOG_ERROR(...) Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>::Error(__VA_ARGS__)
+
+#define LOGGER_INIT_EXCEPTION(reason) LoggerInitException((reason), __FILE__, __LINE__)
 
 class LoggerInitException : public etl::exception
 {
+public:
+    LoggerInitException(const char* reason, const char* file, int line)
+        : etl::exception(reason, file, line) {}
 };
+
 
 template <size_t MaxMessageLength>
 class ILogBackend
 {
 public:
+    virtual ~ILogBackend() = default;
     virtual void Info(etl::string<MaxMessageLength> message, ...) = 0;
     virtual void Warn(etl::string<MaxMessageLength> message, ...) = 0;
     virtual void Error(etl::string<MaxMessageLength> message, ...) = 0;
 };
-
-
 
 template <size_t S>
 class Log// : public etl::singleton<Log<S>>
 {
 public:
     
-    ~Log(){
+    virtual ~Log(){
         delete backend;
     }
 
@@ -89,7 +94,7 @@ public:
 
     void ThrowIfBackendNotSet() 
     {
-        ETL_ASSERT(backendSet, ETL_ERROR_WITH_VALUE(ETL_ERROR(LoggerInitException),"Log backend not set, call ESP_LOG_INIT"));
+        ETL_ASSERT(backendSet, LOGGER_INIT_EXCEPTION("Log backend not set, call ESP_LOG_INIT"));
         // if(!backendSet)
         // {
         //     throw etl::exception("Log backend not set, call ESP_LOG_INIT");
@@ -106,3 +111,43 @@ private:
 };
 
 using LogSingleton = etl::singleton<Log<ELSF_LOG_MAX_MESSAGE_LENGTH>>;
+
+template <size_t S>
+class Logger 
+{
+    public:
+        static void ThrowIfInvalid() {
+                ETL_ASSERT(LogSingleton::is_valid(), LOGGER_INIT_EXCEPTION("Log backend not set, call ESP_LOG_INIT"));
+                ETL_ASSERT(LogSingleton::instance().IsBackendSet(), LOGGER_INIT_EXCEPTION("Log backend not set, call ESP_LOG_INIT"));;
+        }
+
+        static void Info(etl::string<S> message, ...) {
+            ThrowIfInvalid();
+            va_list args;
+            va_start(args, message);
+            LogSingleton::instance().Info(message, args);
+        }
+
+        static void Warn(etl::string<S> message, ...) {
+            ThrowIfInvalid();
+            va_list args;
+            va_start(args, message);
+            LogSingleton::instance().Warn(message, args);
+        }
+
+        static void Error(etl::string<S> message, ...) {
+            ThrowIfInvalid();
+            va_list args;
+            va_start(args, message);
+            LogSingleton::instance().Error(message, args);
+        }
+
+        static void Init(ILogBackend<S>* backend) {
+            if(!LogSingleton::is_valid())
+            {
+                LogSingleton::create();
+            }
+
+            LogSingleton::instance().Init(backend);
+        }
+};

@@ -1,8 +1,9 @@
 #include "setup.hpp"
 
 #include <gtest/gtest.h>
+#include "etl_profile.h"
 
-auto env = testing::AddGlobalTestEnvironment(new ELSFEnvironment);
+//auto env = testing::AddGlobalTestEnvironment(new ELSFEnvironment);
 int main(int argc, char **argv)
 {
     testing::InitGoogleTest(&argc, argv);

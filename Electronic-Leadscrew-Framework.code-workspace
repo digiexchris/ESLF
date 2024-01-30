@@ -30,45 +30,100 @@
 		},
 		"cmake.ctestArgs": [
 			"--output-on-failure",
-			"gtest_break_on_failure"
+			"--gtest_break_on_failure"
 		],
 		"cmake.allowCommentsInPresetsFile": true,
 		"cmake.allowUnsupportedPresetsVersions": true
 	},
+	"tasks":
+	{
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "configure-debug-test",
+				"type": "shell",
+				"command": "cmake",
+				"args": [
+					"--preset",
+					"x64-debug-test"  
+				]
+			},
+			{
+				"label": "build-debug-test",
+				"type": "shell",
+				"command": "cmake",
+				"args": [
+					"--build",
+					"${workspaceFolder}/out/build/x64-debug-test",
+				],
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+				"problemMatcher": ["$msCompile"]
+			}
+		]
+	},
 	"launch": {
 		"version": "0.2.0",
 		"configurations": [
+			{
+				"type": "lldb",
+				"request": "launch",
+				"name": "Launch LLDB",
+				"program": "${workspaceFolder}\\out\\build\\x64-debug-test\\test\\elsf_tests.exe",
+				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure"],
+				"cwd": "${workspaceFolder}",
+				"preLaunchTask": "build-debug-test",
+			},
+
 			// {
-			// 	"name": "(ctest gdb) Launch",
+			// 	"name": "(gdb) Launch",
+			// 	"type": "cppdbg",
+			// 	"request": "launch",
+			// 	"program": "${workspaceFolder}\\out\\build\\x64-debug-test\\test\\elsf_tests.exe",
+			// 	"stopAtEntry": false,
+			// 	//"cwd": "${cmake.testWorkingDirectory}",
+			// 	"cwd": "${workspaceFolder}/out/build/x64-debug-test/test",
+			// 	"args": [ "${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure"],
+			// 	"preLaunchTask": "build-debug-test",
+			// 	"environment": [],
+			// 	"externalConsole": false,
+			// 	"MIMode": "gdb",
+			// 	"miDebuggerPath": "gdb.exe",
+			// 	"setupCommands": [
+			// 		{
+			// 			"description": "Enable pretty-printing for gdb",
+			// 			"text": "-enable-pretty-printing",
+			// 			"ignoreFailures": true
+			// 		},
+			// 		{
+			// 			"description": "Set Disassembly Flavor to Intel",
+			// 			"text": "-gdb-set disassembly-flavor intel",
+			// 			"ignoreFailures": true
+			// 		}
+			// 	]
+			// },
+			// {
+			// 	"name": "(ctest) Launch",
 			// 	"type": "cppdbg",
 			// 	"request": "launch",
 			// 	// Resolved by CMake Tools:
-			// 	"cwd": "${cmake.testWorkingDirectory}",
 			// 	"program": "${cmake.testProgram}",
-			// 	"args": [ "${cmake.testArgs}"],
+			// 	"cwd": "${cmake.testWorkingDirectory}",
+			// 	"args": [ "${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure"],
+			// 	"preLaunchTask": "build-debug-test"
 			// },
-			{
-				"name": "(ctest msvc) Launch",
-				"type": "cppvsdbg",
-				"request": "launch",
-				// Resolved by CMake Tools:
-				"program": "${cmake.testProgram}",
-				"cwd": "${cmake.testWorkingDirectory}",
-				"args": [ "${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure"],
-				// "preLaunchTask": {
-				// 	"type": "shell",
-				// 	"label": "cmake",
-				// 	"command": "build",
-				// 	"args": [
-				// 		"--build",
-				// 		"${workspaceFolder}",
-				// 		"--target",
-				// 		"RUN_TESTS",
-				// 		"--config",
-				// 		"Debug"
-				// 	],
-				// }
-			}
+			// {
+			// 	"name": "(ctest) Launch Debug",
+			// 	"type": "cppdbg",
+			// 	"request": "launch",
+			// 	// Resolved by CMake Tools:
+			// 	"program": "${cmake.cmakePath}/cmake.exe",
+			// 	"cwd": "${cmake.testWorkingDirectory}",
+			// 	"args": [ "--target Debug ${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure"],
+			// 	"preLaunchTask": "build-debug-test"
+			// }
 		],
 		"compounds": []
 	}

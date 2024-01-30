@@ -1,3 +1,4 @@
+#define GTEST_CATCH_EXCEPTIONS 0
 #include <gtest/gtest.h>
 #include "State/Machine/Machine.hpp"
 #include "State/Machine/Running.hpp"
@@ -10,7 +11,6 @@
 #include <etl/iterator.h>
 #include <etl/memory.h> // Include for etl::shared_ptr
 #include <etl/message_packet.h>
-#include "State/Machine/transition.hpp"
 
 class TransitionFromInitTest : public testing::Test {
 protected:
@@ -30,17 +30,6 @@ protected:
 };
 
 TEST_F(TransitionFromInitTest, one_transition_from_reset) {
-
-    const etl::pair<MachineMessageInterface&, MachineStateId> transitions[] = 
-    {
-        {StartMessage(), MachineStateId::RUNNING},
-        {StartAtMessage(100), MachineStateId::IDLE},
-        {StopMessage(), MachineStateId::IDLE},
-        {StopAtMessage(200), MachineStateId::IDLE},
-        {EStopMessage(), MachineStateId::ESTOP},
-        {ResetMessage(), MachineStateId::IDLE}
-    };
-
     Machine fsm;
     RunningState runningState;
     IdleState idleState;
@@ -49,28 +38,36 @@ TEST_F(TransitionFromInitTest, one_transition_from_reset) {
     // The list of states.
     etl::ifsm_state* stateList[] = { &idleState, &runningState, &eStopState };
 
-    // Set up the FSM
     fsm.set_states(stateList, 3);
     fsm.start();
 
-    etl::fsm_state_id_t currentState = fsm.get_state_id();
-    EXPECT_EQ(currentState, static_cast<int>(MachineStateId::IDLE)) << "State is not IDLE at start";
+    struct Transition {
+        etl::imessage* message;
+        MachineStateId expectedState;
+    };
 
-    for (int i = 0; i != sizeof(transitions); i++) {
+    const Transition transitions[] = {
+        { new StartMessage(), MachineStateId::RUNNING },
+        { new StartAtMessage(100), MachineStateId::IDLE },
+        { new StopMessage(), MachineStateId::IDLE },
+        { new StopAtMessage(200), MachineStateId::IDLE },
+        { new EStopMessage(), MachineStateId::ESTOP },
+        { new ResetMessage(), MachineStateId::IDLE }
+    };
+
+    for (const auto& transition : transitions) {
         fsm.reset();
         fsm.start();
+
+        etl::fsm_state_id_t currentState = fsm.get_state_id();
+        ASSERT_EQ(currentState, static_cast<int>(MachineStateId::IDLE)) << "State is not IDLE after reset for transition";
+
+        etl::send_message(fsm, *transition.message);
         fsm.process_queue();
 
         currentState = fsm.get_state_id();
-        EXPECT_EQ(currentState, static_cast<int>(MachineStateId::IDLE)) << "State is not IDLE after reset for case " << i;
+        ASSERT_EQ(currentState, static_cast<int>(transition.expectedState)) << "Transition failed";
 
-        etl::send_message(fsm, transitions[i].first);
-
-        fsm.process_queue();
-
-        currentState = fsm.get_state_id();
-        EXPECT_EQ(currentState, static_cast<int>(transitions[i].second)) << "Case " << i << " failed";
+        delete transition.message;  // Clean up the message
     }
-
-    // No need for explicit cleanup; etl::shared_ptrs in the vector will automatically clean up
 }

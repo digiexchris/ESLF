@@ -3,7 +3,7 @@
 #include "Logging/Logger.hpp"
 #include <etl/string.h>
 #include <stdarg.h>
-#include "helpers.hpp"
+#include "Helpers.hpp"
 
 template <size_t MaxMessageLength, size_t MaxPrefixLength>
 class TestLogBackend : public ILogBackend<MaxMessageLength>

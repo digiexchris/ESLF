@@ -22,17 +22,19 @@ add_executable(elsf_tests
   ${TESTS}
   )
 
-target_compile_definitions(elsf_tests PRIVATE -Delsf_DEBUG)
+target_compile_definitions(elsf_tests PRIVATE -DELSF_DEBUG)
 enable_testing()
 
 include_directories(./)
 
 target_link_libraries(
   elsf_tests
+  gtest gtest_main
   GTest::gtest_main
   etl
   elsf::elsf
 )
+set(GTEST_CATCH_EXCEPTIONS 0)
 
 include(GoogleTest PUBLIC)
 #  find_package(PkgConfig)
