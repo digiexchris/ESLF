@@ -11,9 +11,18 @@
 #include <etl/iterator.h>
 #include <etl/memory.h> // Include for etl::shared_ptr
 #include <etl/message_packet.h>
+#include <memory>
+//#include "Logging/TestLogBackend.hpp"
+#include "Logging/Logger.hpp"
+#include "DefaultUnitTest.hpp"
 
-class TransitionFromInitTest : public testing::Test {
+class TransitionFromInitTest : public DefaultUnitTest {
 protected:
+    void SetUp() override {
+        //GTEST_SKIP() << "Skipping all tests for this fixture";
+        //ESLF_LOG_INIT(new TestLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH, 8>());
+        //GTEST_FLAG_SET(catch_exceptions, false);
+    }
     // void SetUp() override {
     //     //transitions.clear();
     //     //TODO I wonder if it's trying to access uninitialized transitions 
@@ -42,17 +51,17 @@ TEST_F(TransitionFromInitTest, one_transition_from_reset) {
     fsm.start();
 
     struct Transition {
-        etl::imessage* message;
+        std::shared_ptr<etl::imessage> message;
         MachineStateId expectedState;
     };
 
     const Transition transitions[] = {
-        { new StartMessage(), MachineStateId::RUNNING },
-        { new StartAtMessage(100), MachineStateId::IDLE },
-        { new StopMessage(), MachineStateId::IDLE },
-        { new StopAtMessage(200), MachineStateId::IDLE },
-        { new EStopMessage(), MachineStateId::ESTOP },
-        { new ResetMessage(), MachineStateId::IDLE }
+        { std::make_shared<StartMessage>(), MachineStateId::RUNNING },
+        { std::make_shared<StartAtMessage>(100), MachineStateId::IDLE },
+        { std::make_shared<StopMessage>(), MachineStateId::IDLE },
+        { std::make_shared<StopAtMessage>(200), MachineStateId::IDLE },
+        { std::make_shared<EStopMessage>(), MachineStateId::ESTOP },
+        { std::make_shared<ResetMessage>(), MachineStateId::IDLE }
     };
 
     for (const auto& transition : transitions) {
@@ -62,12 +71,15 @@ TEST_F(TransitionFromInitTest, one_transition_from_reset) {
         etl::fsm_state_id_t currentState = fsm.get_state_id();
         ASSERT_EQ(currentState, static_cast<int>(MachineStateId::IDLE)) << "State is not IDLE after reset for transition";
 
-        etl::send_message(fsm, *transition.message);
-        fsm.process_queue();
+        std::shared_ptr<etl::imessage> message = transition.message;
+
+        fsm.receive(*message);
+        //etl::send_message(fsm,*message);
+        // #CCHATELAIN todo: remove this from the fsm, have the fsm as a reciever. Going to use a message bus for multiple routers/recievers. fsm.process_queue();
 
         currentState = fsm.get_state_id();
         ASSERT_EQ(currentState, static_cast<int>(transition.expectedState)) << "Transition failed";
 
-        delete transition.message;  // Clean up the message
+        //delete transition.message;  // Clean up the message
     }
 }

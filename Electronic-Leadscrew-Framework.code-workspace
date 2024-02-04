@@ -26,11 +26,15 @@
 			"xhash": "cpp",
 			"xiosbase": "cpp",
 			"xstring": "cpp",
-			"xtree": "cpp"
+			"xtree": "cpp",
+			"bitset": "cpp",
+			"random": "cpp"
 		},
 		"cmake.ctestArgs": [
 			"--output-on-failure",
-			"--gtest_break_on_failure"
+			"--gtest_break_on_failure",
+			"--gtest_stack_trace_depth=10", 
+			"--gmock_verbose=info"
 		],
 		"cmake.allowCommentsInPresetsFile": true,
 		"cmake.allowUnsupportedPresetsVersions": true
@@ -39,29 +43,30 @@
 	{
 		"version": "2.0.0",
 		"tasks": [
-			{
-				"label": "configure-debug-test",
-				"type": "shell",
-				"command": "cmake",
-				"args": [
-					"--preset",
-					"x64-debug-test"  
-				]
-			},
-			{
-				"label": "build-debug-test",
-				"type": "shell",
-				"command": "cmake",
-				"args": [
-					"--build",
-					"${workspaceFolder}/out/build/x64-debug-test",
-				],
-				"group": {
-					"kind": "build",
-					"isDefault": true
-				},
-				"problemMatcher": ["$msCompile"]
-			}
+			// {
+			// 	"label": "configure-debug-test",
+			// 	"type": "shell",
+			// 	"command": "cmake",
+			// 	"args": [
+			// 		"--preset",
+			// 		"x64-debug-test"  
+			// 	]
+			// },
+			// {
+			// 	"label": "build-debug-test",
+			// 	"type": "shell",
+			// 	"command": "cmake",
+			// 	"args": [
+			// 		"--build",
+			// 		"${workspaceFolder}/out/build/x64-debug-test",
+			// 	],
+			// 	"group": {
+			// 		"kind": "build",
+			// 		"isDefault": true
+			// 	},
+			// 	"problemMatcher": ["$msCompile"],
+			// 	"dependsOn": "configure-debug-test"
+			// }
 		]
 	},
 	"launch": {
@@ -72,9 +77,9 @@
 				"request": "launch",
 				"name": "Launch LLDB",
 				"program": "${workspaceFolder}\\out\\build\\x64-debug-test\\test\\elsf_tests.exe",
-				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure"],
+				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure", "--gtest_stack_trace_depth=10", "--gmock_verbose=info"],
 				"cwd": "${workspaceFolder}",
-				"preLaunchTask": "build-debug-test",
+				// "preLaunchTask": "build-debug-test",
 			},
 
 			// {

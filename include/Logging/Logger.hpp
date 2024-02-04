@@ -46,14 +46,16 @@ public:
     virtual void Error(etl::string<MaxMessageLength> message, ...) = 0;
 };
 
+
+
+
+/**
+ * LOG
+*/
 template <size_t S>
 class Log// : public etl::singleton<Log<S>>
 {
 public:
-    
-    virtual ~Log(){
-        delete backend;
-    }
 
     static void Init(ILogBackend<S>* backend) {
         LogSingleton::create();
@@ -61,8 +63,18 @@ public:
     }
     void SetBackend(ILogBackend<S>* aBackend) 
     {
-        backend = aBackend;
+        if(aBackend == nullptr)
+        {
+            throw LoggerInitException("Log backend cannot be null", __FILE__, __LINE__);
+        }
+        
+        backend = etl::unique_ptr<ILogBackend<S>>(aBackend);
         backendSet = true;
+    };
+
+    ILogBackend<S>* GetBackend() 
+    {
+        return backend.get();
     };
 
     void Info(etl::string<S> message, ...)
@@ -106,7 +118,7 @@ public:
         return backendSet;
     }
 private:
-    ILogBackend<S>* backend;
+    etl::unique_ptr<ILogBackend<S>> backend;
     bool backendSet;
 };
 
@@ -145,6 +157,11 @@ class Logger
         static void Init(ILogBackend<S>* backend) {
             if(!LogSingleton::is_valid())
             {
+                LogSingleton::create();
+            }
+            else
+            {
+                LogSingleton::destroy();
                 LogSingleton::create();
             }
 

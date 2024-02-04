@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "Encoder/IEncoder.hpp"
 #include <stdint.h>
+#include "DefaultUnitTest.hpp"
 
 class MockEncoder : public Encoder {
      public:
@@ -11,20 +12,11 @@ class MockEncoder : public Encoder {
           }
 };
 
-/*
-struct Status {
-        int32_t count;
-        bool direction;
-        uint32_t timestamp;
-        uint16_t speed;
-        uint32_t lastCount;
-        bool lastDirection;
-        uint32_t lastTimestamp;
-        uint16_t lastSpeed;
-    };
-*/
+class EncoderGetCounterPeriodTest : public DefaultUnitTest {
+protected:
+};
 
-TEST(get_counter_period, spindle_stopped)
+TEST_F(EncoderGetCounterPeriodTest, spindle_stopped)
 {
      MockEncoder encoder;
      encoder.SetStatus({0, false, 0, 0, 0, false, 0, 0});
@@ -35,7 +27,7 @@ TEST(get_counter_period, spindle_stopped)
      //zassert_equal(256, fixture->max_size);
 }
 
-TEST(get_counter_period, 100ms_per_count_over_10_counts)
+TEST_F(EncoderGetCounterPeriodTest, 100ms_per_count_over_10_counts)
 {
      Encoder::Status status = {0, false, 1000, 0, 0, false, 0, 0};
      status.count = 10;

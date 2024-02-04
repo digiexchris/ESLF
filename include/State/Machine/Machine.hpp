@@ -25,13 +25,13 @@ class Machine : public etl::hfsm
 public:
 
   Machine();
-  void receive(const etl::imessage& msg_) override;
-  void process_queue();
+  //void receive(const etl::imessage& msg_) override;
+  //void process_queue();
 
 private:
 
   typedef etl::message_packet<StartMessage, StartAtMessage, StopMessage, StopAtMessage, EStopMessage, ResetMessage> message_packet;
-  etl::queue<message_packet, 10> queue;
+  //etl::queue<message_packet, 10> queue;
 };
 
 

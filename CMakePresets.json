@@ -9,7 +9,9 @@
             "installDir": "${sourceDir}/out/install/${presetName}",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "C:/Program Files/LLVM/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe"
+                "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
+                "CMAKE_CXX_FLAGS": "-O0 -g -fsanitize=address -fno-omit-frame-pointer -static",
+                "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address -static"
             },
             "condition": {
                 "type": "equals",
@@ -27,8 +29,6 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
-                // "CMAKE_CXX_FLAGS": "-fdebug-prefix-map=${sourceDir}=.",
-                // "CMAKE_C_FLAGS": "-fdebug-prefix-map=${sourceDir}=."
             }
         },
         {
@@ -50,6 +50,14 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
+        },
+        {
+            "name": "x64-release-test",
+            "displayName": "x64 Release TGest",
+            "inherits": "x64-debug-test",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
         }
     ],
     "buildPresets": [
@@ -64,6 +72,12 @@
             "description": "",
             "displayName": "",
             "configurePreset": "x64-debug-test"
+        },
+        {
+            "name": "ELSFTestASAN",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "x64-release-test"
         }
     ],
     "testPresets": [
@@ -79,6 +93,40 @@
                 "outputOnFailure": true,
                 "verbosity": "verbose"
             }
+        },
+        {
+            "name": "ELSFTestsASAN",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "x64-release-test",
+            "execution": {
+                "stopOnFailure": true
+            },
+            "output": {
+                "outputOnFailure": true,
+                "verbosity": "extra"
+            }
         }
     ]
+    // "workflowPresets": [
+    //     {
+    //         "name": "TestWorkflow",
+    //         "description": "",
+    //         "displayName": "",
+    //         "steps": [
+    //             {
+    //                 "type": "configure",
+    //                 "name": "x64-release-test"
+    //             },
+    //             {
+    //                 "type": "build",
+    //                 "name": "x64-release-test"
+    //             },
+    //             {
+    //                 "type": "test",
+    //                 "name": "ELSFTestsASAN"
+    //             }
+    //         ]
+    //     }
+    // ]
 }

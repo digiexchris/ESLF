@@ -5,7 +5,9 @@
 class ELSFEnvironment : public ::testing::Environment {
 public:
     void SetUp() override {
-        ELSF_LOG_INIT(new TestLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH, 8>());
+        GTEST_FLAG_SET(catch_exceptions, true);
     }
 };
+
+
 
