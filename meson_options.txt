@@ -1,0 +1,2 @@
+option('build_tests', type: 'boolean', value: false, description: 'Build the test suite')
+option('use_stl', description: 'Compiling ETL for STL', type: 'boolean', value: false)

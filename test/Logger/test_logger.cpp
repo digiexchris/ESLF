@@ -40,14 +40,15 @@ TEST_F(LoggerTest, init_with_valid_backend_does_not_throw_and_can_log)
 #include <random>
 TEST_F(LoggerTest, init_while_already_initialized_resets)
 {
-  uint32_t uniqueId1;
-  uint32_t uniqueId2;
+  uint32_t uniqueId1 = 0;
+  uint32_t uniqueId2 = 0;
 
 
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<uint32_t> dis(1, UINT32_MAX); // Adjust the range as needed
   uniqueId1 = dis(gen);
+  uniqueId2 = dis(gen);
   int tries = 10;
   while(uniqueId1 == uniqueId2) { //an attempt to not make this test flakey on the off chance that the random number generator generates the same number twice
     ASSERT_GT(tries, 0); //an attempt to not let this loop run forever
