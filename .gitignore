@@ -34,3 +34,4 @@
 out/
 build/
 builddir/
+.cache/

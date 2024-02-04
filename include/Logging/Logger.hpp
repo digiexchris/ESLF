@@ -18,10 +18,11 @@
 #include <etl/string.h>
 #include <etl/singleton.h>
 #include <stdarg.h>
+#include "Logging/Logger.hpp"
 
 #define ELSF_LOG_MAX_MESSAGE_LENGTH 256
 
-#define ELSF_LOG_INIT(...) Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>::Init(__VA_ARGS__)
+#define ELSF_LOG_INIT(...) LogFactory<ELSF_LOG_MAX_MESSAGE_LENGTH>::Create(__VA_ARGS__)
 #define ELSF_LOG_INFO(...) Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>::Info(__VA_ARGS__)
 #define ELSF_LOG_WARN(...) Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>::Warn(__VA_ARGS__)
 #define ELSF_LOG_ERROR(...) Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>::Error(__VA_ARGS__)
@@ -56,11 +57,6 @@ template <size_t S>
 class Log// : public etl::singleton<Log<S>>
 {
 public:
-
-    static void Init(ILogBackend<S>* backend) {
-        LogSingleton::create();
-        LogSingleton::instance().SetBackend(backend);
-    }
     void SetBackend(ILogBackend<S>* aBackend) 
     {
         if(aBackend == nullptr)
@@ -125,7 +121,7 @@ private:
 using LogSingleton = etl::singleton<Log<ELSF_LOG_MAX_MESSAGE_LENGTH>>;
 
 template <size_t S>
-class Logger 
+class Logger
 {
     public:
         static void ThrowIfInvalid() {
@@ -153,8 +149,14 @@ class Logger
             va_start(args, message);
             LogSingleton::instance().Error(message, args);
         }
+};
 
-        static void Init(ILogBackend<S>* backend) {
+template <size_t S>
+class LogFactory
+{   
+    public:
+        static void Create(ILogBackend<S>* backend) {
+
             if(!LogSingleton::is_valid())
             {
                 LogSingleton::create();
@@ -165,6 +167,6 @@ class Logger
                 LogSingleton::create();
             }
 
-            LogSingleton::instance().Init(backend);
-        }
+            LogSingleton::instance().SetBackend(backend);
+    }
 };

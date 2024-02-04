@@ -5,7 +5,7 @@
 		}
 	],
 	"settings": {
-		"cmake.configureOnOpen": false,
+		"cmake.configureOnOpen": true,
 		"makefile.configureOnOpen": false,
 		"cmake.options.statusBarVisibility": "visible",
 		"files.associations": {
@@ -54,7 +54,6 @@
 			"--gtest_stack_trace_depth=10", 
 			"--gmock_verbose=info"
 		],
-		"C_Cpp.default.compileCommands": "c:\\Users\\chris\\Documents\\repos\\els\\LeadscrewWarrantyVoider\\lib\\ESLF\\build/compile_commands.json"
 	},
 	"tasks":
 	{
@@ -92,9 +91,9 @@
 			{
 				"type": "lldb",
 				"request": "launch",
-				"envFile": "${workspaceFolder}/${config:mesonbuild.buildFolder}/meson-vscode.env",
+				//"envFile": "${workspaceFolder}/${config:mesonbuild.buildFolder}/meson-vscode.env",
 				"name": "Launch LLDB",
-				"program": "${workspaceFolder}\\out\\build\\x64-debug-test\\test\\elsf_tests.exe",
+				"program": "${workspaceFolder}\\build\\elsf_tests.exe",
 				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure", "--gtest_stack_trace_depth=10", "--gmock_verbose=info"],
 				"cwd": "${workspaceFolder}",
 				// "preLaunchTask": "build-debug-test",
@@ -149,5 +148,13 @@
 			// }
 		],
 		"compounds": []
+	},
+	"extensions": {
+		"recommendations": [
+			"twxs.cmake",
+			"llvm-vs-code-extensions.vscode-clangd",
+			"ms-vscode.cmake-tools",
+			// "jbenden.c-cpp-flylint"
+		]
 	}
 }

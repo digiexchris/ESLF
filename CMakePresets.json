@@ -58,75 +58,74 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
+        },
+        {
+            "name": "clang-base",
+            "hidden": true,
+            "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu",
+            "description": "Using compilers: C = /usr/bin/clang, CXX = /usr/bin/clang++",
+            "binaryDir": "${sourceDir}/build/",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "YES"
+            }
+        },
+        {
+            "name": "clang-debug",
+            "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu",
+            "description": "Using compilers: C = /usr/bin/clang, CXX = /usr/bin/clang++",
+            "inherits": "clang-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "clang-release",
+            "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu Release",
+            "inherits": "clang-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "clang-debug-test",
+            "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu Debug Tests Enabled ASAN Enabled",
+            "inherits": "clang-debug",
+            "cacheVariables": {
+                "BUILD_ESLF_TESTS": "ON",
+                "CMAKE_CXX_FLAGS": "-O0 -g -fsanitize=address -fno-omit-frame-pointer",
+                "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address"
+            }
         }
     ],
     "buildPresets": [
         {
             "name": "ELSF",
             "description": "",
-            "displayName": "",
-            "configurePreset": "x64-debug"
+            "displayName": ""
         },
         {
             "name": "ELSFTest",
             "description": "",
             "displayName": "",
-            "configurePreset": "x64-debug-test"
-        },
-        {
-            "name": "ELSFTestASAN",
-            "description": "",
-            "displayName": "",
-            "configurePreset": "x64-release-test"
+            "configurePreset": "clang-debug-test"
         }
     ],
     "testPresets": [
         {
             "name": "ELSFTests",
             "description": "",
-            "displayName": "",
-            "configurePreset": "x64-debug-test",
+            "displayName": "Test Preset",
             "execution": {
                 "stopOnFailure": true
             },
             "output": {
                 "outputOnFailure": true,
                 "verbosity": "verbose"
-            }
-        },
-        {
-            "name": "ELSFTestsASAN",
-            "description": "",
-            "displayName": "",
-            "configurePreset": "x64-release-test",
-            "execution": {
-                "stopOnFailure": true
             },
-            "output": {
-                "outputOnFailure": true,
-                "verbosity": "extra"
-            }
+            "configurePreset": "clang-debug-test"
         }
     ]
-    // "workflowPresets": [
-    //     {
-    //         "name": "TestWorkflow",
-    //         "description": "",
-    //         "displayName": "",
-    //         "steps": [
-    //             {
-    //                 "type": "configure",
-    //                 "name": "x64-release-test"
-    //             },
-    //             {
-    //                 "type": "build",
-    //                 "name": "x64-release-test"
-    //             },
-    //             {
-    //                 "type": "test",
-    //                 "name": "ELSFTestsASAN"
-    //             }
-    //         ]
-    //     }
-    // ]
 }

@@ -4,7 +4,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 set(BUILD_ESLF_TESTS "Build unit tests" OFF)
-cmake_policy(SET CMP0135 NEW)
+
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
   cmake_policy(SET CMP0141 NEW)

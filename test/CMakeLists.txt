@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(elsf_unit_tests LANGUAGES CXX)
 
-cmake_policy(SET CMP0135 NEW)
-
 include(CTest)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -52,14 +50,14 @@ target_link_libraries(
   elsf::elsf
 )
 
-foreach(target elsf_tests)
-    target_compile_definitions(${target} PRIVATE
-        $<$<CONFIG:Debug>:_DEBUG>
-        $<$<NOT:$<CONFIG:Debug>>:NDEBUG>
-        # Remove unwanted definitions
-        -U_DLL -U_MT
-    )
-endforeach()
+# foreach(target elsf_tests)
+#     target_compile_definitions(${target} PRIVATE
+#         $<$<CONFIG:Debug>:_DEBUG>
+#         $<$<NOT:$<CONFIG:Debug>>:NDEBUG>
+#         # Remove unwanted definitions
+#         -U_DLL -U_MT
+#     )
+# endforeach()
 
 
 include(GoogleTest PUBLIC)
