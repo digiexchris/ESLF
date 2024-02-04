@@ -18,7 +18,6 @@
 #include <etl/string.h>
 #include <etl/singleton.h>
 #include <stdarg.h>
-#include "Logging/Logger.hpp"
 
 #define ELSF_LOG_MAX_MESSAGE_LENGTH 256
 

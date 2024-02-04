@@ -110,7 +110,10 @@
             "name": "ELSFTest",
             "description": "",
             "displayName": "",
-            "configurePreset": "clang-debug-test"
+            "configurePreset": "clang-debug-test",
+            "environment": {
+                //"LSAN_OPTIONS": "verbosity=1:log_threads=1"
+              }
         }
     ],
     "testPresets": [
@@ -125,7 +128,10 @@
                 "outputOnFailure": true,
                 "verbosity": "verbose"
             },
-            "configurePreset": "clang-debug-test"
+            "configurePreset": "clang-debug-test",
+            "environment": {
+                //"LSAN_OPTIONS": "verbosity=1:log_threads=1"
+              }
         }
     ]
 }

@@ -30,7 +30,7 @@ SOFTWARE.
 
 #ifndef ETL_PROFILE_H_INCLUDED
 #define ETL_PROFILE_H_INCLUDED
-//#define ETL_USING_CPP11
+#define ETL_USING_CPP11
 #define ETL_THROW_EXCEPTIONS
 #define ETL_VERBOSE_ERRORS
 #define ETL_CHECK_PUSH_POP
@@ -39,7 +39,7 @@ SOFTWARE.
 #define ETL_IDEQUE_REPAIR_ENABLE
 #define ETL_ICIRCULAR_BUFFER_REPAIR_ENABLE
 #define ETL_IN_UNIT_TEST
-//#define ETL_DEBUG_COUNT
+#define ETL_DEBUG_COUNT
 #define ETL_ARRAY_VIEW_IS_MUTABLE
 
 #define ETL_HAS_ATOMIC 1
@@ -111,9 +111,9 @@ SOFTWARE.
   #define ETL_VARIANT_FORCE_CPP11
 #endif
 
-#include "../include/etl/profiles/determine_compiler_language_support.h"
-#include "../include/etl/profiles/determine_compiler_version.h"
-#include "../include/etl/profiles/determine_development_os.h"
+#include "etl/profiles/determine_compiler_language_support.h"
+#include "etl/profiles/determine_compiler_version.h"
+#include "etl/profiles/determine_development_os.h"
 
 //#if ETL_CPP17_NOT_SUPPORTED
 //  #error THE UNIT TESTS REQUIRE C++17 SUPPORT

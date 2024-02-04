@@ -48,6 +48,7 @@ target_link_libraries(
   GTest::gmock_main
   etl
   elsf::elsf
+  atomic
 )
 
 # foreach(target elsf_tests)

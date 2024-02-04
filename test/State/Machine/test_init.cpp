@@ -18,11 +18,11 @@
 
 class TransitionFromInitTest : public DefaultUnitTest {
 protected:
-    void SetUp() override {
-        //GTEST_SKIP() << "Skipping all tests for this fixture";
-        //ESLF_LOG_INIT(new TestLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH, 8>());
-        //GTEST_FLAG_SET(catch_exceptions, false);
-    }
+    // void SetUp() override {
+    //     //GTEST_SKIP() << "Skipping all tests for this fixture";
+    //     //ESLF_LOG_INIT(new TestLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH, 8>());
+    //     //GTEST_FLAG_SET(catch_exceptions, false);
+    // }
     // void SetUp() override {
     //     //transitions.clear();
     //     //TODO I wonder if it's trying to access uninitialized transitions 
