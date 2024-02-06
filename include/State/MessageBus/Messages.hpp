@@ -1,5 +1,12 @@
 #pragma once
 
+#include "etl/message.h"
+
+namespace State
+{
+namespace MessageBus
+{
+
 enum MessageId {
     START = 1,
     START_RUNNING_AT, //queue up a timer to engage the leadscrew (START) at a specific time (time in this case is the encoder position plus the time it takes move beween the indicated position to the estimated position between encoder pulses)
@@ -46,3 +53,6 @@ struct EStopMessage : public etl::message<MessageId::TRIGGER_ESTOP, MachineMessa
 struct ResetMessage : public etl::message<MessageId::RESET, MachineMessageInterface>
 {
 };
+
+} // namespace Machine
+} // namespace State

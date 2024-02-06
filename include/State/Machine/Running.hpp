@@ -1,9 +1,15 @@
 #pragma once
 
 #include <etl/fsm.h>
-#include "Machine.hpp"
-#include "Messages.hpp"
+#include "State/MessageBus/Messages.hpp"
+#include "State/Machine/Machine.hpp"
 
+namespace State
+{
+namespace Machine
+{
+
+using namespace MessageBus;
 
 class RunningState : public etl::fsm_state<Machine, RunningState, MachineStateId::RUNNING, StopMessage, StopAtMessage, EStopMessage, ResetMessage>
 {
@@ -17,3 +23,6 @@ public:
   etl::fsm_state_id_t on_event(const ResetMessage& msg);
   etl::fsm_state_id_t on_event_unknown(const etl::imessage& msg);
 };
+
+} // namespace Machine
+} // namespace State

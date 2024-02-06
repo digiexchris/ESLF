@@ -1,13 +1,15 @@
-#ifndef STATE_HPP
-#define STATE_HPP
-#include "etl/queue.h"
-#include "etl/hfsm.h"
-#include "etl/message_packet.h"
+#pragma once
 
-#include "State/Machine/Messages.hpp"
-
+#include <etl/hfsm.h>
+#include <etl/message_packet.h>
 
 #define MACHINE_ROUTER_ID 0
+
+namespace State
+{
+namespace Machine
+{
+
 
 enum MachineStateId
 {
@@ -25,16 +27,12 @@ class Machine : public etl::hfsm
 public:
 
   Machine();
-  //void receive(const etl::imessage& msg_) override;
-  //void process_queue();
 
-private:
+protected:
 
-  typedef etl::message_packet<StartMessage, StartAtMessage, StopMessage, StopAtMessage, EStopMessage, ResetMessage> message_packet;
-  //etl::queue<message_packet, 10> queue;
+
 };
 
 
-
-
-#endif
+  } // namespace Machine
+} // namespace State
