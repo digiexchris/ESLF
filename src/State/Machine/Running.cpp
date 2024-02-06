@@ -5,6 +5,11 @@
 #include "State/Machine/Running.hpp"
 #include "Logging/Logger.hpp"
 
+namespace State
+{
+namespace Machine
+{
+
   etl::fsm_state_id_t RunningState::on_enter_state()
   {
     ELSF_LOG_INFO(" S1 : Enter state RUNNING\n");
@@ -49,3 +54,7 @@
     ELSF_LOG_INFO("  S1 : Received unknown message %d\n", msg.get_message_id());
     return etl::ifsm_state::No_State_Change;
   }
+
+
+} // namespace Machine
+} // namespace State

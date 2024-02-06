@@ -32,7 +32,7 @@ TEST_F(LoggerTest, init_with_valid_backend_does_not_throw_and_can_log)
   // });
   LogFactory<256>::Create(&mockLogBackend);
   LogSingleton::instance().Info("Foo");
-  // EXPECT_CALL(mockLogBackend, Info("Foo", testing::_)).Times(1);
+  // EXPECT_CALL(mockLogBackend, Info("Foo")).Times(1);
   // EXPECT_CALL(mockLogBackend, Info(testing::_, testing::_)).Times(0);
 }
 

@@ -1,9 +1,10 @@
+#include <etl/message.h>
 #define GTEST_CATCH_EXCEPTIONS 0
 #include <gtest/gtest.h>
 #include "State/Machine/Machine.hpp"
-#include "State/Machine/Running.hpp"
-#include "State/Machine/Idle.hpp"
 #include "State/Machine/EStop.hpp"
+#include "State/Machine/Idle.hpp"
+#include "State/Machine/Running.hpp"
 #include "State/MessageBus/Messages.hpp"
 #include <etl/vector.h>
 #include <etl/utility.h>
@@ -12,25 +13,38 @@
 #include <etl/message_packet.h>
 #include <memory>
 #include "DefaultUnitTest.hpp"
+#include <etl/hfsm.h>
 
 using namespace State::Machine;
 using namespace State::MessageBus;
 
-class TransitionFromInitTest : public DefaultUnitTest {
+class TransitionFromEStopTest : public DefaultUnitTest {
 protected:
+
 };
 
-TEST_F(TransitionFromInitTest, one_transition_from_reset) {
-    Machine fsm;
-    RunningState runningState;
-    IdleState idleState;
-    EStopState eStopState;
+namespace test_EStop {
+    void Reset(Machine* fsm, etl::imessage* message) {
+        fsm->reset();
+        fsm->start();
+        fsm->receive(*message);
+    }
+}
 
-    // The list of states.
-    etl::ifsm_state* stateList[] = { &idleState, &runningState, &eStopState };
+TEST_F(TransitionFromEStopTest, one_transition_from_idle) {
+        Machine fsm;
+        RunningState runningState;
+        IdleState idleState;
+        EStopState eStopState;
 
-    fsm.set_states(stateList, 3);
-    fsm.start();
+        // The list of states.
+        etl::ifsm_state* stateList[] = { &idleState,  &runningState, &eStopState };
+
+        fsm.set_states(stateList, 3);
+
+        auto initialStateMessage= EStopMessage();
+       
+       test_EStop::Reset(&fsm, &initialStateMessage);
 
     struct Transition {
         std::shared_ptr<etl::imessage> message;
@@ -38,20 +52,19 @@ TEST_F(TransitionFromInitTest, one_transition_from_reset) {
     };
 
     const Transition transitions[] = {
-        { std::make_shared<StartMessage>(), MachineStateId::RUNNING },
-        { std::make_shared<StartAtMessage>(100), MachineStateId::IDLE },
-        { std::make_shared<StopMessage>(), MachineStateId::IDLE },
-        { std::make_shared<StopAtMessage>(200), MachineStateId::IDLE },
+        { std::make_shared<StartMessage>(), MachineStateId::ESTOP },
+        { std::make_shared<StartAtMessage>(100), MachineStateId::ESTOP },
+        { std::make_shared<StopMessage>(), MachineStateId::ESTOP },
+        { std::make_shared<StopAtMessage>(200), MachineStateId::ESTOP },
         { std::make_shared<EStopMessage>(), MachineStateId::ESTOP },
         { std::make_shared<ResetMessage>(), MachineStateId::IDLE }
     };
 
     for (const auto& transition : transitions) {
-        fsm.reset();
-        fsm.start();
+        test_EStop::Reset(&fsm, &initialStateMessage);
 
         etl::fsm_state_id_t currentState = fsm.get_state_id();
-        ASSERT_EQ(currentState, static_cast<int>(MachineStateId::IDLE)) << "State is not IDLE after reset for transition";
+        ASSERT_EQ(currentState, static_cast<int>(MachineStateId::ESTOP)) << "State is not EStop after reset for transition";
 
         std::shared_ptr<etl::imessage> message = transition.message;
 
