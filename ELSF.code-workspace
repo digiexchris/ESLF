@@ -54,6 +54,7 @@
 			"--gtest_stack_trace_depth=10", 
 			"--gmock_verbose=info"
 		],
+		"C_Cpp.default.compileCommands": "c:\\Users\\chris\\Documents\\repos\\els\\LeadscrewWarrantyVoider\\lib\\ESLF\\build/compile_commands.json",
 	},
 	"tasks":
 	{

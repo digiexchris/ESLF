@@ -1,6 +1,8 @@
 {
-    "image": "eslf_tests/eslf_tests_build:latest",
-
+    //"image": "eslf_tests/eslf_tests_build:latest",
+    "build": { 
+      "dockerfile": "Dockerfile"
+    },
     "runArgs": [
       "--cap-add=SYS_PTRACE",
       "--security-opt",

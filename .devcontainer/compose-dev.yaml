@@ -3,7 +3,7 @@ services:
     build:
       context: .
       image: eslf_tests/eslf_tests_build:latest
-      dockerfile: DockerfileBuildEnv
+      dockerfile: Dockerfile
     entrypoint:
     - sleep
     - infinity
