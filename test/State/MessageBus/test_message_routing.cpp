@@ -1,7 +1,8 @@
 #include "State/MessageBus/Messages.hpp"
 
 #include "DefaultUnitTest.hpp"
-#include "State/MessageBus/MessageBus.hpp"
+#include "State/MessageBus/Subscription.hpp"
+#include "State/MessageBus/Broker.hpp"
 #include "State/Machine/Machine.hpp"
 #include "State/MessageBus/MachineRouter.hpp"
 
@@ -19,7 +20,9 @@ TEST_F(MessageRoutingTest, should_send_start_message_to_machine_and_ui) {
 
     MachineRouter machineRouter(fsm);
 
-    Subscription machineSubscription(machineRouter, {MachineStateId::IDLE, MachineStateId::RUNNING, MachineStateId::ESTOP});
+    Subscription* machineSubscription = machineRouter.GetSubscription();
+
+    broker.subscribe(*machineSubscription);
 
     StartMessage startMessage;
     //broker.send(startMessage);

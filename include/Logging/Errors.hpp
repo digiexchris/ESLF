@@ -1,6 +1,10 @@
 #pragma once
 
-#include "Logger.hpp"
-#include <etl/error_handler.h>>
+#include <etl/error_handler.h>
+#include "Logging/Logger.hpp"
 
-void LogErrors(const etl::exception e);
+struct ErrorLog {
+    void member_function(const etl::exception e) {
+        ELSF_LOG_ERROR("%s:%s| %s", e.file_name(), e.line_number() ,e.what());
+    }
+};
