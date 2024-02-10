@@ -29,13 +29,13 @@ public:
     {
     }
 
-    void on_receive(const StartMessage& msg);
-    void on_receive(const StartAtMessage& msg);
-    void on_receive(const StopMessage& msg);
-    void on_receive(const StopAtMessage& msg);
-    void on_receive(const EStopMessage& msg);
-    void on_receive(const ResetMessage& msg);
-    void on_receive_unknown(const etl::imessage& msg);
+    virtual void on_receive(const StartMessage& msg);
+    virtual void on_receive(const StartAtMessage& msg);
+    virtual void on_receive(const StopMessage& msg);
+    virtual void on_receive(const StopAtMessage& msg);
+    virtual void on_receive(const EStopMessage& msg);
+    virtual void on_receive(const ResetMessage& msg);
+    virtual void on_receive_unknown(const etl::imessage& msg);
 
 private:
     etl::hfsm* myFsm;

@@ -2,6 +2,10 @@
 #include <etl/string.h>
 #include <random>
 
+#include "Logging/Logger.hpp"
+
+namespace Mocks::Logging {
+
 template <size_t MaxMessageLength>
 class MockLogBackend : public ILogBackend<MaxMessageLength>
 {
@@ -27,3 +31,5 @@ public:
     MOCK_METHOD(void, Error, (etl::string<MaxMessageLength> message), ());
     uint32_t uniqueId;
 };
+
+} // namespace Mocks

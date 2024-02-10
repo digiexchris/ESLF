@@ -12,5 +12,29 @@ namespace Machine {
   {
   }
 
+  void Machine::ExecuteStart()
+  {
+  }
+
+  void Machine::ExecuteStartAt()
+  {
+  }
+
+  void Machine::ExecuteStop()
+  {
+  }
+
+  void Machine::ExecuteStopAt()
+  {
+  }
+
+  void Machine::ExecuteEStop()
+  {
+  }
+
+  void Machine::ExecuteReset()
+  {
+  }
+
 } // namespace Machine
 } // namespace State
