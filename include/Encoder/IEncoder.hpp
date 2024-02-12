@@ -3,12 +3,13 @@
 #define IENCODER_HPP
 #include <stdint.h>
 #include <etl/atomic.h>
+#include "Position/Position.hpp"
 /**
  * @brief The Encoder class is an abstract base class for encoders.
  * 
  * It provides methods to get the position, update the encoder, and get the average time between counts.
  */
-class Encoder {
+class Encoder: public Position::Position {
 public:
     struct Status {
         int32_t count;
