@@ -27,6 +27,12 @@ class Machine : public etl::hfsm
 public:
 
   Machine();
+  virtual void ExecuteStart();
+  virtual void ExecuteStartAt();
+  virtual void ExecuteStop();
+  virtual void ExecuteStopAt();
+  virtual void ExecuteEStop();
+  virtual void ExecuteReset();
 
 protected:
 

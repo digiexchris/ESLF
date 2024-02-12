@@ -25,6 +25,7 @@ etl::fsm_state_id_t EStopState::on_enter_state()
   //***************************************************************************
   etl::fsm_state_id_t EStopState::on_event(const ResetMessage& msg)
   {
+    get_fsm_context().ExecuteReset();
     ELSF_LOG_INFO("  S1 : Received message RESET\n");
     return MachineStateId::IDLE;
   }

@@ -24,12 +24,14 @@ namespace Machine
 
   etl::fsm_state_id_t RunningState::on_event(const StopMessage& msg)
   {
+    get_fsm_context().ExecuteStop();
     ELSF_LOG_INFO("  S1 : Received message STOP\n");
     return MachineStateId::IDLE;
   }
 
   etl::fsm_state_id_t RunningState::on_event(const StopAtMessage& msg)
   {
+    get_fsm_context().ExecuteStopAt();
     ELSF_LOG_INFO("  S1 : Received message STOP AT\n");
     return etl::ifsm_state::No_State_Change;
   }
@@ -37,6 +39,7 @@ namespace Machine
   //***************************************************************************
   etl::fsm_state_id_t RunningState::on_event(const EStopMessage& msg)
   {
+    get_fsm_context().ExecuteEStop();
     ELSF_LOG_INFO("  S1 : Received message ESTOP\n");
     return MachineStateId::ESTOP; //this should transition to the sub-state ESTOP of all movement mode states.
   }
@@ -44,6 +47,7 @@ namespace Machine
   //***************************************************************************
   etl::fsm_state_id_t RunningState::on_event(const ResetMessage& msg)
   {
+    get_fsm_context().ExecuteReset();
     ELSF_LOG_INFO("  S1 : Received message RESET\n");
     return MachineStateId::IDLE;
   }

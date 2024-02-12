@@ -2,7 +2,9 @@
 #include <gtest/gtest.h>
 
 #include <gmock/gmock.h> // Include the necessary header file
-#include "Mocks/MockLogBackend.hpp"
+#include "Mocks/Logging/MockLogBackend.hpp"
+
+using namespace Mocks::Logging;
 
 class LoggerTest : public testing::Test {
 protected:

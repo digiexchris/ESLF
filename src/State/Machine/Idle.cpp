@@ -25,12 +25,14 @@ namespace Machine
   //***************************************************************************
   etl::fsm_state_id_t IdleState::on_event(const StartMessage& msg)
   {
+    get_fsm_context().ExecuteStart();
     ELSF_LOG_INFO("  S1 : Received message START\n");
     return MachineStateId::RUNNING;
   }
 
   etl::fsm_state_id_t IdleState::on_event(const StartAtMessage& msg)
   {
+    get_fsm_context().ExecuteStartAt();
     ELSF_LOG_INFO("  S1 : Received message START AT\n");
     return etl::ifsm_state::No_State_Change; //TODO return the child state WAITING_FOR_SYNC
   }
@@ -38,6 +40,7 @@ namespace Machine
   //***************************************************************************
   etl::fsm_state_id_t IdleState::on_event(const EStopMessage& msg)
   {
+    get_fsm_context().ExecuteEStop();
     ELSF_LOG_INFO("  S1 : Received message ESTOP\n");
     return MachineStateId::ESTOP;
   }
@@ -45,6 +48,7 @@ namespace Machine
   //***************************************************************************
   etl::fsm_state_id_t IdleState::on_event(const ResetMessage& msg)
   {
+    get_fsm_context().ExecuteReset();
     ELSF_LOG_INFO("  S1 : Received message RESET\n");
     return etl::ifsm_state::No_State_Change; // uhh, maybe we don't need this message, but I need to play with the FSM
   }
