@@ -12,7 +12,6 @@ namespace State::Machine
 * This expects all positions to be in the the same scale
 * and will output the delta in the same scale
 */
-template <typename ...T>
 class MasterPosition : public Position::Position
 {
     public:
