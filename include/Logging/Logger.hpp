@@ -40,7 +40,7 @@ template <size_t MaxMessageLength>
 class ILogBackend
 {
 public:
-    virtual ~ILogBackend() = default;
+    virtual ~ILogBackend() {};
     virtual void Info(etl::string<MaxMessageLength> message, ...) = 0;
     virtual void Warn(etl::string<MaxMessageLength> message, ...) = 0;
     virtual void Error(etl::string<MaxMessageLength> message, ...) = 0;
@@ -102,11 +102,6 @@ public:
     void ThrowIfBackendNotSet() 
     {
         ETL_ASSERT(backendSet, LOGGER_INIT_EXCEPTION("Log backend not set, call ESP_LOG_INIT"));
-        // if(!backendSet)
-        // {
-        //     throw etl::exception("Log backend not set, call ESP_LOG_INIT");
-        // }
-    
     };
     bool IsBackendSet()
     {
@@ -154,18 +149,21 @@ template <size_t S>
 class LogFactory
 {   
     public:
-        static void Create(ILogBackend<S>* backend) {
-
+        static bool Create(ILogBackend<S>* backend) {
+            if(backend == nullptr)
+            {
+                throw LoggerInitException("Log backend cannot be null", __FILE__, __LINE__);
+            }
+            
             if(!LogSingleton::is_valid())
             {
                 LogSingleton::create();
+                LogSingleton::instance().SetBackend(backend);
+                return true;
             }
             else
             {
-                LogSingleton::destroy();
-                LogSingleton::create();
+                return false;
             }
-
-            LogSingleton::instance().SetBackend(backend);
     }
 };

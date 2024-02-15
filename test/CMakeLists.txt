@@ -5,6 +5,8 @@ include(CTest)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
+
 # if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 #   # Force use of static runtime library even in Debug configuration
 #   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer -O1 -g -MT")

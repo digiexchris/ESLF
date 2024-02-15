@@ -26,11 +26,13 @@
             "redhat.vscode-yaml",
             "IBM.output-colorizer",
             "ms-vscode.cpptools-themes",
-            "seaube.clangformat"
+            "seaube.clangformat",
+            "ryanluker.vscode-coverage-gutters",
+            "markis.code-coverage"
         ]
       }
     },
     "workspaceMount": "source=${localWorkspaceFolder},target=/ESLF,type=bind",
-    "workspaceFolder": "/ESLF",
+    "workspaceFolder": "/ESLF"
     //"onCreateCommand": "apt update && apt install -y git && git config --global --add safe.directory /ESLF"
   }

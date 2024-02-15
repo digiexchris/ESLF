@@ -27,6 +27,17 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 # to use the same target as users which use find_package
 add_library(elsf::elsf ALIAS ${PROJECT_NAME})
 
+if(BUILD_ESLF_TESTS)
+  option(ENABLE_COVERAGE "Enable coverage reporting" OFF)
+
+  if(ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
+    target_link_options(${PROJECT_NAME} PRIVATE -fprofile-instr-generate)
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
+    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-instr-generate")
+  endif()
+endif()
+
 target_include_directories(${PROJECT_NAME} ${INCLUDE_SPECIFIER} INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>

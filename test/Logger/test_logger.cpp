@@ -8,7 +8,21 @@ using namespace Mocks::Logging;
 
 class LoggerTest : public testing::Test {
 protected:
+  void TearDown() override {
+    if(LogSingleton::is_valid()) {
+      LogSingleton::destroy();
+    }
+  }
 };
+
+//Note: this mockLogBackend must be a pointer, not a stack variable! unique_ptr deletes it later.
+TEST_F(LoggerTest, create_and_destroy_logger)
+{
+  MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH>* mockLogBackend = new MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH>();
+  LogSingleton::create();
+  LogSingleton::instance().SetBackend(mockLogBackend);
+  LogSingleton::destroy();
+}
 
 TEST_F(LoggerTest, use_without_create_throws)
 {
@@ -28,18 +42,21 @@ TEST_F(LoggerTest, init_with_nullptr_backend_throws)
 
 TEST_F(LoggerTest, init_with_valid_backend_does_not_throw_and_can_log)
 {
-  MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH> mockLogBackend;
+  MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH>* mockLogBackend = new MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH>();
   // ON_CALL(mockLogBackend, Info(testing::_, testing::_)).WillByDefault([](){
   //   ASSERT_HRESULT_FAILED("Info called with unexpected arguments");
   // });
-  LogFactory<256>::Create(&mockLogBackend);
+  EXPECT_CALL(*mockLogBackend, LogFormattedInfo("Foo")).Times(testing::Exactly(1));
+
+  bool result = LogFactory<256>::Create(mockLogBackend);
+  ASSERT_TRUE(result);
+
   LogSingleton::instance().Info("Foo");
-  // EXPECT_CALL(mockLogBackend, Info("Foo")).Times(1);
   // EXPECT_CALL(mockLogBackend, Info(testing::_, testing::_)).Times(0);
 }
 
 #include <random>
-TEST_F(LoggerTest, init_while_already_initialized_resets)
+TEST_F(LoggerTest, init_while_already_initialized_returns_false)
 {
   uint32_t uniqueId1 = 0;
   uint32_t uniqueId2 = 0;
@@ -58,12 +75,14 @@ TEST_F(LoggerTest, init_while_already_initialized_resets)
   }
 
   MockLogBackend<256ULL>* mockLogBackend1 = new MockLogBackend<256ULL>(uniqueId1);
-  MockLogBackend<256ULL> mockLogBackend2(uniqueId2);
+  MockLogBackend<256ULL>* mockLogBackend2 = new MockLogBackend<256ULL>(uniqueId2);
 
-  LogFactory<256>::Create(mockLogBackend1);
-  LogFactory<256>::Create(&mockLogBackend2);
+  bool result1 = LogFactory<256>::Create(mockLogBackend1);
+  bool result2 = LogFactory<256>::Create(mockLogBackend2);
   auto backend = LogSingleton::instance().GetBackend();
-  EXPECT_EQ(static_cast<MockLogBackend<256>*>(backend)->uniqueId, uniqueId2);
+  EXPECT_NE(static_cast<MockLogBackend<256>*>(backend)->uniqueId, uniqueId2);
+  EXPECT_TRUE(result1);
+  EXPECT_FALSE(result2);
 }
 
 TEST_F(LoggerTest, macro_use_without_init_throws)
@@ -73,7 +92,6 @@ TEST_F(LoggerTest, macro_use_without_init_throws)
     // Log<256>::Init(nullptr);
     ELSF_LOG_INFO("Foo");
 
-    // rework this logger so that Log::Info() calls LogSingleton::instance().Info() if LogSingleton::has_instance() otherwise throw an
-  },
+    },
                LoggerInitException);
 }

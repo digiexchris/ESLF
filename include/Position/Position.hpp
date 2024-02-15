@@ -35,12 +35,15 @@ public:
     */
     virtual void Update() {
         myStatus.store(UpdateMotionParams());
-        myStatus = UpdateMotionParams();
     };
     
     int32_t GetPosition() const { 
         Status s = myStatus.load();
         return s.count;
+    }
+
+    Status GetStatus() const {
+        return myStatus.load();
     }
 
     void SetStatus(Status aStatus) {

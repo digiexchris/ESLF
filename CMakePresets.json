@@ -100,15 +100,14 @@
             "cacheVariables": {
                 "BUILD_ESLF_TESTS": "ON",
                 "CMAKE_CXX_FLAGS": "-O0 -g",
-                "CMAKE_LINKER_FLAGS": ""
+                "ENABLE_COVERAGE": "ON"
             }
         },
         {
             "name": "clang-debug-test-ASAN",
             "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu Debug Tests Enabled ASAN Enabled",
-            "inherits": "clang-debug",
+            "inherits": "clang-debug-test",
             "cacheVariables": {
-                "BUILD_ESLF_TESTS": "ON",
                 "CMAKE_CXX_FLAGS": "-O0 -g -fsanitize=address -fno-omit-frame-pointer",
                 "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address"
             }

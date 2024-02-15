@@ -1,8 +1,9 @@
 #include <gmock/gmock.h>
 #include <etl/string.h>
-#include <random>
-
-#include "Logging/Logger.hpp"
+#include <cstdio>
+#include <cstdarg> // For va_list, va_start, va_end
+#include <string>
+#include <Logging/Logger.hpp>
 
 namespace Mocks::Logging {
 
@@ -10,26 +11,45 @@ template <size_t MaxMessageLength>
 class MockLogBackend : public ILogBackend<MaxMessageLength>
 {
 public:
+    MOCK_METHOD(void, LogFormattedInfo, (const std::string& message), ());
+    MOCK_METHOD(void, LogFormattedWarn, (const std::string& message), ());
+    MOCK_METHOD(void, LogFormattedError, (const std::string& message), ());
 
-    virtual ~MockLogBackend() override {};
-    MockLogBackend() = default;
-    MockLogBackend(uint32_t uniqueId) : uniqueId(uniqueId) {}
-    virtual void Info(etl::string<MaxMessageLength> message, ...) override
-    {
-        //Info(message, nullptr);
+    // Constructor that accepts a uint32_t argument for uniqueId
+    explicit MockLogBackend(uint32_t id = 0) : uniqueId(id) {}
+
+    virtual void Info(etl::string<MaxMessageLength> message, ...) override {
+        va_list args;
+        va_start(args, message);
+        std::string formatted = FormatString(message.c_str(), args);
+        va_end(args);
+        LogFormattedInfo(formatted);
     }
-    virtual void Warn(etl::string<MaxMessageLength> message, ...) override
-    {
-        //Warn(message, nullptr);
+
+    virtual void Warn(etl::string<MaxMessageLength> message, ...) override {
+        va_list args;
+        va_start(args, message);
+        std::string formatted = FormatString(message.c_str(), args);
+        va_end(args);
+        LogFormattedWarn(formatted);
     }
-    virtual void Error(etl::string<MaxMessageLength> message, ...) override
-    {
-        //Error(message, nullptr);
+
+    virtual void Error(etl::string<MaxMessageLength> message, ...) override {
+        va_list args;
+        va_start(args, message);
+        std::string formatted = FormatString(message.c_str(), args);
+        va_end(args);
+        LogFormattedError(formatted);
     }
-    MOCK_METHOD(void, Info, (etl::string<MaxMessageLength> message), ());
-    MOCK_METHOD(void, Warn, (etl::string<MaxMessageLength> message), ());
-    MOCK_METHOD(void, Error, (etl::string<MaxMessageLength> message), ());
-    uint32_t uniqueId;
+
+    uint32_t uniqueId; // Make sure uniqueId is public if you need to access it outside the class
+
+private:
+    std::string FormatString(const char* format, va_list args) {
+        char buffer[MaxMessageLength];
+        vsnprintf(buffer, sizeof(buffer), format, args);
+        return std::string(buffer);
+    }
 };
 
-} // namespace Mocks
+} // namespace Mocks::Logging

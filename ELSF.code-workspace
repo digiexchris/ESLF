@@ -60,6 +60,27 @@
 	{
 		"version": "2.0.0",
 		"tasks": [
+			{
+				"label": "generate-lcov",
+				"type": "shell",
+				"command": "llvm-cov",
+				"args": [
+					"export", "-format=lcov", "-instr-profile=${workspaceFolder}/build/test/default.profraw", "${workspaceFolder}/build/test/elsf_tests", ">", "${workspaceFolder}/coverage/lcov-elsf_tests.info"
+				]
+			},
+			{
+				"label": "view-coverage-report",
+				"type": "shell",
+				"command": "llvm-cov",
+				"args": [
+					"show",
+					"-instr-profile=${workspaceFolder}/build/test/default.profdata",
+					"${workspaceFolder}/build/test/elsf_tests",
+					 "-show-line-counts-or-regions",
+					  "-Xdemangler", "c++filt", "-n"
+				]
+			}
+			
 			// {
 			// 	"label": "configure-debug-test",
 			// 	"type": "shell",

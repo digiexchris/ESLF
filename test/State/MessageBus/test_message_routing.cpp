@@ -18,31 +18,31 @@ class MachineSubscriptionIntegrationTest : public DefaultUnitTest {
     
 };
 
-TEST_F(MachineSubscriptionIntegrationTest, should_send_start_message_to_machine) {
-GTEST_SKIP();
-    MockMachine *fsm = new MockMachine();
-    Broker broker;
+// TEST_F(MachineSubscriptionIntegrationTest, should_send_start_message_to_machine) {
+// GTEST_SKIP();
+//     MockMachine *fsm = new MockMachine();
+//     Broker broker;
 
-    MachineRouter machineRouter(fsm);
+//     MachineRouter machineRouter(fsm);
 
-    Subscription machineSubscription = Subscription(machineRouter, machineRouter.GetValidMessagesList());
+//     Subscription machineSubscription = Subscription(machineRouter, machineRouter.GetValidMessagesList());
 
-    broker.subscribe(machineSubscription);
+//     broker.subscribe(machineSubscription);
 
-    StartMessage startMessage;
+//     StartMessage startMessage;
 
-    broker.receive(startMessage);
+//     broker.receive(startMessage);
 
-    machineRouter.ProcessQueue();
+//     machineRouter.ProcessQueue();
 
-    EXPECT_CALL(*fsm, ExecuteStart()).Times(1);
+//     EXPECT_CALL(*fsm, ExecuteStart()).Times(1);
 
-    EXPECT_EQ(fsm->get_state_id(), MachineStateId::RUNNING);
+//     EXPECT_EQ(fsm->get_state_id(), MachineStateId::RUNNING);
 
-    // if(fsm != nullptr) {
-    //     delete fsm;
-    // }
-}
+//     // if(fsm != nullptr) {
+//     //     delete fsm;
+//     // }
+// }
 
 // TEST_F(MessageRoutingTest, should_send_start_at_message_to_machine_and_not_ui) {
 //     Broker broker;
