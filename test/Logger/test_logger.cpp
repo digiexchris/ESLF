@@ -15,6 +15,25 @@ protected:
   }
 };
 
+class LoggerExceptionTest : public testing::Test {
+protected:
+};
+
+TEST_F(LoggerExceptionTest, LoggerInitException_what_returns_correct_string)
+{
+  LoggerInitException e = LOGGER_INIT_EXCEPTION("FOO");
+  EXPECT_STREQ(e.what(), "FOO");
+}
+
+TEST_F(LoggerTest, is_backend_set)
+{
+  MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH>* mockLogBackend = new MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH>();
+  LogSingleton::create();
+  LogSingleton::instance().SetBackend(mockLogBackend);
+  ASSERT_TRUE(LogSingleton::instance().IsBackendSet());
+  LogSingleton::destroy();
+}
+
 //Note: this mockLogBackend must be a pointer, not a stack variable! unique_ptr deletes it later.
 TEST_F(LoggerTest, create_and_destroy_logger)
 {

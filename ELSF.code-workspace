@@ -31,6 +31,14 @@
 			"bitset": "cpp",
 			"random": "cpp"
 		},
+		"c": {
+			"minCoverage": 0.8,
+			"refBranch": "main",
+			"usePrePushValidation": false,
+			"lcovFileName": "lcov.info",
+			"runTestCoverage": "npm run test"
+		  },
+		  
 		"cmake.ctestArgs": [
 			"--output-on-failure",
 			"--gtest_break_on_failure",
@@ -55,6 +63,18 @@
 			"--gmock_verbose=info"
 		],
 		"C_Cpp.default.compileCommands": "c:\\Users\\chris\\Documents\\repos\\els\\LeadscrewWarrantyVoider\\lib\\ESLF\\build/compile_commands.json",
+		"cmakeExplorer.suiteDelimiter": "-",
+		"cmakeExplorer.parallelJobs": 1,
+		"cmakeExplorer.buildDir": "${buildDirectory}",
+		"code-coverage-lcov.path.searchPath": "coverage/*.info",
+		"koverage.coverageFilePaths": [
+
+			"coverage/lcov.info"
+		],
+		"koverage.coverageCommand": "./coverage.sh",
+		"koverage.sufficientCoverageThreshold": 80,
+		"koverage.autoRefresh": true,
+		"koverage.autoRefreshDebounce": 3000
 	},
 	"tasks":
 	{
@@ -63,10 +83,11 @@
 			{
 				"label": "generate-lcov",
 				"type": "shell",
-				"command": "llvm-cov",
+				"command": "./coverage.sh",
 				"args": [
-					"export", "-format=lcov", "-instr-profile=${workspaceFolder}/build/test/default.profraw", "${workspaceFolder}/build/test/elsf_tests", ">", "${workspaceFolder}/coverage/lcov-elsf_tests.info"
-				]
+					// "export", "-format=lcov", "-instr-profile=${workspaceFolder}/build/test/default.profraw", "${workspaceFolder}/build/test/elsf_tests", ">", "${workspaceFolder}/coverage/lcov-elsf_tests.info"
+				],
+
 			},
 			{
 				"label": "view-coverage-report",

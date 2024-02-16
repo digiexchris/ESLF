@@ -15,7 +15,6 @@
             "llvm-vs-code-extensions.vscode-clangd",
             "twxs.cmake",
             "ms-vscode.cmake-tools",
-            "fredericbonnet.cmake-test-adapter",
             "vadimcn.vscode-lldb",
             "GitHub.copilot",
             "GitHub.copilot-chat",
@@ -27,8 +26,10 @@
             "IBM.output-colorizer",
             "ms-vscode.cpptools-themes",
             "seaube.clangformat",
-            "ryanluker.vscode-coverage-gutters",
-            "markis.code-coverage"
+            "josetr.cmake-language-support-vscode",
+            "derivitec-ltd.cmake-test-adapter",
+            "tenninebt.vscode-koverage",
+            "rherrmannr.code-coverage-lcov"
         ]
       }
     },

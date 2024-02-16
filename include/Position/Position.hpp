@@ -22,10 +22,7 @@ public:
     * Note: Ideally to avoid losing precision as much as possible, choose a scale factor
     * that will result in a normalized position that is an integer.
     */
-    Position(float aScaleFactor = 1.0f) : myScaleFactor(aScaleFactor) 
-    {
-        myStatus = {0, false, 0, 0, 0, false, 0, 0};
-    };
+    Position(float aScaleFactor = 1.0f);
 
     /**
     * @brief Update the internal position.
@@ -33,28 +30,17 @@ public:
     * This function should be called by the main position correction loop on a regular basis.
     * 
     */
-    virtual void Update() {
-        myStatus.store(UpdateMotionParams());
-    };
+    virtual void Update() ;
     
-    int32_t GetPosition() const { 
-        Status s = myStatus.load();
-        return s.count;
-    }
+    int32_t GetPosition() const;
 
-    Status GetStatus() const {
-        return myStatus.load();
-    }
+    Status GetStatus() const;
 
-    void SetStatus(Status aStatus) {
-        myStatus.store(aStatus);
-    }
+    void SetStatus(Status aStatus);
 
 
-    int32_t GetNormalizedPosition() const { 
-        Status s = myStatus.load();
-        return s.count * myScaleFactor; 
-    } 
+    int32_t GetNormalizedPosition() const;
+    
 
     /**
      * @brief Returns the average time between counts in milliseconds.

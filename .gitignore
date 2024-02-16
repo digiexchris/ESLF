@@ -31,6 +31,8 @@
 *.out
 *.app
 
+default.profraw
+
 out/
 build/
 builddir/

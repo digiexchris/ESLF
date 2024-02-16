@@ -101,6 +101,7 @@
                 "BUILD_ESLF_TESTS": "ON",
                 "CMAKE_CXX_FLAGS": "-O0 -g",
                 "ENABLE_COVERAGE": "ON"
+                //"CMAKE_VERBOSE_MAKEFILE": "ON"
             }
         },
         {
