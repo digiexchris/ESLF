@@ -31,6 +31,31 @@ int32_t Position::GetNormalizedPosition() const {
     return s.count * myScaleFactor; 
 } 
 
+bool Position::operator>(const Position& aPosition) const
+{
+    uint32_t count = GetNormalizedPosition();
+    uint32_t aCount = aPosition.GetNormalizedPosition();
+
+    return count > aCount;
+}
+
+bool Position::operator<(const Position& aPosition) const
+{
+    //TODO might need to optimize these functions to load only once per tick instead of when needed. Profile waiting on the atomic to find out.
+    uint32_t count = GetNormalizedPosition();
+    uint32_t aCount = aPosition.GetNormalizedPosition();
+
+    return count < aCount;
+}
+
+bool Position::operator==(const Position& aPosition) const
+{
+    uint32_t count = GetNormalizedPosition();
+    uint32_t aCount = aPosition.GetNormalizedPosition();
+
+    return count == aCount;
+}
+
 uint16_t Position::GetCountPeriod() 
 {
     Status status = myStatus.load();

@@ -38,7 +38,6 @@ public:
 
     void SetStatus(Status aStatus);
 
-
     int32_t GetNormalizedPosition() const;
     
 
@@ -54,6 +53,9 @@ public:
 
     virtual Status GetMotionParams() final;
 
+    bool operator>(const Position& aPosition) const;
+    bool operator<(const Position& aPosition) const;
+    bool operator==(const Position& aPosition) const;
 
 protected:
     
