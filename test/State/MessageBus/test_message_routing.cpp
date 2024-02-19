@@ -18,33 +18,30 @@ class MachineSubscriptionIntegrationTest : public DefaultUnitTest {
     
 };
 
-// TEST_F(MachineSubscriptionIntegrationTest, should_send_start_message_to_machine) {
-// GTEST_SKIP();
-//     MockMachine *fsm = new MockMachine();
-//     Broker broker;
+TEST_F(MachineSubscriptionIntegrationTest, should_send_start_message_to_machine) {
+//GTEST_SKIP();
+    MockMachine *fsm = new MockMachine();
+    Broker broker;
 
-//     MachineRouter machineRouter(fsm);
+    EXPECT_CALL(*fsm, ExecuteStart()).Times(1);
 
-//     Subscription machineSubscription = Subscription(machineRouter, machineRouter.GetValidMessagesList());
+    MachineRouter machineRouter(fsm);
 
-//     broker.subscribe(machineSubscription);
+    Subscription machineSubscription = Subscription(machineRouter, machineRouter.GetValidMessagesList());
 
-//     StartMessage startMessage;
+    broker.subscribe(machineSubscription);
 
-//     broker.receive(startMessage);
+    StartMessage startMessage;
 
-//     machineRouter.ProcessQueue();
+    broker.receive(startMessage);
 
-//     EXPECT_CALL(*fsm, ExecuteStart()).Times(1);
+    machineRouter.ProcessQueue();
 
-//     EXPECT_EQ(fsm->get_state_id(), MachineStateId::RUNNING);
+    //EXPECT_EQ(fsm->get_state_id(), MachineStateId::RUNNING);
 
-//     // if(fsm != nullptr) {
-//     //     delete fsm;
-//     // }
-// }
+}
 
-// TEST_F(MessageRoutingTest, should_send_start_at_message_to_machine_and_not_ui) {
+// TEST_F(MachineSubscriptionIntegrationTest, should_send_start_at_message_to_machine_only) {
 //     Broker broker;
 
 //     StartAtMessage startAtMessage(100);

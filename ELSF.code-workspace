@@ -74,7 +74,7 @@
 		"koverage.coverageCommand": "./coverage.sh",
 		"koverage.sufficientCoverageThreshold": 80,
 		"koverage.autoRefresh": true,
-		"koverage.autoRefreshDebounce": 3000
+		"koverage.autoRefreshDebounce": 1000
 	},
 	"tasks":
 	{

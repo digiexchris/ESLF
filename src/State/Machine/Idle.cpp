@@ -14,7 +14,7 @@ namespace Machine
   etl::fsm_state_id_t IdleState::on_enter_state()
   {
     ELSF_LOG_INFO("  S2 : Enter state Idle\n" );
-    return etl::ifsm_state::No_State_Change; //Queue the message that sets the saved mode
+    return etl::ifsm_state::No_State_Change; //Queue the message that sets the saved mode here if we want to restore mode on startup
   }
 
   void IdleState::on_exit_state()

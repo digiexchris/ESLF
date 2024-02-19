@@ -24,17 +24,17 @@ template <typename TDerived, typename... Messages>
 class Router : public etl::message_router<TDerived, Messages...>
 {
 public:
-    Router()
+    Router() : myValidMessagesList({Messages::ID...})
     {
-        myValidMessagesList = {Messages::ID...};
+        
     }
 
-    virtual std::initializer_list<etl::message_id_t> GetValidMessagesList() const
+    const std::vector<etl::message_id_t>& GetValidMessagesList() const
     {
         return myValidMessagesList;
     }
 protected:
-    std::initializer_list<etl::message_id_t> myValidMessagesList;
+    std::vector<etl::message_id_t> myValidMessagesList;
 };
 
 

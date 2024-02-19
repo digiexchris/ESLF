@@ -31,10 +31,8 @@
 class LoggerInitException : public etl::exception
 {
 public:
-    LoggerInitException(const char* reason, const char* file, int line)
-        : etl::exception(reason, file, line) {}
+    LoggerInitException(const char* reason, const char* file, int line);
 };
-
 
 template <size_t MaxMessageLength>
 class ILogBackend
@@ -46,124 +44,46 @@ public:
     virtual void Error(etl::string<MaxMessageLength> message, ...) = 0;
 };
 
-
-
-
-/**
- * LOG
-*/
 template <size_t S>
-class Log// : public etl::singleton<Log<S>>
+class Log
 {
 public:
-    void SetBackend(ILogBackend<S>* aBackend) 
-    {
-        if(aBackend == nullptr)
-        {
-            throw LoggerInitException("Log backend cannot be null", __FILE__, __LINE__);
-        }
-        
-        backend = etl::unique_ptr<ILogBackend<S>>(aBackend);
-        backendSet = true;
-    };
-
-    ILogBackend<S>* GetBackend() 
-    {
-        return backend.get();
-    };
-
-    void Info(etl::string<S> message, ...)
-    {
-        ThrowIfBackendNotSet();
-
-        va_list args;
-        va_start(args, message);
-        backend->Info(message, args);
-    }
-
-    void Warn(etl::string<S> message, ...)
-    {
-        ThrowIfBackendNotSet();
-
-        va_list args;
-        va_start(args, message);
-        backend->Warn(message, args);
-    }
-
-    void Error(etl::string<S> message, ...)
-    {
-        ThrowIfBackendNotSet();
-
-        va_list args;
-        va_start(args, message);
-        backend->Error(message, args);
-    }
-
-    void ThrowIfBackendNotSet() 
-    {
-        ETL_ASSERT(backendSet, LOGGER_INIT_EXCEPTION("Log backend not set, call ESP_LOG_INIT"));
-    };
-    bool IsBackendSet()
-    {
-        return backendSet;
-    }
+    void SetBackend(ILogBackend<S>* aBackend);
+    ILogBackend<S>* GetBackend();
+    void Info(etl::string<S> message, ...);
+    void Warn(etl::string<S> message, ...);
+    void Error(etl::string<S> message, ...);
+    bool IsBackendSet();
 private:
+    void ThrowIfBackendNotSet();
+    
+
     etl::unique_ptr<ILogBackend<S>> backend;
-    bool backendSet;
+    bool backendSet = false;
 };
 
 using LogSingleton = etl::singleton<Log<ELSF_LOG_MAX_MESSAGE_LENGTH>>;
 
+
+/**
+This is the frontend to the macro, used for intermediate checks
+to see if the singleton is in a good state before executing
+the log call to it*/
 template <size_t S>
 class Logger
 {
-    public:
-        static void ThrowIfInvalid() {
-                ETL_ASSERT(LogSingleton::is_valid(), LOGGER_INIT_EXCEPTION("Log backend not set, call ESP_LOG_INIT"));
-                ETL_ASSERT(LogSingleton::instance().IsBackendSet(), LOGGER_INIT_EXCEPTION("Log backend not set, call ESP_LOG_INIT"));;
-        }
+public:
+    static void Info(etl::string<S> message, ...);
+    static void Warn(etl::string<S> message, ...);
+    static void Error(etl::string<S> message, ...);
 
-        static void Info(etl::string<S> message, ...) {
-            ThrowIfInvalid();
-            va_list args;
-            va_start(args, message);
-            LogSingleton::instance().Info(message, args);
-        }
-
-        static void Warn(etl::string<S> message, ...) {
-            ThrowIfInvalid();
-            va_list args;
-            va_start(args, message);
-            LogSingleton::instance().Warn(message, args);
-        }
-
-        static void Error(etl::string<S> message, ...) {
-            ThrowIfInvalid();
-            va_list args;
-            va_start(args, message);
-            LogSingleton::instance().Error(message, args);
-        }
+private:
+    static void ThrowIfInvalid();
 };
 
 template <size_t S>
 class LogFactory
 {   
-    public:
-        static bool Create(ILogBackend<S>* backend) {
-            if(backend == nullptr)
-            {
-                throw LoggerInitException("Log backend cannot be null", __FILE__, __LINE__);
-            }
-            
-            if(!LogSingleton::is_valid())
-            {
-                LogSingleton::create();
-                LogSingleton::instance().SetBackend(backend);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-    }
+public:
+    static bool Create(ILogBackend<S>* backend);
 };

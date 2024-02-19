@@ -38,7 +38,7 @@ public:
     virtual void on_receive_unknown(const etl::imessage& msg);
 
 private:
-    etl::hfsm* myFsm;
+    etl::unique_ptr<etl::hfsm> myFsm;
 };
 
 } // namespace Machine

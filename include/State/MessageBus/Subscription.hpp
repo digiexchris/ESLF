@@ -10,7 +10,7 @@ class Subscription : public etl::message_broker::subscription
 {
 public:
 
-  Subscription(etl::imessage_router& router, std::initializer_list<etl::message_id_t> id_list_)
+  Subscription(etl::imessage_router& router, std::vector<etl::message_id_t> id_list_)
     : etl::message_broker::subscription(router)
     , id_list(id_list_)
   {
