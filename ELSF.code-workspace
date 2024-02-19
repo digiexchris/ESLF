@@ -47,21 +47,6 @@
 		],
 		"cmake.allowCommentsInPresetsFile": true,
 		"cmake.allowUnsupportedPresetsVersions": true,
-		"mesonbuild.configureOnOpen": true,
-		"mesonbuild.configureOptions": [
-
-			"--buildtype=debug",
-			"-Dbuild_tests=true"
-			//"--use_stl=true"
-		],
-		"mesonbuild.formatting.enabled": true,
-		"mesonbuild.buildFolder": "build",
-		"mesonbuild.testOptions": [
-			"--output-on-failure",
-			"--gtest_break_on_failure",
-			"--gtest_stack_trace_depth=10", 
-			"--gmock_verbose=info"
-		],
 		"C_Cpp.default.compileCommands": "c:\\Users\\chris\\Documents\\repos\\els\\LeadscrewWarrantyVoider\\lib\\ESLF\\build/compile_commands.json",
 		"cmakeExplorer.suiteDelimiter": "-",
 		"cmakeExplorer.parallelJobs": 1,
@@ -138,6 +123,16 @@
 				"name": "Launch LLDB",
 				"program": "${workspaceFolder}/build/test/elsf_tests",
 				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure", "--gtest_stack_trace_depth=10", "--gmock_verbose=info"],
+				"cwd": "${workspaceFolder}",
+				// "preLaunchTask": "build-debug-test",
+			},
+			{
+				"type": "lldb",
+				"request": "launch",
+				//"envFile": "${workspaceFolder}/${config:mesonbuild.buildFolder}/meson-vscode.env",
+				"name": "Launch -no-break-on-failure",
+				"program": "${workspaceFolder}/build/test/elsf_tests",
+				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_stack_trace_depth=20", "--gmock_verbose=warn"],
 				"cwd": "${workspaceFolder}",
 				// "preLaunchTask": "build-debug-test",
 			},

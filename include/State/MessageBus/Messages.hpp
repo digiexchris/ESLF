@@ -31,15 +31,22 @@ struct StartMessage : public etl::message<MessageId::START, MachineMessageInterf
  * a specific position before starting the position tracking
 */
 struct StartAtMessage : public etl::message<MessageId::START_RUNNING_AT, MachineMessageInterface>
+
 {
-    StartAtMessage(double time) : time(time) {}
-    double time;
+    /**
+    * @brief Represents a message to start at a specific position.
+    * 
+    * @param position  This message is used to instruct the system to start at a specific position.
+    * The position is specified in base system units.
+    */
+    StartAtMessage(uint32_t position);
+    uint32_t position;
 };
 
 struct StopAtMessage : public etl::message<MessageId::STOP_RUNNING_AT, MachineMessageInterface>
 {
-    StopAtMessage(double time) : time(time) {}
-    double time;
+    StopAtMessage(uint32_t position);
+    uint32_t position;
 };
 
 struct StopMessage : public etl::message<MessageId::STOP, MachineMessageInterface>

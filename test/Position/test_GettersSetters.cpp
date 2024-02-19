@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 #include "Position/Position.hpp"
 #include <stdint.h>
-#include "DefaultUnitTest.hpp"
+#include "TestHelpers/DefaultUnitTest.hpp"
 #include "Mocks/Position/MockPosition.hpp"
 
 class PositionGettersSettersTest : public DefaultUnitTest {

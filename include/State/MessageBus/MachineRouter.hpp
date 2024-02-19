@@ -25,10 +25,7 @@ class MachineRouter
     ResetMessage>
 {
 public:
-    explicit MachineRouter(State::Machine::Machine& fsm) : myFsm(fsm)
-    {
-        myFsm.start();
-    }
+    explicit MachineRouter(State::Machine::Machine& fsm);
 
     virtual void on_receive(const etl::imessage& msg);
     virtual void on_receive_unknown(const etl::imessage& msg);

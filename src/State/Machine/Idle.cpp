@@ -34,7 +34,7 @@ namespace Machine
   {
     get_fsm_context().ExecuteStartAt();
     ELSF_LOG_INFO("  S1 : Received message START AT\n");
-    return etl::ifsm_state::No_State_Change; //TODO return the child state WAITING_FOR_SYNC
+    return etl::ifsm_state::No_State_Change;
   }
 
   //***************************************************************************

@@ -2,7 +2,8 @@
 #include "Mocks/Logging/MockLogBackend.hpp"
 #include "State/MessageBus/Messages.hpp"
 
-#include "DefaultUnitTest.hpp"
+#include "TestHelpers/DefaultUnitTest.hpp"
+#include "TestHelpers/Logging/LoggingUnitTest.hpp"
 #include "State/MessageBus/Subscription.hpp"
 #include "State/MessageBus/Broker.hpp"
 #include "State/Machine/Machine.hpp"
@@ -41,12 +42,25 @@ TEST_F(MachineSubscriptionIntegrationTest, should_send_start_message_to_machine)
 
 }
 
-TEST(MessageRouter, MessageRouter_logs_unknown_message) {
-    Mocks::Logging::MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH> mockBackend;
-    ELSF_LOG_INIT(mockBackend);
+TEST_F(MachineSubscriptionIntegrationTest, constructor_starts_fsm) 
+{
+    MockMachine fsm;
 
+    MachineRouter machineRouter(fsm);
+
+    EXPECT_TRUE(fsm.is_started());
+}
+
+class MessageRouterLoggingTest : public LoggerTest
+{
+};
+
+TEST_F(MessageRouterLoggingTest, MessageRouter_logs_unknown_message) {
+    Mocks::Logging::MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH> mockBackend;
+    bool result = LogFactory<256>::Create(mockBackend);
+    ASSERT_TRUE(result);
     EXPECT_CALL(mockBackend, LogFormattedWarn(testing::_)).Times(1);
-    
+    EXPECT_CALL(mockBackend, LogFormattedInfo(testing::_)); //just because the FSM logs info when it starts
     MockMachine fsm;
     MachineRouter machineRouter(fsm);
     StartMessage startMessage;

@@ -25,22 +25,5 @@ public:
 };
 
 
-// // The subscriptions.
-// Subscription subscription1{ router1, { Message1::ID, Message2::ID } };
-// Subscription subscription2{ router2, { Message2::ID, Message3::ID } };
-
-// // Instance of message broker.
-// etl::message_broker broker;
-
-// // Subscribe router1 and router1 to the broker.
-// broker.subscribe(subscription1);
-// broker.subscribe(subscription2);
-
-// broker.receive(message1); // Received by router1
-// broker.receive(message2); // Received by router1 and router2
-// broker.receive(message3); // Received by router2
-// broker.receive(message4); // Received by router2 as a Message3
-
-
 } // namespace MessageBus
 } // namespace State

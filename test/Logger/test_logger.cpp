@@ -3,17 +3,9 @@
 
 #include <gmock/gmock.h> // Include the necessary header file
 #include "Mocks/Logging/MockLogBackend.hpp"
+#include "TestHelpers/Logging/LoggingUnitTest.hpp"
 
 using namespace Mocks::Logging;
-
-class LoggerTest : public testing::Test {
-protected:
-  void TearDown() override {
-    if(LogSingleton::is_valid()) {
-      LogSingleton::destroy();
-    }
-  }
-};
 
 class LoggerExceptionTest : public testing::Test {
 protected:

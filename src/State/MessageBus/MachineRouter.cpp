@@ -6,6 +6,11 @@ namespace State
 {
 namespace MessageBus
 {
+    MachineRouter::MachineRouter(State::Machine::Machine& fsm) : myFsm(fsm)
+    {
+        myFsm.start();
+    }
+
     void MachineRouter::on_receive(const etl::imessage& msg)
     {
         myFsm.receive(msg);

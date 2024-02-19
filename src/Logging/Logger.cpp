@@ -62,12 +62,9 @@ void Logger<S>::Error(etl::string<S> message, ...)
 template <size_t S>
 bool LogFactory<S>::Create(const ILogBackend<S>& backend)
 {
-    ETL_ASSERT(backend != nullptr, LOGGER_INIT_EXCEPTION("Log backend cannot be null"))
-    
     if(!LogSingleton::is_valid())
     {
         LogSingleton::create(backend);
-        //LogSingleton::instance().SetBackend(backend);
         return true;
     }
     else

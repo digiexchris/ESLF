@@ -12,7 +12,7 @@
 #include <etl/memory.h> // Include for etl::shared_ptr
 #include <etl/message_packet.h>
 #include <memory>
-#include "DefaultUnitTest.hpp"
+#include "TestHelpers/DefaultUnitTest.hpp"
 #include <etl/hfsm.h>
 
 using namespace State::Machine;
