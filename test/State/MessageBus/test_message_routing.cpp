@@ -1,3 +1,5 @@
+#include "Logging/Logger.hpp"
+#include "Mocks/Logging/MockLogBackend.hpp"
 #include "State/MessageBus/Messages.hpp"
 
 #include "DefaultUnitTest.hpp"
@@ -20,10 +22,10 @@ class MachineSubscriptionIntegrationTest : public DefaultUnitTest {
 
 TEST_F(MachineSubscriptionIntegrationTest, should_send_start_message_to_machine) {
 //GTEST_SKIP();
-    MockMachine *fsm = new MockMachine();
+    MockMachine fsm;
     Broker broker;
 
-    EXPECT_CALL(*fsm, ExecuteStart()).Times(1);
+    EXPECT_CALL(fsm, ExecuteStartMock()).Times(1);
 
     MachineRouter machineRouter(fsm);
 
@@ -37,12 +39,18 @@ TEST_F(MachineSubscriptionIntegrationTest, should_send_start_message_to_machine)
 
     machineRouter.ProcessQueue();
 
-    //EXPECT_EQ(fsm->get_state_id(), MachineStateId::RUNNING);
-
 }
 
-// TEST_F(MachineSubscriptionIntegrationTest, should_send_start_at_message_to_machine_only) {
-//     Broker broker;
+TEST(MessageRouter, MessageRouter_logs_unknown_message) {
+    Mocks::Logging::MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH> mockBackend;
+    ELSF_LOG_INIT(mockBackend);
 
-//     StartAtMessage startAtMessage(100);
-// }
+    EXPECT_CALL(mockBackend, LogFormattedWarn(testing::_)).Times(1);
+    
+    MockMachine fsm;
+    MachineRouter machineRouter(fsm);
+    StartMessage startMessage;
+
+    machineRouter.on_receive_unknown(startMessage);
+    LogSingleton::destroy();
+}

@@ -25,20 +25,16 @@ class MachineRouter
     ResetMessage>
 {
 public:
-    explicit MachineRouter(State::Machine::Machine* fsm) : myFsm(fsm)
+    explicit MachineRouter(State::Machine::Machine& fsm) : myFsm(fsm)
     {
+        myFsm.start();
     }
 
-    virtual void on_receive(const StartMessage& msg);
-    virtual void on_receive(const StartAtMessage& msg);
-    virtual void on_receive(const StopMessage& msg);
-    virtual void on_receive(const StopAtMessage& msg);
-    virtual void on_receive(const EStopMessage& msg);
-    virtual void on_receive(const ResetMessage& msg);
+    virtual void on_receive(const etl::imessage& msg);
     virtual void on_receive_unknown(const etl::imessage& msg);
 
 private:
-    etl::unique_ptr<etl::hfsm> myFsm;
+    etl::hfsm& myFsm;
 };
 
 } // namespace Machine

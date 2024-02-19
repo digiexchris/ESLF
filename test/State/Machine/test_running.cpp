@@ -24,27 +24,17 @@ protected:
 };
 
 namespace test_running {
-    void Reset(Machine* fsm, etl::imessage* message) {
-        fsm->reset();
-        fsm->start();
-        fsm->receive(*message);
+    void Reset(Machine& fsm, etl::imessage* message) {
+        fsm.reset();
+        fsm.start();
+        fsm.receive(*message);
     }
 }
 
 TEST_F(TransitionFromRunningTest, one_transition_from_idle) {
-        Machine fsm;
-        RunningState runningState;
-        IdleState idleState;
-        EStopState eStopState;
-
-        // The list of states.
-        etl::ifsm_state* stateList[] = { &idleState,  &runningState, &eStopState };
-
-        fsm.set_states(stateList, 3);
-
-        auto initialStateMessage= StartMessage();
-       
-       test_running::Reset(&fsm, &initialStateMessage);
+    Machine fsm;
+    auto initialStateMessage= StartMessage();
+    test_running::Reset(fsm, &initialStateMessage);
 
     struct Transition {
         std::shared_ptr<etl::imessage> message;
@@ -61,7 +51,7 @@ TEST_F(TransitionFromRunningTest, one_transition_from_idle) {
     };
 
     for (const auto& transition : transitions) {
-        test_running::Reset(&fsm, &initialStateMessage);
+        test_running::Reset(fsm, &initialStateMessage);
 
         etl::fsm_state_id_t currentState = fsm.get_state_id();
         ASSERT_EQ(currentState, static_cast<int>(MachineStateId::RUNNING)) << "State is not RUNNING after reset for transition";
@@ -69,12 +59,7 @@ TEST_F(TransitionFromRunningTest, one_transition_from_idle) {
         std::shared_ptr<etl::imessage> message = transition.message;
 
         fsm.receive(*message);
-        //etl::send_message(fsm,*message);
-        // #CCHATELAIN todo: remove this from the fsm, have the fsm as a reciever. Going to use a message bus for multiple routers/recievers. fsm.process_queue();
-
         currentState = fsm.get_state_id();
         ASSERT_EQ(currentState, static_cast<int>(transition.expectedState)) << "Transition failed";
-
-        //delete transition.message;  // Clean up the message
     }
 }

@@ -22,14 +22,6 @@ protected:
 
 TEST_F(TransitionFromInitTest, one_transition_from_reset) {
     Machine fsm;
-    RunningState runningState;
-    IdleState idleState;
-    EStopState eStopState;
-
-    // The list of states.
-    etl::ifsm_state* stateList[] = { &idleState, &runningState, &eStopState };
-
-    fsm.set_states(stateList, 3);
     fsm.start();
 
     struct Transition {
@@ -56,12 +48,9 @@ TEST_F(TransitionFromInitTest, one_transition_from_reset) {
         std::shared_ptr<etl::imessage> message = transition.message;
 
         fsm.receive(*message);
-        //etl::send_message(fsm,*message);
-        // #CCHATELAIN todo: remove this from the fsm, have the fsm as a reciever. Going to use a message bus for multiple routers/recievers. fsm.process_queue();
 
         currentState = fsm.get_state_id();
         ASSERT_EQ(currentState, static_cast<int>(transition.expectedState)) << "Transition failed";
 
-        //delete transition.message;  // Clean up the message
     }
 }

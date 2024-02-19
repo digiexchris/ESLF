@@ -8,15 +8,17 @@ namespace Mocks::State::Machine {
 class MockMachine : public ::State::Machine::Machine
 {
 public:
-// virtual void ExecuteStart() override {
-//     ELSF_LOG_INFO("MockMachine received ExecuteStart");
-// }
-  MOCK_METHOD(void, ExecuteStart, (), (override));
+
+  MOCK_METHOD(void, ExecuteStartMock, (), ());
   MOCK_METHOD(void, ExecuteStartAt, (), (override));
   MOCK_METHOD(void, ExecuteStop, (), (override));
   MOCK_METHOD(void, ExecuteStopAt, (), (override));
   MOCK_METHOD(void, ExecuteEStop, (), (override));
   MOCK_METHOD(void, ExecuteReset, (), (override));
+  
+  virtual void ExecuteStart() override {
+    ExecuteStartMock();
+  }
 };
 
 } // namespace State::Machine

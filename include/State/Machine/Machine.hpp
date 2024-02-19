@@ -10,6 +10,9 @@ namespace State
 namespace Machine
 {
 
+class RunningState;
+class IdleState;
+class EStopState;
 
 enum MachineStateId
 {
@@ -35,10 +38,11 @@ public:
   virtual void ExecuteReset();
 
 protected:
-
-
+    static IdleState idleState;
+    static RunningState runningState;
+    static EStopState eStopState;
+    static etl::ifsm_state* myStateList[3];//= { &idleState, &runningState, &eStopState };
 };
-
 
   } // namespace Machine
 } // namespace State

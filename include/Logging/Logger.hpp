@@ -39,27 +39,22 @@ class ILogBackend
 {
 public:
     virtual ~ILogBackend() {};
-    virtual void Info(etl::string<MaxMessageLength> message, ...) = 0;
-    virtual void Warn(etl::string<MaxMessageLength> message, ...) = 0;
-    virtual void Error(etl::string<MaxMessageLength> message, ...) = 0;
+    virtual void Info(etl::string<MaxMessageLength> message, ...) const = 0;
+    virtual void Warn(etl::string<MaxMessageLength> message, ...) const = 0;
+    virtual void Error(etl::string<MaxMessageLength> message, ...) const = 0;
 };
 
 template <size_t S>
 class Log
 {
 public:
-    void SetBackend(ILogBackend<S>* aBackend);
-    ILogBackend<S>* GetBackend();
+    Log(const ILogBackend<S>& aBackend) : backend(aBackend) {}
+    Log() = delete;
     void Info(etl::string<S> message, ...);
     void Warn(etl::string<S> message, ...);
     void Error(etl::string<S> message, ...);
-    bool IsBackendSet();
 private:
-    void ThrowIfBackendNotSet();
-    
-
-    etl::unique_ptr<ILogBackend<S>> backend;
-    bool backendSet = false;
+    const ILogBackend<S>& backend;
 };
 
 using LogSingleton = etl::singleton<Log<ELSF_LOG_MAX_MESSAGE_LENGTH>>;
@@ -85,5 +80,5 @@ template <size_t S>
 class LogFactory
 {   
 public:
-    static bool Create(ILogBackend<S>* backend);
+    static bool Create(const ILogBackend<S>& backend);
 };
