@@ -1,67 +1,80 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "Position/Position.hpp"
+#include "State/Position.hpp"
 #include <stdint.h>
 #include "TestHelpers/DefaultUnitTest.hpp"
-#include "Mocks/Position/MockPosition.hpp"
+#include "Mocks/State/MockPosition.hpp"
 
 class PositionFunctionsTest : public DefaultUnitTest {
+public:
+    friend class MockPosition;
 protected:
      MockPosition position;
 };
 
 TEST_F(PositionFunctionsTest, UpdateMotionParamsCalled)
 {
-    EXPECT_CALL(position, UpdateMotionParams()).Times(1);
+    State::PositionParams expectedPosition = {300, true, 1};    
+    EXPECT_CALL(position, UpdateMotionParams()).Times(1).WillOnce(::testing::ReturnRef(expectedPosition));
 
     position.Update();
 }
 
-TEST_F(PositionFunctionsTest, StatusUpdated)
+TEST_F(PositionFunctionsTest, Updated)
 {
-    Position::Status expectedStatus = {300, true, 1, 2, 3, true, 4, 5};
+    State::PositionParams expectedPosition = {300, true, 1};
 
-    EXPECT_CALL(position, UpdateMotionParams()).WillOnce(::testing::Return(expectedStatus));
+    EXPECT_CALL(position, UpdateMotionParams())
+        .WillOnce(::testing::ReturnRef(expectedPosition));
 
     position.Update();
 
-    //EXPECT_EQ(expectedStatus, position.GetStatus());
+    EXPECT_EQ(position.GetPosition(), 300);
+    EXPECT_EQ(position.GetDirection(), true);
+    EXPECT_EQ(position.GetTimestamp(), 1);
+    
+    expectedPosition = {400, false, 2};
+    EXPECT_CALL(position, UpdateMotionParams()).WillOnce(::testing::ReturnRef(expectedPosition));
+    position.Update();
+
+    EXPECT_EQ(position.GetPosition(), 400);
+    EXPECT_EQ(position.GetDirection(), false);
+    EXPECT_EQ(position.GetTimestamp(), 2);
+
 }
 
 TEST_F(PositionFunctionsTest, GreaterThan)
 {
-    Position::Status status1 = {400, true, 1, 2, 3, true, 4, 5};
+    State::PositionParams params1 = {400, true, 1 };
     MockPosition pos1;
-    pos1.SetStatus(status1);
-    Position::Status status2 = {300, true, 1, 2, 3, true, 4, 5};
+    pos1.Set(params1);
+    State::PositionParams params2 = {300, true, 1};
     MockPosition pos2;
-    pos2.SetStatus(status2);
-
-
+    pos2.Set(params2);
 
     EXPECT_TRUE(pos1 > pos2);
 }
 
 TEST_F(PositionFunctionsTest, LessThan)
 {
-    Position::Status status1 = {300, true, 1, 2, 3, true, 4, 5};
+    State::PositionParams params1 = {300, true, 1 };
     MockPosition pos1;
-    pos1.SetStatus(status1);
-    Position::Status status2 = {500, true, 1, 2, 3, true, 4, 5};
+    pos1.Set(params1);
+    State::PositionParams params2 = {400, true, 1};
     MockPosition pos2;
-    pos2.SetStatus(status2);
+    pos2.Set(params2);
 
     EXPECT_TRUE(pos1 < pos2);
 }
 
 TEST_F(PositionFunctionsTest, Equal)
 {
-    Position::Status status1 = {300, true, 1, 2, 3, true, 4, 5};
+    State::PositionParams params1 = {400, true, 1 };
     MockPosition pos1;
-    pos1.SetStatus(status1);
-    Position::Status status2 = {300, true, 1, 2, 3, true, 4, 5};
+    pos1.Set(params1);
+    State::PositionParams params2 = {400, true, 1};
     MockPosition pos2;
-    pos2.SetStatus(status2);
+    pos2.Set(params2);
 
     EXPECT_TRUE(pos1 == pos2);
 }

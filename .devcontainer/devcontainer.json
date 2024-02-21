@@ -29,7 +29,8 @@
             "josetr.cmake-language-support-vscode",
             "derivitec-ltd.cmake-test-adapter",
             "tenninebt.vscode-koverage",
-            "rherrmannr.code-coverage-lcov"
+            "rherrmannr.code-coverage-lcov",
+            "SbastienLevy.covertops-cmake-llvm"
         ]
       }
     },

@@ -1,34 +1,24 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "Position/Position.hpp"
+#include "State/Position.hpp"
 #include <stdint.h>
 #include "TestHelpers/DefaultUnitTest.hpp"
-#include "Mocks/Position/MockPosition.hpp"
+#include "Mocks/State/MockPosition.hpp"
 
 class PositionGettersSettersTest : public DefaultUnitTest {
 protected:
 };
 
-TEST_F(PositionGettersSettersTest, position_GetCountPeriod)
-{
-     MockPosition encoder;
-     encoder.SetStatus({0, false, 0, 0, 0, false, 0, 0});
-
-     uint16_t period = encoder.GetCountPeriod();
-
-     EXPECT_EQ(0, period);
-}
-
 TEST_F(PositionGettersSettersTest, position_GetPosition)
 {
      MockPosition encoder;
-     encoder.SetStatus({1000, false, 0, 0, 0, false, 0, 0});
+     encoder.Set({1000, false, 0});
 
      int32_t position = encoder.GetPosition();
 
      EXPECT_EQ(1000, position);
 
-     encoder.SetStatus({1001, false, 0, 0, 0, false, 0, 0});
+     encoder.Set({1001, false, 0});
 
      position = encoder.GetPosition();
 
@@ -36,97 +26,113 @@ TEST_F(PositionGettersSettersTest, position_GetPosition)
 
 }
 
-TEST_F(PositionGettersSettersTest, position_GetMotionParams)
+TEST_F(PositionGettersSettersTest, position_GetDirection)
 {
      MockPosition encoder;
-     encoder.SetStatus({1000, false, 0, 0, 0, false, 0, 0});
+     encoder.Set({1000, false, 0});
 
-     Position::Status status = encoder.GetMotionParams();
+     bool direction = encoder.GetDirection();
 
-     EXPECT_EQ(1000, status.count);
-     EXPECT_EQ(false, status.direction);
-     EXPECT_EQ(0, status.timestamp);
-     EXPECT_EQ(0, status.speed);
-     EXPECT_EQ(0, status.lastCount);
-     EXPECT_EQ(false, status.lastDirection);
-     EXPECT_EQ(0, status.lastTimestamp);
-     EXPECT_EQ(0, status.lastSpeed);
+     EXPECT_EQ(false, direction);
 
-     encoder.SetStatus({1001, true, 1000, 1, 1000, true, 1000, 1});
+     encoder.Set({1001, true, 0});
 
-     status = encoder.GetMotionParams();
+     direction = encoder.GetDirection();
 
-     EXPECT_EQ(1001, status.count);
-     EXPECT_EQ(true, status.direction);
-     EXPECT_EQ(1000, status.timestamp);
-     EXPECT_EQ(1, status.speed);
-     EXPECT_EQ(1000, status.lastCount);
-     EXPECT_EQ(true, status.lastDirection);
-     EXPECT_EQ(1000, status.lastTimestamp);
-     EXPECT_EQ(1, status.lastSpeed);
+     EXPECT_EQ(true, direction);
+
+}
+
+TEST_F(PositionGettersSettersTest, position_GetTimestamp)
+{
+     MockPosition encoder;
+     encoder.Set({1000, false, 0});
+
+     uint32_t timestamp = encoder.GetTimestamp();
+
+     EXPECT_EQ(0, timestamp);
+
+     encoder.Set({1001, false, 1000});
+
+     timestamp = encoder.GetTimestamp();
+
+     EXPECT_EQ(1000, timestamp);
 
 }
 
 TEST_F(PositionGettersSettersTest, position_GetNormalizedPosition)
 {
-     MockPosition encoder(2.0f);
-     encoder.SetStatus({1000, false, 0, 0, 0, false, 0, 0});
+     MockPosition encoder;
+     
+     encoder.SetScaleFactor(2);
+     encoder.Set({1000, false, 0});
 
-     int32_t position = encoder.GetNormalizedPosition();
+     EXPECT_EQ(2000, encoder.GetPosition());
+     encoder.Set({1001, false, 1000});
+     EXPECT_EQ(2002, encoder.GetPosition());
 
-     EXPECT_EQ(2000, position);
+     MockPosition encoder2;
+     encoder2.SetScaleFactor(0.5);
+     encoder2.Set({1000, false, 0});
 
-     encoder.SetStatus({2002, false, 0, 0, 0, false, 0, 0});
-
-     position = encoder.GetNormalizedPosition();
-
-     EXPECT_EQ(4004, position);
-
-     MockPosition encoder2(0.5f);
-     encoder2.SetStatus({1000, false, 0, 0, 0, false, 0, 0});
-     position = encoder2.GetNormalizedPosition();
-     EXPECT_EQ(500, position);
-
+     EXPECT_EQ(500, encoder2.GetPosition());
+     encoder2.Set({1001, false, 1000});
+     EXPECT_EQ(500, encoder2.GetPosition());
+     encoder2.Set({1002, false, 1000});
+     EXPECT_EQ(501, encoder2.GetPosition());
+     encoder2.Set({1003, false, 1000});
+     EXPECT_EQ(501, encoder2.GetPosition());
+     encoder2.Set({1004, false, 1000});
+     EXPECT_EQ(502, encoder2.GetPosition());
 }
 
 TEST_F(PositionGettersSettersTest, position_100msPerCountOver10Counts)
 {
-     Position::Status status = {0, false, 1000, 0, 0, false, 0, 0};
-     status.count = 10;
-     status.lastCount = 0;
-     status.timestamp = 2000;
-     status.lastTimestamp = 1000;
-
      MockPosition encoder;
-     encoder.SetStatus(status);
+     State::PositionParams params = {0, false, 1000};
+     encoder.Set(params);
+     params = {10, false, 2000};
+     encoder.Set(params);
 
      uint16_t period = encoder.GetCountPeriod();
 
      EXPECT_EQ(100, period);
 }
 
-TEST_F(PositionGettersSettersTest, position_GetStatus)
+TEST_F(PositionGettersSettersTest, position_100msPerCountOver10CountsNormalized)
 {
-     Position::Status status = {0, false, 1000, 0, 0, false, 0, 0};
-     Position::Status status2 = {1000, false, 1000, 0, 0, false, 0, 0};
-
      MockPosition encoder;
-     encoder.SetStatus(status);
+     encoder.SetScaleFactor(0.5);
+     State::PositionParams params = {0, false, 1000};
+     encoder.Set(params);
+     params = {10, false, 2000};
+     encoder.Set(params);
 
-     Position::Status returnedStatus = encoder.GetStatus();
+     uint16_t period = encoder.GetCountPeriod();
 
-     EXPECT_EQ(status.count, returnedStatus.count);
-     EXPECT_EQ(status.direction, returnedStatus.direction);
-     EXPECT_EQ(status.timestamp, returnedStatus.timestamp);
-     EXPECT_EQ(status.speed, returnedStatus.speed);
-     EXPECT_EQ(status.lastCount, returnedStatus.lastCount);
-     EXPECT_EQ(status.lastDirection, returnedStatus.lastDirection);
-     EXPECT_EQ(status.lastTimestamp, returnedStatus.lastTimestamp);
-     EXPECT_EQ(status.lastSpeed, returnedStatus.lastSpeed);
+     EXPECT_EQ(200, period);
+}
 
-     encoder.SetStatus(status2);
-     EXPECT_EQ(status2.count, encoder.GetStatus().count);
-     EXPECT_NE(status.count, status2.count);
+TEST_F(PositionGettersSettersTest, position_GetCountPeriod_WhenNotMoving)
+{
+     MockPosition encoder;
+     encoder.SetScaleFactor(2);
+     State::PositionParams params = {0, false, 1000};
+     encoder.Set(params);
+     params = {10, false, 2000};
+     encoder.Set(params);
+
+     uint16_t period = encoder.GetCountPeriod();
+
+     EXPECT_EQ(50, period);
+     params = {10, false, 4000};
+     
+     encoder.Set(params);
+
+     period = encoder.GetCountPeriod();
+     EXPECT_EQ(0, period);
 
 
 }
+
+//TODO write a test validating the carry over longer iterations

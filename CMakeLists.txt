@@ -28,13 +28,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(elsf::elsf ALIAS ${PROJECT_NAME})
 
 if(BUILD_ESLF_TESTS)
-  option(ENABLE_COVERAGE "Enable coverage reporting" OFF)
+  option(EXPOSE_COVERAGE_TARGET "Enable coverage reporting" OFF)
 
-  if(ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  if(EXPOSE_COVERAGE_TARGET AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
     target_link_options(${PROJECT_NAME} PRIVATE -fprofile-instr-generate)
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
-    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-instr-generate")
+    # # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
+    # # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-instr-generate")
   endif()
 endif()
 
@@ -46,6 +46,16 @@ target_include_directories(${PROJECT_NAME} ${INCLUDE_SPECIFIER} INTERFACE
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET ELSF PROPERTY CXX_STANDARD 17)
 endif()
+
+if((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang"))
+  if((${CMAKE_CXX_COMPILER_VERSION} VERSION_EQUAL 11) OR
+     (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 11))
+      set(EXPOSE_COVERAGE_TARGET TRUE CACHE BOOL
+        "A 'coverage' target will be created and can be used to create a `coverage.json` file containing coverage information in the build tree directory.")
+  endif()
+endif()
+
+subdirs("coverage")
 
 add_subdirectory(lib/etl)
 target_link_libraries(ELSF PRIVATE etl)

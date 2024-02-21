@@ -1,12 +1,18 @@
 #pragma once
 
-// #include "Position/Position.hpp"
+#include "State/Position.hpp"
 
-// namespace Device
-// {
-// class Spindle : public Position::Position
-// {
-//     public:
-// };
-//probably unecessary, the main machine position can do this.
-//} // namespace Spindle
+namespace Device
+{
+//*
+// * @brief Spindle class
+// *Example Encoder Type: Spindle<EncoderSimulator>
+// */
+template <typename EncoderType>
+class Spindle : public EncoderType
+{
+    public:
+
+    protected:
+};
+} // namespace Spindle

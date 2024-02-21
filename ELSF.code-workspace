@@ -48,7 +48,7 @@
 		"cmake.allowCommentsInPresetsFile": true,
 		"cmake.allowUnsupportedPresetsVersions": true,
 		"C_Cpp.default.compileCommands": "c:\\Users\\chris\\Documents\\repos\\els\\LeadscrewWarrantyVoider\\lib\\ESLF\\build/compile_commands.json",
-		"cmakeExplorer.suiteDelimiter": "-",
+		"cmakeExplorer.suiteDelimiter": ".",
 		"cmakeExplorer.parallelJobs": 1,
 		"cmakeExplorer.buildDir": "${buildDirectory}",
 		"code-coverage-lcov.path.searchPath": "coverage/*.info",
@@ -59,7 +59,12 @@
 		"koverage.coverageCommand": "./coverage.sh",
 		"koverage.sufficientCoverageThreshold": 80,
 		"koverage.autoRefresh": true,
-		"koverage.autoRefreshDebounce": 1000
+		"koverage.autoRefreshDebounce": 1000,
+		"cmakeExplorer.logpanel": true,
+		"cmakeExplorer.buildConfig": "ELSFTest",
+		"covertops-cmake-llvm.additionalCmakeOptions": [
+			"-DENABLE_COVERAGE=ON"
+		]
 	},
 	"tasks":
 	{
@@ -69,9 +74,7 @@
 				"label": "generate-lcov",
 				"type": "shell",
 				"command": "./coverage.sh",
-				"args": [
-					// "export", "-format=lcov", "-instr-profile=${workspaceFolder}/build/test/default.profraw", "${workspaceFolder}/build/test/elsf_tests", ">", "${workspaceFolder}/coverage/lcov-elsf_tests.info"
-				],
+				"args": []
 
 			},
 			{
@@ -86,31 +89,6 @@
 					  "-Xdemangler", "c++filt", "-n"
 				]
 			}
-			
-			// {
-			// 	"label": "configure-debug-test",
-			// 	"type": "shell",
-			// 	"command": "cmake",
-			// 	"args": [
-			// 		"--preset",
-			// 		"x64-debug-test"  
-			// 	]
-			// },
-			// {
-			// 	"label": "build-debug-test",
-			// 	"type": "shell",
-			// 	"command": "cmake",
-			// 	"args": [
-			// 		"--build",
-			// 		"${workspaceFolder}/out/build/x64-debug-test",
-			// 	],
-			// 	"group": {
-			// 		"kind": "build",
-			// 		"isDefault": true
-			// 	},
-			// 	"problemMatcher": ["$msCompile"],
-			// 	"dependsOn": "configure-debug-test"
-			// }
 		]
 	},
 	"launch": {
@@ -119,71 +97,19 @@
 			{
 				"type": "lldb",
 				"request": "launch",
-				//"envFile": "${workspaceFolder}/${config:mesonbuild.buildFolder}/meson-vscode.env",
 				"name": "Launch LLDB",
 				"program": "${workspaceFolder}/build/test/elsf_tests",
 				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure", "--gtest_stack_trace_depth=10", "--gmock_verbose=info"],
-				"cwd": "${workspaceFolder}",
-				// "preLaunchTask": "build-debug-test",
+				"cwd": "${workspaceFolder}"
 			},
 			{
 				"type": "lldb",
 				"request": "launch",
-				//"envFile": "${workspaceFolder}/${config:mesonbuild.buildFolder}/meson-vscode.env",
 				"name": "Launch -no-break-on-failure",
 				"program": "${workspaceFolder}/build/test/elsf_tests",
 				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_stack_trace_depth=20", "--gmock_verbose=warn"],
-				"cwd": "${workspaceFolder}",
-				// "preLaunchTask": "build-debug-test",
-			},
-
-			// {
-			// 	"name": "(gdb) Launch",
-			// 	"type": "cppdbg",
-			// 	"request": "launch",
-			// 	"program": "${workspaceFolder}\\out\\build\\x64-debug-test\\test\\elsf_tests.exe",
-			// 	"stopAtEntry": false,
-			// 	//"cwd": "${cmake.testWorkingDirectory}",
-			// 	"cwd": "${workspaceFolder}/out/build/x64-debug-test/test",
-			// 	"args": [ "${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure"],
-			// 	"preLaunchTask": "build-debug-test",
-			// 	"environment": [],
-			// 	"externalConsole": false,
-			// 	"MIMode": "gdb",
-			// 	"miDebuggerPath": "gdb.exe",
-			// 	"setupCommands": [
-			// 		{
-			// 			"description": "Enable pretty-printing for gdb",
-			// 			"text": "-enable-pretty-printing",
-			// 			"ignoreFailures": true
-			// 		},
-			// 		{
-			// 			"description": "Set Disassembly Flavor to Intel",
-			// 			"text": "-gdb-set disassembly-flavor intel",
-			// 			"ignoreFailures": true
-			// 		}
-			// 	]
-			// },
-			// {
-			// 	"name": "(ctest) Launch",
-			// 	"type": "cppdbg",
-			// 	"request": "launch",
-			// 	// Resolved by CMake Tools:
-			// 	"program": "${cmake.testProgram}",
-			// 	"cwd": "${cmake.testWorkingDirectory}",
-			// 	"args": [ "${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure"],
-			// 	"preLaunchTask": "build-debug-test"
-			// },
-			// {
-			// 	"name": "(ctest) Launch Debug",
-			// 	"type": "cppdbg",
-			// 	"request": "launch",
-			// 	// Resolved by CMake Tools:
-			// 	"program": "${cmake.cmakePath}/cmake.exe",
-			// 	"cwd": "${cmake.testWorkingDirectory}",
-			// 	"args": [ "--target Debug ${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure"],
-			// 	"preLaunchTask": "build-debug-test"
-			// }
+				"cwd": "${workspaceFolder}"
+			}
 		],
 		"compounds": []
 	},
@@ -191,8 +117,7 @@
 		"recommendations": [
 			"twxs.cmake",
 			"llvm-vs-code-extensions.vscode-clangd",
-			"ms-vscode.cmake-tools",
-			// "jbenden.c-cpp-flylint"
+			"ms-vscode.cmake-tools"
 		]
 	}
 }

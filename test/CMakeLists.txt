@@ -26,7 +26,7 @@ enable_testing()
 
 include_directories(./)
 
-if(ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+if(EXPOSE_COVERAGE_TARGET AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 target_link_libraries(
   elsf_tests PRIVATE -fprofile-instr-generate
   gtest gtest_main

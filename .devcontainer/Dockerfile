@@ -18,12 +18,12 @@ RUN apt-get update && apt-get -y --no-install-recommends install \
     python3 \
     python3-pip 
 
-run apt install llvm-14 llvm-14-tools -y
+run apt install llvm-14 llvm-14-tools curl -y
 
 run update-alternatives --install /usr/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-14 100
 run update-alternatives --install /usr/bin/llvm-profdata llvm-profdata /usr/bin/llvm-profdata-14 100
 
-run curl -fsSL https://ollama.com/install.sh | sh
+# uncomment to use code completion using continue.dev extension run curl -fsSL https://ollama.com/install.sh | sh
 
 # Let us add some heavy dependency
 # RUN cd ${HOME} && \

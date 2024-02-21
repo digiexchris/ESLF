@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Position/Position.hpp"
-#include "Encoder/Encoder.hpp"
+#include "State/Position.hpp"
 
 namespace Device 
 {
 
-class Axis : public Position::Position
+template <typename EncoderType>
+class Axis : public EncoderType
 {
     public:
-        Axis(float aScaleFactor = 1.0f) : Position::Position(aScaleFactor) {};
+        Axis(float aScaleFactor = 1.0f) : State::Position(aScaleFactor) {};
         virtual void MoveTo(int32_t aTargetPosition) = 0;
 
         //Stop now, flushing any remaining motion commands, if possible.
