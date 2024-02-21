@@ -10,21 +10,21 @@ class TestLogBackend : public ILogBackend<MaxMessageLength>
 {
 public:
 
-    virtual void Info(etl::string<MaxMessageLength> message, ...) override
+    virtual void Info(etl::string<MaxMessageLength> message, ...) const override
     {
         va_list args;
         va_start(args, message);
         PrintLog("INFO: ", message, args);
     }
 
-    virtual void Warn(etl::string<MaxMessageLength> message, ...) override
+    virtual void Warn(etl::string<MaxMessageLength> message, ...) const override
     {
         va_list args;
         va_start(args, message);
         PrintLog("WARN: ", message, args);
     }
 
-    virtual void Error(etl::string<MaxMessageLength> message, ...) override
+    virtual void Error(etl::string<MaxMessageLength> message, ...) const override
     {
         va_list args;
         va_start(args, message);
@@ -32,7 +32,7 @@ public:
     }
 
     //allow each log function to add up to 32 characters of prefix (eg. ERROR: WARN: FILENAME:, etc...)
-    void PrintLog(etl::string<MaxPrefixLength> prefix, etl::string<MaxMessageLength> message, va_list args)
+    void PrintLog(etl::string<MaxPrefixLength> prefix, etl::string<MaxMessageLength> message, va_list args) const
     {
         
         #ifdef APPLICATION_LOGGING_OUTPUT

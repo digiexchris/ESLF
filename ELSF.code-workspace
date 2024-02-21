@@ -1,0 +1,123 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"cmake.configureOnOpen": true,
+		"makefile.configureOnOpen": false,
+		"cmake.options.statusBarVisibility": "visible",
+		"files.associations": {
+			"format": "cpp",
+			"chrono": "cpp",
+			"system_error": "cpp",
+			"any": "cpp",
+			"exception": "cpp",
+			"functional": "cpp",
+			"memory": "cpp",
+			"optional": "cpp",
+			"type_traits": "cpp",
+			"atomic": "cpp",
+			"deque": "cpp",
+			"forward_list": "cpp",
+			"ios": "cpp",
+			"list": "cpp",
+			"vector": "cpp",
+			"xhash": "cpp",
+			"xiosbase": "cpp",
+			"xstring": "cpp",
+			"xtree": "cpp",
+			"bitset": "cpp",
+			"random": "cpp"
+		},
+		"c": {
+			"minCoverage": 0.8,
+			"refBranch": "main",
+			"usePrePushValidation": false,
+			"lcovFileName": "lcov.info",
+			"runTestCoverage": "npm run test"
+		  },
+		  
+		"cmake.ctestArgs": [
+			"--output-on-failure",
+			"--gtest_break_on_failure",
+			"--gtest_stack_trace_depth=10", 
+			"--gmock_verbose=info"
+		],
+		"cmake.allowCommentsInPresetsFile": true,
+		"cmake.allowUnsupportedPresetsVersions": true,
+		"C_Cpp.default.compileCommands": "c:\\Users\\chris\\Documents\\repos\\els\\LeadscrewWarrantyVoider\\lib\\ESLF\\build/compile_commands.json",
+		"cmakeExplorer.suiteDelimiter": ".",
+		"cmakeExplorer.parallelJobs": 1,
+		"cmakeExplorer.buildDir": "${buildDirectory}",
+		"code-coverage-lcov.path.searchPath": "coverage/*.info",
+		"koverage.coverageFilePaths": [
+
+			"coverage/lcov.info"
+		],
+		"koverage.coverageCommand": "./coverage.sh",
+		"koverage.sufficientCoverageThreshold": 80,
+		"koverage.autoRefresh": true,
+		"koverage.autoRefreshDebounce": 1000,
+		"cmakeExplorer.logpanel": true,
+		"cmakeExplorer.buildConfig": "ELSFTest",
+		"covertops-cmake-llvm.additionalCmakeOptions": [
+			"-DENABLE_COVERAGE=ON"
+		]
+	},
+	"tasks":
+	{
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "generate-lcov",
+				"type": "shell",
+				"command": "./coverage.sh",
+				"args": []
+
+			},
+			{
+				"label": "view-coverage-report",
+				"type": "shell",
+				"command": "llvm-cov",
+				"args": [
+					"show",
+					"-instr-profile=${workspaceFolder}/build/test/default.profdata",
+					"${workspaceFolder}/build/test/elsf_tests",
+					 "-show-line-counts-or-regions",
+					  "-Xdemangler", "c++filt", "-n"
+				]
+			}
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"type": "lldb",
+				"request": "launch",
+				"name": "Launch LLDB",
+				"program": "${workspaceFolder}/build/test/elsf_tests",
+				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure", "--gtest_stack_trace_depth=10", "--gmock_verbose=info"],
+				"cwd": "${workspaceFolder}"
+			},
+			{
+				"type": "lldb",
+				"request": "launch",
+				"name": "Launch -no-break-on-failure",
+				"program": "${workspaceFolder}/build/test/elsf_tests",
+				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_stack_trace_depth=20", "--gmock_verbose=warn"],
+				"cwd": "${workspaceFolder}"
+			}
+		],
+		"compounds": []
+	},
+	"extensions": {
+		"recommendations": [
+			"twxs.cmake",
+			"llvm-vs-code-extensions.vscode-clangd",
+			"ms-vscode.cmake-tools"
+		]
+	}
+}

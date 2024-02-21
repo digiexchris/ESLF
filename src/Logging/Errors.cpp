@@ -1,8 +1,6 @@
-#include "Errors.hpp"
-#include <etl/error_handler.h>
+// #include "Logging/Errors.hpp"
+// #include <etl/error_handler.h>
 
-void LogErrors(const etl::exception e) {
-    Log<ELSF_LOG_MAX_MESSAGE_LENGTH>::instance().Error("%s:%s| %s", e.file_name(), e.line_number ,e.what());
-}
+// ErrorLog ETLErrorLog;
 
-etl::error_handler::set_callback<LogErrors>();
+// etl::error_handler::set_callback<ErrorLog, ETLErrorLog, &ErrorLog::member_function>();

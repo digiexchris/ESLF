@@ -1,25 +1,9 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(elsf_unit_tests LANGUAGES CXX)
 
-cmake_policy(SET CMP0135 NEW)
-
 include(CTest)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-#   # Force use of static runtime library even in Debug configuration
-#   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer -O1 -g -MT")
-#   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fsanitize=address -fno-omit-frame-pointer -O2 -g -MT")
-# endif()
-
-  # # ASan flags
-  # set(ASAN_FLAGS "-fsanitize=address -fno-omit-frame-pointer -MT")
-  
-  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g ${ASAN_FLAGS} -Wall")
-  # add_compile_definitions(_ITERATOR_DEBUG_LEVEL=0)
-  # set (CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address -static)
-
 
 include(FetchContent)
 FetchContent_Declare(
@@ -37,12 +21,23 @@ add_executable(elsf_tests
   )
 
 target_compile_definitions(elsf_tests PRIVATE -DELSF_DEBUG)
+
 enable_testing()
 
 include_directories(./)
-# add_compile_definitions(LIBDWARF_LIBRARY)
-# set(LIBDWARF_LIBRARY ${CMAKE_SOURCE_DIR}/out/build/$(presetName)/src/libdwarf/libdwarf.so)
 
+if(EXPOSE_COVERAGE_TARGET AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+target_link_libraries(
+  elsf_tests PRIVATE -fprofile-instr-generate
+  gtest gtest_main
+  GTest::gtest_main
+  GTest::gmock_main
+  etl
+  elsf::elsf
+  atomic
+  
+)
+else()
 target_link_libraries(
   elsf_tests
   gtest gtest_main
@@ -50,17 +45,9 @@ target_link_libraries(
   GTest::gmock_main
   etl
   elsf::elsf
+  atomic
 )
-
-foreach(target elsf_tests)
-    target_compile_definitions(${target} PRIVATE
-        $<$<CONFIG:Debug>:_DEBUG>
-        $<$<NOT:$<CONFIG:Debug>>:NDEBUG>
-        # Remove unwanted definitions
-        -U_DLL -U_MT
-    )
-endforeach()
-
+endif()
 
 include(GoogleTest PUBLIC)
 #  find_package(PkgConfig)
