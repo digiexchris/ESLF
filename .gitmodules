@@ -1,6 +1,0 @@
-[submodule "lib/etl"]
-	path = lib/etl
-	url = https://github.com/ETLCPP/etl
-[submodule "build_tools"]
-	path = build_tools
-	url = https://github.com/f-squirrel/dockerized_cpp.git

@@ -66,6 +66,8 @@ public:
     bool operator>(const Position& aPosition) const;
     bool operator<(const Position& aPosition) const;
     bool operator==(const Position& aPosition) const;
+    int32_t operator-(const Position& aPosition) const;
+    int32_t operator+(const Position& aPosition) const;
 
 protected:
     

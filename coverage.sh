@@ -1,5 +1,5 @@
 #!/bin/bash
-IGNORELIST='.*include/State/MessageBus/(Router\.hpp|Subscription\.hpp)'
+IGNORELIST='.*include/Machine/MessageBus/(Router\.hpp|Subscription\.hpp)'
 echo "Clearing lconv" &&
 rm coverage/*
 echo "Running tests" &&

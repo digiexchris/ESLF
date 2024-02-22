@@ -78,3 +78,17 @@ TEST_F(PositionFunctionsTest, Equal)
 
     EXPECT_TRUE(pos1 == pos2);
 }
+
+TEST_F(PositionFunctionsTest, Diff)
+{
+    State::PositionParams params1 = {400, true, 1 };
+    MockPosition pos1;
+    pos1.Set(params1);
+    State::PositionParams params2 = {300, true, 1};
+    MockPosition pos2;
+    pos2.Set(params2);
+
+    EXPECT_EQ(pos1 - pos2, 100);
+
+    EXPECT_EQ(pos2 + pos1, 700);
+}

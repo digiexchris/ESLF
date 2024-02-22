@@ -37,4 +37,7 @@ out/
 build/
 builddir/
 .cache/
-coverage/
+coverage/html
+coverage/*.prof*
+coverage/*.lcov
+Testing/
