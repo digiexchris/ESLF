@@ -2,7 +2,7 @@
 
 #include <etl/fsm.h>
 #include "Machine/MessageBus/Messages.hpp"
-#include "Machine/FSM/Machine.hpp"
+#include "Machine.hpp"
 
 namespace Machine
 {

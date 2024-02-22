@@ -1,8 +1,8 @@
 
 #include "etl/queue.h"
 #include "etl/fsm.h"
-#include "Machine/FSM/Machine.hpp"
-#include "Machine/FSM/Running.hpp"
+#include "Machine.hpp"
+#include "Running.hpp"
 #include "Logging/Logger.hpp"
 
 namespace Machine

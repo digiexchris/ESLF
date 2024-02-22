@@ -8,10 +8,11 @@ namespace Device
 // * @brief Spindle class
 // *Example Encoder Type: Spindle<EncoderSimulator>
 // */
-template <typename EncoderType>
-class Spindle : public EncoderType
+template <typename IEncoder>
+class Spindle : public IEncoder
 {
     public:
+    
 
     protected:
 };

@@ -2,10 +2,10 @@
 #include "etl/hfsm.h"
 #include "etl/message_packet.h"
 
-#include "Machine/FSM/Machine.hpp"
-#include "Machine/FSM/Idle.hpp"
-#include "Machine/FSM/Running.hpp"
-#include "Machine/FSM/EStop.hpp"
+#include "Machine.hpp"
+#include "Idle.hpp"
+#include "Running.hpp"
+#include "EStop.hpp"
 
 
 namespace Machine

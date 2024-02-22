@@ -1,4 +1,4 @@
-#include "State/Position.hpp"
+#include "Position.hpp"
 
 #include <etl/absolute.h>
 #include <etl/atomic.h>

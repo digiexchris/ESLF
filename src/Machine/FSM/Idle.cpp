@@ -1,8 +1,8 @@
 
 #include "etl/fsm.h"
 #include "etl/message_packet.h"
-#include "Machine/FSM/Machine.hpp"
-#include "Machine/FSM/Idle.hpp"
+#include "Machine.hpp"
+#include "Idle.hpp"
 #include "Logging/Logger.hpp"
 
 namespace Machine

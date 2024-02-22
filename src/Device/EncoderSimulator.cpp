@@ -1,4 +1,4 @@
-#include "Device/EncoderSimulator.hpp"
+#include "EncoderSimulator.hpp"
 #include "State/Position.hpp"
 #include "State/Position.hpp"
 

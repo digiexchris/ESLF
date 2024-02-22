@@ -3,7 +3,7 @@
 #include <etl/queue.h>
 #include <etl/message_packet.h>
 #include <etl/message_router.h>
-#include "Machine/MessageBus/Subscription.hpp"
+#include "Subscription.hpp"
 #include "Logging/Logger.hpp"
 
 namespace Machine
