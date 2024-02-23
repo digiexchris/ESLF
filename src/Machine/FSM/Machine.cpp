@@ -4,7 +4,7 @@
 
 #include "Machine.hpp"
 #include "Idle.hpp"
-#include "Running.hpp"
+#include "Turning.hpp"
 #include "EStop.hpp"
 
 
@@ -14,9 +14,9 @@ namespace FSM
 {
 
   IdleState MachineFSM::idleState;
-  RunningState MachineFSM::runningState;
+  TurningState MachineFSM::turningState;
   EStopState MachineFSM::eStopState;
-  etl::ifsm_state* MachineFSM::myStateList[] = { &idleState, &runningState, &eStopState };
+  etl::ifsm_state* MachineFSM::myStateList[] = { &idleState, &turningState, &eStopState };
 
   MachineFSM::MachineFSM()
     : hfsm(MACHINE_ROUTER_ID)

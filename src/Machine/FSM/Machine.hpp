@@ -10,14 +10,15 @@ namespace Machine
 namespace FSM
 {
 
-class RunningState;
+class TurningState;
 class IdleState;
 class EStopState;
 
 enum MachineStateId
 {
   IDLE,
-  RUNNING,
+  THREADING,
+  TURNING,
   ESTOP,
   NUMBER_OF_STATES
 };
@@ -39,7 +40,8 @@ public:
 
 protected:
     static IdleState idleState;
-    static RunningState runningState;
+    static TurningState turningState;
+    //static ThreadingState threadingState;
     static EStopState eStopState;
     static etl::ifsm_state* myStateList[3];//= { &idleState, &runningState, &eStopState };
 };

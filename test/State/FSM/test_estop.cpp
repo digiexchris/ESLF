@@ -33,12 +33,12 @@ namespace test_EStop {
 
 TEST_F(TransitionFromEStopTest, one_transition_from_idle) {
         MachineFSM fsm;
-        TurningState rurningState;
+        TurningState turningState;
         IdleState idleState;
         EStopState eStopState;
 
         // The list of states.
-        etl::ifsm_state* stateList[] = { &idleState,  &rurningState, &eStopState };
+        etl::ifsm_state* stateList[] = { &idleState,  &turningState, &eStopState };
 
         fsm.set_states(stateList, 3);
 

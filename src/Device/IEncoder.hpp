@@ -1,3 +1,5 @@
+#pragma once
+
 #include "State/Position.hpp"
 
 #include <etl/type_traits.h>
@@ -9,11 +11,14 @@ namespace Device
 
 class IEncoder : public State::Position
 {
-
+    public:
+        virtual State::PositionParams& UpdateMotionParams() = 0;
     protected:
-    // Protected constructor to prevent instantiation of IEncoder directly
-    IEncoder() = default;
-    ~IEncoder() = default; // Ensure proper destruction of derived classes
+        // Protected constructor to prevent instantiation of IEncoder directly
+        IEncoder(float aNormalizedScaleFactor = 1.0f) : State::Position(aNormalizedScaleFactor){
+
+        };
+        ~IEncoder() = default; // Ensure proper destruction of derived classes
 };
 
 

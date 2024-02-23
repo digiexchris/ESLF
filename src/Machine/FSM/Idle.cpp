@@ -27,7 +27,7 @@ namespace FSM
   {
     get_fsm_context().ExecuteStart();
     ELSF_LOG_INFO("  S1 : Received message START\n");
-    return MachineStateId::RUNNING;
+    return MachineStateId::TURNING;
   }
 
   etl::fsm_state_id_t IdleState::on_event(const StartAtMessage& msg)
