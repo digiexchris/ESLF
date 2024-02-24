@@ -1,5 +1,4 @@
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
+#include <catch2/catch_test_macros.hpp>
 #include "State/Position.hpp"
 #include <stdint.h>
 #include "TestHelpers/DefaultUnitTest.hpp"
@@ -9,84 +8,97 @@ class PositionGettersSettersTest : public DefaultUnitTest {
 protected:
 };
 
-TEST_F(PositionGettersSettersTest, position_GetPosition)
-{
+TEST_CASE_METHOD(PositionGettersSettersTest, "Set Position", "[Position]") {
+    MockPosition encoder;
+    State::PositionParams params = {1000, false, 0};
+    encoder.Set(params);
+
+    int32_t position = encoder.GetPosition();
+    bool direction = encoder.GetDirection();
+    uint32_t timestamp = encoder.GetTimestamp();
+
+    REQUIRE(position == 1000);
+    REQUIRE(direction == false);
+    REQUIRE(timestamp == 0);
+}
+
+TEST_CASE_METHOD(PositionGettersSettersTest, "Get Position", "[Position]"){
      MockPosition encoder;
      encoder.Set({1000, false, 0});
 
      int32_t position = encoder.GetPosition();
 
-     EXPECT_EQ(1000, position);
+     REQUIRE(1000 == position);
 
      encoder.Set({1001, false, 0});
 
      position = encoder.GetPosition();
 
-     EXPECT_EQ(1001, position);
+     REQUIRE(1001 == position);
 
 }
 
-TEST_F(PositionGettersSettersTest, position_GetDirection)
+TEST_CASE_METHOD(PositionGettersSettersTest, "position_GetDirection", "[Position]")
 {
      MockPosition encoder;
      encoder.Set({1000, false, 0});
 
      bool direction = encoder.GetDirection();
 
-     EXPECT_EQ(false, direction);
+     REQUIRE(false == direction);
 
      encoder.Set({1001, true, 0});
 
      direction = encoder.GetDirection();
 
-     EXPECT_EQ(true, direction);
+     REQUIRE(true == direction);
 
 }
 
-TEST_F(PositionGettersSettersTest, position_GetTimestamp)
+TEST_CASE_METHOD(PositionGettersSettersTest, "position_GetTimestamp", "[Position]")
 {
      MockPosition encoder;
      encoder.Set({1000, false, 0});
 
      uint32_t timestamp = encoder.GetTimestamp();
 
-     EXPECT_EQ(0, timestamp);
+     REQUIRE(0 == timestamp);
 
      encoder.Set({1001, false, 1000});
 
      timestamp = encoder.GetTimestamp();
 
-     EXPECT_EQ(1000, timestamp);
+     REQUIRE(1000 == timestamp);
 
 }
 
-TEST_F(PositionGettersSettersTest, position_GetNormalizedPosition)
+TEST_CASE_METHOD(PositionGettersSettersTest, "position_GetNormalizedPosition", "[Position]")
 {
      MockPosition encoder;
      
      encoder.SetScaleFactor(2);
      encoder.Set({1000, false, 0});
 
-     EXPECT_EQ(2000, encoder.GetPosition());
+     REQUIRE(2000 == encoder.GetPosition());
      encoder.Set({1001, false, 1000});
-     EXPECT_EQ(2002, encoder.GetPosition());
+     REQUIRE(2002 == encoder.GetPosition());
 
      MockPosition encoder2;
      encoder2.SetScaleFactor(0.5);
      encoder2.Set({1000, false, 0});
 
-     EXPECT_EQ(500, encoder2.GetPosition());
+     REQUIRE(500 == encoder2.GetPosition());
      encoder2.Set({1001, false, 1000});
-     EXPECT_EQ(500, encoder2.GetPosition());
+     REQUIRE(500 == encoder2.GetPosition());
      encoder2.Set({1002, false, 1000});
-     EXPECT_EQ(501, encoder2.GetPosition());
+     REQUIRE(501 == encoder2.GetPosition());
      encoder2.Set({1003, false, 1000});
-     EXPECT_EQ(501, encoder2.GetPosition());
+     REQUIRE(501 == encoder2.GetPosition());
      encoder2.Set({1004, false, 1000});
-     EXPECT_EQ(502, encoder2.GetPosition());
+     REQUIRE(502 == encoder2.GetPosition());
 }
 
-TEST_F(PositionGettersSettersTest, position_100msPerCountOver10Counts)
+TEST_CASE_METHOD(PositionGettersSettersTest, "position_100msPerCountOver10Counts", "[Position]")
 {
      MockPosition encoder;
      State::PositionParams params = {0, false, 1000};
@@ -96,10 +108,10 @@ TEST_F(PositionGettersSettersTest, position_100msPerCountOver10Counts)
 
      uint16_t period = encoder.GetCountPeriod();
 
-     EXPECT_EQ(100, period);
+     REQUIRE(100 == period);
 }
 
-TEST_F(PositionGettersSettersTest, position_100msPerCountOver10CountsNormalized)
+TEST_CASE_METHOD(PositionGettersSettersTest, "position_100msPerCountOver10CountsNormalized", "[Position]")
 {
      MockPosition encoder;
      encoder.SetScaleFactor(0.5);
@@ -110,10 +122,10 @@ TEST_F(PositionGettersSettersTest, position_100msPerCountOver10CountsNormalized)
 
      uint16_t period = encoder.GetCountPeriod();
 
-     EXPECT_EQ(200, period);
+     REQUIRE(200 == period);
 }
 
-TEST_F(PositionGettersSettersTest, position_GetCountPeriod_WhenNotMoving)
+TEST_CASE_METHOD(PositionGettersSettersTest, "position_GetCountPeriod_WhenNotMoving", "[Position]")
 {
      MockPosition encoder;
      encoder.SetScaleFactor(2);
@@ -124,13 +136,13 @@ TEST_F(PositionGettersSettersTest, position_GetCountPeriod_WhenNotMoving)
 
      uint16_t period = encoder.GetCountPeriod();
 
-     EXPECT_EQ(50, period);
+     REQUIRE(50 == period);
      params = {10, false, 4000};
      
      encoder.Set(params);
 
      period = encoder.GetCountPeriod();
-     EXPECT_EQ(0, period);
+     REQUIRE(0 == period);
 
 
 }

@@ -1,15 +1,15 @@
-#include <gtest/gtest.h>
+
 #include "Logging/Logger.hpp"
 
-class LoggerTest : public testing::Test {
+class LoggerTest {
 protected:
-    void SetUp() override {
+    LoggerTest() {
         if(LogSingleton::is_valid()) {
             LogSingleton::destroy();
         }
     }
 
-    void TearDown() override {
+    ~LoggerTest() {
         if(LogSingleton::is_valid()) {
             LogSingleton::destroy();
         }

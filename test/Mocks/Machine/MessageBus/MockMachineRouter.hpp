@@ -7,22 +7,22 @@
 * Allows expectations against the on_receive methods
 */
 
-#include <gmock/gmock.h>
-#include "State/MessageBus/MachineRouter.hpp"
-#include "State/MessageBus/Messages.hpp"
+#include <trompeloeil.hpp>
+#include "Machine/MessageBus/MachineRouter.hpp"
+#include "Machine/MessageBus/Messages.hpp"
 
-namespace Mocks::State::MessageBus {
-using namespace ::State::MessageBus;
-class MockMachineRouter : public ::State::MessageBus::MachineRouter
+namespace Mocks::Machine::MessageBus {
+using namespace ::Machine::MessageBus;
+class MockMachineRouter : public ::Machine::MessageBus::MachineRouter
 {
 public:
-    MOCK_METHOD(void, on_receive, (const StartMessage&), (override));
-    MOCK_METHOD(void, on_receive, (const StartAtMessage&), (override));
-    MOCK_METHOD(void, on_receive, (const StopMessage&), (override));
-    MOCK_METHOD(void, on_receive, (const StopAtMessage&), (override));
-    MOCK_METHOD(void, on_receive, (const EStopMessage&), (override));
-    MOCK_METHOD(void, on_receive, (const ResetMessage&), (override));
-    MOCK_METHOD(void, on_receive_unknown, (const etl::imessage&), (override));
+    MAKE_MOCK1(on_receive, void(const StartMessage&));
+    MAKE_MOCK1(on_receive, void(const StartAtMessage&));
+    MAKE_MOCK1(on_receive, void(const StopMessage&));
+    MAKE_MOCK1(on_receive, void(const StopAtMessage&));
+    MAKE_MOCK1(on_receive, void(const EStopMessage&));
+    MAKE_MOCK1(on_receive, void(const ResetMessage&));
+    MAKE_MOCK1(on_receive_unknown, void(const etl::imessage&));
 };
 
 } // namespace Mocks

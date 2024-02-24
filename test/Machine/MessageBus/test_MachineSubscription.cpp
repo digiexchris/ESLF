@@ -10,23 +10,23 @@
 #include "Machine/MessageBus/MachineRouter.hpp"
 #include "Mocks/Machine/FSM/MockMachine.hpp"
 
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
+#include <catch2/catch_test_macros.hpp>
+#include <trompeloeil.hpp>
 
 using namespace Machine::MessageBus;
 using namespace Machine::FSM;
 using namespace Mocks::Machine::FSM;
 
-class MachineSubscriptionIntegrationTest : public DefaultUnitTest {
+class MachineSubscriptionTest : public DefaultUnitTest {
     
 };
 
-TEST_F(MachineSubscriptionIntegrationTest, should_send_start_message_to_machine) {
+TEST_CASE_METHOD(MachineSubscriptionTest, "should_send_start_message_to_machine", "[MessageBus]") {
 //GTEST_SKIP();
     MockMachine fsm;
     Broker broker;
 
-    EXPECT_CALL(fsm, ExecuteStartMock()).Times(1);
+    REQUIRE_CALL(fsm, ExecuteStart()).TIMES(1);
 
     MachineRouter machineRouter(fsm);
 
@@ -42,25 +42,26 @@ TEST_F(MachineSubscriptionIntegrationTest, should_send_start_message_to_machine)
 
 }
 
-TEST_F(MachineSubscriptionIntegrationTest, constructor_starts_fsm) 
+TEST_CASE_METHOD(MachineSubscriptionTest, "constructor_starts_fsm", "[MessageBus]") 
 {
     MockMachine fsm;
 
     MachineRouter machineRouter(fsm);
 
-    EXPECT_TRUE(fsm.is_started());
+    REQUIRE(fsm.is_started());
 }
 
 class MessageRouterLoggingTest : public LoggerTest
 {
 };
 
-TEST_F(MessageRouterLoggingTest, MessageRouter_logs_unknown_message) {
+TEST_CASE_METHOD(MessageRouterLoggingTest, "MessageRouter_logs_unknown_message", "[MessageBus]") 
+{
     Mocks::Logging::MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH> mockBackend;
     bool result = LogFactory<256>::Create(mockBackend);
-    ASSERT_TRUE(result);
-    EXPECT_CALL(mockBackend, LogFormattedWarn(testing::_)).Times(1);
-    EXPECT_CALL(mockBackend, LogFormattedInfo(testing::_)); //just because the FSM logs info when it starts
+    REQUIRE(result);
+    REQUIRE_CALL(mockBackend, WarnMock(trompeloeil::_)).TIMES(1);
+    REQUIRE_CALL(mockBackend, InfoMock(trompeloeil::_)).TIMES(1); //just because the FSM logs info when it starts
     MockMachine fsm;
     MachineRouter machineRouter(fsm);
     StartMessage startMessage;

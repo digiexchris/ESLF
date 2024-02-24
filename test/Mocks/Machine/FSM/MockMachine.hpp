@@ -1,5 +1,5 @@
 
-#include <gmock/gmock.h>
+#include <trompeloeil.hpp>
 #include "Machine/FSM/Machine.hpp"
 #include "Logging/Logger.hpp"
 
@@ -9,16 +9,16 @@ class MockMachine : public ::Machine::FSM::MachineFSM
 {
 public:
 
-  MOCK_METHOD(void, ExecuteStartMock, (), ());
-  MOCK_METHOD(void, ExecuteStartAt, (), (override));
-  MOCK_METHOD(void, ExecuteStop, (), (override));
-  MOCK_METHOD(void, ExecuteStopAt, (), (override));
-  MOCK_METHOD(void, ExecuteEStop, (), (override));
-  MOCK_METHOD(void, ExecuteReset, (), (override));
+  MAKE_MOCK0(ExecuteStart, void());
+  MAKE_MOCK1(ExecuteStartAt, void(int));
+  MAKE_MOCK0(ExecuteStop, void());
+  MAKE_MOCK1(ExecuteStopAt,void(int));
+  MAKE_MOCK0(ExecuteEStop, void());
+  MAKE_MOCK0(ExecuteReset,void());
   
-  virtual void ExecuteStart() override {
-    ExecuteStartMock();
-  }
+  // virtual void ExecuteStart() override {
+  //   ExecuteStartMock();
+  // }
 };
 
 } // namespace State::Machine

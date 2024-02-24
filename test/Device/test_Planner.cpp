@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include <catch2/catch_test_macros.hpp>
 
 #include "Device/VirtualEncoder.hpp"
 #include "Device/VirtualMotor.hpp"
