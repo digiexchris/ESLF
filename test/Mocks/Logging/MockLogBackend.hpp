@@ -1,6 +1,7 @@
 #pragma once
 
-#include <trompeloeil.hpp>
+#include <catch2/catch_all.hpp>
+#include <catch2/trompeloeil.hpp>
 #include <trompeloeil/mock.hpp>
 #include <etl/string.h>
 #include <cstdio>

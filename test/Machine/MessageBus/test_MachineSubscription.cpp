@@ -11,7 +11,8 @@
 #include "Mocks/Machine/FSM/MockMachine.hpp"
 
 #include <catch2/catch_test_macros.hpp>
-#include <trompeloeil.hpp>
+#include <catch2/trompeloeil.hpp>
+
 
 using namespace Machine::MessageBus;
 using namespace Machine::FSM;
@@ -21,7 +22,7 @@ class MachineSubscriptionTest : public DefaultUnitTest {
     
 };
 
-TEST_CASE_METHOD(MachineSubscriptionTest, "should_send_start_message_to_machine", "[MessageBus]") {
+TEST_CASE_METHOD(MachineSubscriptionTest, "should_send_start_message_to_machine", "[Machine][MessageBus][Router]") {
 //GTEST_SKIP();
     MockMachine fsm;
     Broker broker;
@@ -42,7 +43,7 @@ TEST_CASE_METHOD(MachineSubscriptionTest, "should_send_start_message_to_machine"
 
 }
 
-TEST_CASE_METHOD(MachineSubscriptionTest, "constructor_starts_fsm", "[MessageBus]") 
+TEST_CASE_METHOD(MachineSubscriptionTest, "constructor_starts_fsm", "[Machine][MessageBus][Router]") 
 {
     MockMachine fsm;
 
@@ -55,7 +56,7 @@ class MessageRouterLoggingTest : public LoggerTest
 {
 };
 
-TEST_CASE_METHOD(MessageRouterLoggingTest, "MessageRouter_logs_unknown_message", "[MessageBus]") 
+TEST_CASE_METHOD(MessageRouterLoggingTest, "MessageRouter_logs_unknown_message", "[Machine][MessageBus][Router]") 
 {
     Mocks::Logging::MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH> mockBackend;
     bool result = LogFactory<256>::Create(mockBackend);

@@ -1,7 +1,7 @@
 #!/bin/bash
 IGNORELIST='.*include/Machine/MessageBus/(Router\.hpp|Subscription\.hpp)'
 echo "Clearing lconv" &&
-rm coverage/*
+rm -R coverage/lcov.info coverage/elsf_tests.profdata coverage/elsf_tests.profraw coverage/html
 echo "Running tests" &&
 LLVM_PROFILE_FILE="coverage/elsf_tests.profraw" ./build/test/elsf_tests &&
 echo "Merging coverage" &&

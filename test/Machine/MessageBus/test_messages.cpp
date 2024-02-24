@@ -18,7 +18,7 @@ class MessagesTest : public DefaultUnitTest {
     
 };
 
-TEST_CASE_METHOD(MessagesTest, "messages_with_params_store_corectly", "[MessageBus]") {
+TEST_CASE_METHOD(MessagesTest, "messages_with_params_store_corectly", "[Machine][MessageBus][Messages]") {
     StartAtMessage startAtMessage(100);
     StopAtMessage stopAtMessage(200);
 

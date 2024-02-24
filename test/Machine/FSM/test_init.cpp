@@ -20,7 +20,7 @@ class TransitionFromInitTest : public DefaultUnitTest {
 protected:
 };
 
-TEST_CASE_METHOD(TransitionFromInitTest, "one_transition_from_reset", "[FSM]") {
+TEST_CASE_METHOD(TransitionFromInitTest, "one_transition_from_reset", "[Machine][FSM][Init]") {
     MachineFSM fsm;
     fsm.start();
 

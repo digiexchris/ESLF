@@ -18,6 +18,10 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
+list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+include(CTest)
+include(Catch)
+
 
 
 FetchContent_Declare(
@@ -69,9 +73,11 @@ target_link_libraries(
 )
 endif()
 
-include(GoogleTest PUBLIC)
+#include(GoogleTest PUBLIC)
 #  find_package(PkgConfig)
 #  pkg_search_module(GTEST REQUIRED gtest_main)
 #  target_link_libraries(elsf_tests PRIVATE ${GTEST_LDFLAGS})
 #  target_compile_options(elsf_tests PRIVATE ${GTEST_CFLAGS})
-gtest_discover_tests(elsf_tests)
+#gtest_discover_tests(elsf_tests)
+
+catch_discover_tests(elsf_tests)

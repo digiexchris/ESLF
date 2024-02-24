@@ -31,7 +31,7 @@ namespace test_turning {
     }
 }
 
-TEST_CASE_METHOD(TransitionFromTurningTest, "one_transition_from_idle", "[FSM]") {
+TEST_CASE_METHOD(TransitionFromTurningTest, "one_transition_from_idle", "[Machine][FSM][Turning]") {
     MachineFSM fsm;
     auto initialStateMessage= StartMessage();
     test_turning::Reset(fsm, &initialStateMessage);

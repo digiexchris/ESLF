@@ -33,9 +33,9 @@ namespace Planner
             case FSM::MachineStateId::TURNING:
                 GenerateTurningMoves();
                 break;
-            case FSM::MachineStateId::THREADING:
-                GenerateThreadingMoves();
-                break;
+            // case FSM::MachineStateId::THREADING:
+            //     GenerateThreadingMoves();
+            //     break;
             default:
                 break;
         }

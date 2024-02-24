@@ -1,4 +1,5 @@
-#include <trompeloeil.hpp>
+#include <catch2/catch_all.hpp>
+#include <catch2/trompeloeil.hpp>
 #include "State/Position.hpp"
 #include <stdint.h>
 #include "TestHelpers/DefaultUnitTest.hpp"
@@ -14,17 +15,17 @@ protected:
 
 TEST_CASE_METHOD(PositionFunctionsTest, "UpdateMotionParamsCalled", "[Position]")
 {
-    const State::PositionParams expectedPosition = {300, true, 1};    
-    REQUIRE_CALL(position, UpdateMotionParams()).TIMES(1).RETURN(std::ref(expectedPosition));
+    State::PositionParams expectedPosition = {300, true, 1};    
+    REQUIRE_CALL(position, UpdateMotionParams()).TIMES(1).LR_RETURN(expectedPosition);
 
     position.Update();
 }
 
 TEST_CASE_METHOD(PositionFunctionsTest, "Updated", "[Position]")
 {
-    const State::PositionParams expectedPosition1 = {300, true, 1};
+    State::PositionParams expectedPosition1 = {300, true, 1};
 
-    REQUIRE_CALL(position, UpdateMotionParams()).TIMES(1).RETURN(std::ref(expectedPosition1));
+    REQUIRE_CALL(position, UpdateMotionParams()).TIMES(1).LR_RETURN(expectedPosition1);
 
     position.Update();
 
@@ -32,8 +33,8 @@ TEST_CASE_METHOD(PositionFunctionsTest, "Updated", "[Position]")
     REQUIRE(position.GetDirection() == true);
     REQUIRE(position.GetTimestamp() == 1);
     
-    const State::PositionParams expectedPosition2 = {400, false, 2};
-    REQUIRE_CALL(position, UpdateMotionParams()).TIMES(1).RETURN(std::ref(expectedPosition2));
+    State::PositionParams expectedPosition2 = {400, false, 2};
+    REQUIRE_CALL(position, UpdateMotionParams()).TIMES(1).LR_RETURN(expectedPosition2);
     position.Update();
 
     REQUIRE(position.GetPosition() == 400);

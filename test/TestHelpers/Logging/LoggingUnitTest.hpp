@@ -1,5 +1,6 @@
 
 #include "Logging/Logger.hpp"
+#include "etl_profile.h"
 
 class LoggerTest {
 protected:

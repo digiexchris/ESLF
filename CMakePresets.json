@@ -101,7 +101,6 @@
                 "BUILD_ESLF_TESTS": "ON",
                 "CMAKE_CXX_FLAGS": "-O0 -g",
                 "EXPOSE_COVERAGE_TARGET": "ON"
-                //"CMAKE_VERBOSE_MAKEFILE": "ON"
             }
         },
         {
@@ -109,8 +108,8 @@
             "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu Debug Tests Enabled ASAN Enabled",
             "inherits": "clang-debug-test",
             "cacheVariables": {
-                "CMAKE_CXX_FLAGS": "-O0 -g -fsanitize=address -fno-omit-frame-pointer",
-                "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address"
+                "CMAKE_CXX_FLAGS": "-O0 -g -fsanitize=address -fno-omit-frame-pointer -fcxx-exceptions",
+                "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address -fcxx-exceptions"
             }
         }
     ],

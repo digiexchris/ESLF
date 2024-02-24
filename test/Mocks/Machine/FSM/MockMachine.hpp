@@ -1,5 +1,5 @@
-
-#include <trompeloeil.hpp>
+#include <catch2/catch_all.hpp>
+#include <catch2/trompeloeil.hpp>
 #include "Machine/FSM/Machine.hpp"
 #include "Logging/Logger.hpp"
 
@@ -8,7 +8,8 @@ namespace Mocks::Machine::FSM {
 class MockMachine : public ::Machine::FSM::MachineFSM
 {
 public:
-
+  
+  
   MAKE_MOCK0(ExecuteStart, void());
   MAKE_MOCK1(ExecuteStartAt, void(int));
   MAKE_MOCK0(ExecuteStop, void());
@@ -21,4 +22,10 @@ public:
   // }
 };
 
+class MockBaseMachine : public MockMachine
+{
+public :
+  MAKE_MOCK2(set_states, void(etl::ifsm_state** states, size_t number_of_states));
+
+};
 } // namespace State::Machine

@@ -1,6 +1,5 @@
 #include <etl/message.h>
 #include <catch2/catch_test_macros.hpp>
-// #include <trompeloeil.hpp>
 
 #include "Machine/FSM/Machine.hpp"
 #include "Machine/FSM/EStop.hpp"
@@ -32,16 +31,16 @@ namespace test_EStop {
     }
 }
 
-TEST_CASE_METHOD(TransitionFromEStopTest, "one_transition_from_idle", "[FSM]") {
+TEST_CASE_METHOD(TransitionFromEStopTest, "one_transition_from_idle", "[Machine][FSM][EStop]") {
         MachineFSM fsm;
-        TurningState turningState;
-        IdleState idleState;
-        EStopState eStopState;
+        // TurningState turningState;
+        // IdleState idleState;
+        // EStopState eStopState;
 
-        // The list of states.
-        etl::ifsm_state* stateList[] = { &idleState,  &turningState, &eStopState };
+        // // The list of states.
+        // etl::ifsm_state* stateList[] = { &idleState,  &turningState, &eStopState };
 
-        fsm.set_states(stateList, 3);
+        // fsm.set_states(stateList, 3);
 
         auto initialStateMessage= EStopMessage();
        

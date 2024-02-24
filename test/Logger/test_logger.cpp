@@ -4,7 +4,8 @@
 
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_string.hpp>
-#include <trompeloeil.hpp>
+#include <catch2/trompeloeil.hpp>
+#include <iostream>
 
 using namespace Mocks::Logging;
 
@@ -21,14 +22,14 @@ TEST_CASE_METHOD(LoggerExceptionTest, "LoggerInitException_what_returns_correct_
 }
 
 //Note: this mockLogBackend must be a stack var, not a pointer, unless you manage it's memory manually
-TEST_CASE_METHOD(LoggerTest, "create_and_destroy_logger")
+TEST_CASE_METHOD(LoggerTest, "create_and_destroy_logger", "[Logger]")
 {
   MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH> mockLogBackend;
   LogSingleton::create(mockLogBackend);
   LogSingleton::destroy();
 }
 
-TEST_CASE_METHOD(LoggerTest, "use_without_create_throws")
+TEST_CASE_METHOD(LoggerTest, "use_without_create_throws", "[Logger]")
 {
 
   REQUIRE_THROWS_AS(
@@ -45,7 +46,7 @@ TEST_CASE_METHOD(LoggerTest, "use_without_create_throws")
   ,etl::singleton_not_created);
 }
 
-TEST_CASE_METHOD(LoggerTest, "init_with_valid_backend_does_not_throw_and_can_log")
+TEST_CASE_METHOD(LoggerTest, "init_with_valid_backend_does_not_throw_and_can_log", "[Logger]")
 {
   MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH> mockLogBackend;
   REQUIRE_CALL(mockLogBackend, InfoMock("Foo")).TIMES(1);
@@ -67,7 +68,7 @@ TEST_CASE_METHOD(LoggerTest, "init_with_valid_backend_does_not_throw_and_can_log
 }
 
 #include <random>
-TEST_CASE_METHOD(LoggerTest, "init_while_already_initialized_asserts")
+TEST_CASE_METHOD(LoggerTest, "init_while_already_initialized_asserts", "[Logger]")
 {
   uint32_t uniqueId1 = 0;
   uint32_t uniqueId2 = 0;
@@ -94,9 +95,11 @@ TEST_CASE_METHOD(LoggerTest, "init_while_already_initialized_asserts")
   REQUIRE_THROWS_AS(
     LogFactory<256>::Create(mockLogBackend2)
   , LoggerInitException);
+
+  
 }
 
-TEST_CASE_METHOD(LoggerTest, "macro_use_without_init_throws")
+TEST_CASE_METHOD(LoggerTest, "macro_use_without_init_throws", "[Logger]")
 {
 
   REQUIRE_THROWS_AS(

@@ -6,8 +6,8 @@
 * Allowing testing of the brokers and subscriptions
 * Allows expectations against the on_receive methods
 */
-
-#include <trompeloeil.hpp>
+#include <catch2/catch_all.hpp>
+#include <catch2/trompeloeil.hpp>
 #include "Machine/MessageBus/MachineRouter.hpp"
 #include "Machine/MessageBus/Messages.hpp"
 
