@@ -5,11 +5,12 @@
 #include <stdarg.h>
 #include "Helpers.hpp"
 
-template <size_t MaxMessageLength, size_t MaxPrefixLength>
-class TestLogBackend : public ILogBackend<MaxMessageLength>
+template <typename DerivedBackend_t, typename LogMessage_t>
+class TestLogBackend : public ILogBackend<DerivedBackend_t, LogMessage_t>
 {
 public:
 
+    
     virtual void Info(etl::string<MaxMessageLength> message, ...) const override
     {
         va_list args;

@@ -3,68 +3,62 @@
 LoggerInitException::LoggerInitException(const char* reason, const char* file, int line)
     : etl::exception(reason, file, line) {}
 
-template <size_t S>
-void Log<S>::Info(etl::string<S> message, ...)
+template <typename DerivedBackend_t, typename LogMessage_t>
+template<typename... Args>
+void Log<DerivedBackend_t, LogMessage_t>::Info(LogMessage_t message, Args&&... args)
 {
-    va_list args;
-    va_start(args, message);
-    backend.Info(message, args);
+    backend.Info(message, etl::forward<Args>(args)...);
 }
 
-template <size_t S>
-void Log<S>::Warn(etl::string<S> message, ...)
+template <typename DerivedBackend_t, typename LogMessage_t>
+template<typename... Args>
+void Log<DerivedBackend_t, LogMessage_t>::Warn(LogMessage_t message, Args&&... args)
 {
-    va_list args;
-    va_start(args, message);
-    backend.Warn(message, args);
+    backend.Warn(message, etl::forward<Args>(args)...);
 }
 
-template <size_t S>
-void Log<S>::Error(etl::string<S> message, ...)
+template <typename DerivedBackend_t, typename LogMessage_t>
+template<typename... Args>
+void Log<DerivedBackend_t, LogMessage_t>::Error(LogMessage_t message, Args&&... args)
 {
-    va_list args;
-    va_start(args, message);
-    backend.Error(message, args);
+    backend.Error(message, etl::forward<Args>(args)...);
 }
 
-template <size_t S>
-void Logger<S>::ThrowIfInvalid() {
+template <typename DerivedBackend_t, typename LogMessage_t>
+void Logger<DerivedBackend_t, LogMessage_t>::ThrowIfInvalid() {
     ETL_ASSERT(LogSingleton::is_valid(), LOGGER_INIT_EXCEPTION("Log not initialized, call ESP_LOG_INIT"));
 }
 
-template <size_t S>
-void Logger<S>::Info(etl::string<S> message, ...)
+template <typename DerivedBackend_t, typename LogMessage_t>
+template<typename... Args>
+void Logger<DerivedBackend_t, LogMessage_t>::Info(etl::string<S> message, Args&&... args)
 {
     ThrowIfInvalid();
-    va_list args;
-    va_start(args, message);
-    LogSingleton::instance().Info(message, args);
+    LogSingleton<DerivedBackend_t>::instance().Info(message, etl::forward<Args>(args)...);
 }
 
-template <size_t S>
-void Logger<S>::Warn(etl::string<S> message, ...)
+template <typename DerivedBackend_t, typename LogMessage_t>
+template<typename... Args>
+void Logger<DerivedBackend_t, LogMessage_t>::Warn(etl::string<S> message, Args&&... args)
 {
     ThrowIfInvalid();
-    va_list args;
-    va_start(args, message);
-    LogSingleton::instance().Warn(message, args);
+    LogSingleton<DerivedBackend_t>::instance().Warn(message, etl::forward<Args>(args)...);
 }
 
-template <size_t S>
-void Logger<S>::Error(etl::string<S> message, ...)
+template <typename DerivedBackend_t, typename LogMessage_t>
+template<typename... Args>
+void Logger<DerivedBackend_t, LogMessage_t>::Error(etl::string<S> message, Args&&... args)
 {
     ThrowIfInvalid();
-    va_list args;
-    va_start(args, message);
-    LogSingleton::instance().Error(message, args);
+    LogSingleton<DerivedBackend_t>::instance().Error(message, etl::forward<Args>(args)...);
 }
 
-template <size_t S>
-bool LogFactory<S>::Create(const ILogBackend<S>& backend)
+template <typename DerivedBackend_t, typename LogMessage_t>
+bool LogFactory<DerivedBackend_t, LogMessage_t>::Create(const ILogBackend<S>& backend)
 {
-    if(!LogSingleton::is_valid())
+    if(!LogSingleton<DerivedBackend_t>::is_valid())
     {
-        LogSingleton::create(backend);
+        LogSingleton<DerivedBackend_t>::create(backend);
         return true;
     }
     else
@@ -74,6 +68,6 @@ bool LogFactory<S>::Create(const ILogBackend<S>& backend)
 }
 
 // Explicit template instantiation
-template class Log<ELSF_LOG_MAX_MESSAGE_LENGTH>;
-template class Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>;
-template class LogFactory<ELSF_LOG_MAX_MESSAGE_LENGTH>;
+// template class Log<ELSF_LOG_MAX_MESSAGE_LENGTH>;
+// template class Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>;
+// template class LogFactory<ELSF_LOG_MAX_MESSAGE_LENGTH>;
