@@ -3,7 +3,7 @@ IGNORELIST='.*include/Machine/MessageBus/(Router\.hpp|Subscription\.hpp)'
 echo "Clearing lconv" &&
 rm -R coverage/lcov.info coverage/elsf_tests.profdata coverage/elsf_tests.profraw coverage/html
 echo "Running tests" &&
-LLVM_PROFILE_FILE="coverage/elsf_tests.profraw" ./build/test/elsf_tests &&
+LLVM_PROFILE_FILE="coverage/elsf_tests.profraw" ./build/test/elsf_tests --order rand --warn NoAssertions &&
 echo "Merging coverage" &&
 llvm-profdata merge coverage/elsf_tests.profraw -o coverage/elsf_tests.profdata &&
 

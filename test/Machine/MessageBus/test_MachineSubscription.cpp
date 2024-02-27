@@ -9,7 +9,8 @@
 #include "Machine/FSM/Machine.hpp"
 #include "Machine/MessageBus/MachineRouter.hpp"
 #include "Mocks/Machine/FSM/MockMachine.hpp"
-
+#include "Mocks/Machine/MessageBus/MockMachineRouter.hpp"
+#include "trompeloeil/mock.hpp"
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/trompeloeil.hpp>
 
@@ -17,6 +18,7 @@
 using namespace Machine::MessageBus;
 using namespace Machine::FSM;
 using namespace Mocks::Machine::FSM;
+using namespace Machine::MessageBus;
 
 class MachineSubscriptionTest : public DefaultUnitTest {
     
@@ -30,6 +32,9 @@ TEST_CASE_METHOD(MachineSubscriptionTest, "should_send_start_message_to_machine"
     REQUIRE_CALL(fsm, ExecuteStart()).TIMES(1);
 
     MachineRouter machineRouter(fsm);
+    machineRouter.Start();
+
+    REQUIRE(fsm.is_started());
 
     Subscription machineSubscription = Subscription(machineRouter, machineRouter.GetValidMessagesList());
 
@@ -43,15 +48,6 @@ TEST_CASE_METHOD(MachineSubscriptionTest, "should_send_start_message_to_machine"
 
 }
 
-TEST_CASE_METHOD(MachineSubscriptionTest, "constructor_starts_fsm", "[Machine][MessageBus][Router]") 
-{
-    MockMachine fsm;
-
-    MachineRouter machineRouter(fsm);
-
-    REQUIRE(fsm.is_started());
-}
-
 class MessageRouterLoggingTest : public LoggerTest
 {
 };
@@ -62,11 +58,37 @@ TEST_CASE_METHOD(MessageRouterLoggingTest, "MessageRouter_logs_unknown_message",
     bool result = LogFactory<256>::Create(mockBackend);
     REQUIRE(result);
     REQUIRE_CALL(mockBackend, WarnMock(trompeloeil::_)).TIMES(1);
-    REQUIRE_CALL(mockBackend, InfoMock(trompeloeil::_)).TIMES(1); //just because the FSM logs info when it starts
+    REQUIRE_CALL(mockBackend, InfoMock(trompeloeil::_)).TIMES(1); //the default Startup log
     MockMachine fsm;
     MachineRouter machineRouter(fsm);
+    machineRouter.Start();
     StartMessage startMessage;
 
     machineRouter.on_receive_unknown(startMessage);
+    LogSingleton::destroy();
+}
+
+TEST_CASE_METHOD(MessageRouterLoggingTest, "QueuedRouter Recieve and ProcessQueue", "[Machine][MessageBus][Router]") 
+{
+    
+    Mocks::Logging::MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH> mockBackend;
+    bool result = LogFactory<256>::Create(mockBackend);
+    REQUIRE(result);
+    REQUIRE_CALL(mockBackend, InfoMock(trompeloeil::_)).TIMES(2); //once for starting the queue, once for emplacing the message
+    REQUIRE_CALL(mockBackend, ErrorMock(trompeloeil::_)).TIMES(1); //for the unknown message
+    MockMachine fsm;
+    Mocks::Machine::MessageBus::TestQueuedRouter machineRouter;
+    StartMessage startMessage;
+    EStopMessage eStopMessage;
+    REQUIRE_CALL(machineRouter, on_receive(trompeloeil::_)).TIMES(1);
+
+    //shouldn't make it to on_receive_unknown, since the queue only accepts certain messages
+    REQUIRE_CALL(machineRouter, on_receive_unknown(trompeloeil::_)).TIMES(0);
+
+    machineRouter.receive(startMessage);
+    machineRouter.receive(eStopMessage);
+    machineRouter.ProcessQueue();
+    machineRouter.ProcessQueue();
+
     LogSingleton::destroy();
 }

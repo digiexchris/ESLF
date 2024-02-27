@@ -73,6 +73,12 @@ target_link_libraries(
 )
 endif()
 
+target_compile_definitions(elsf_tests PRIVATE
+ #-DCATCH_CONFIG_FAST_COMPILE
+ -DCATCH_CONFIG_POSIX_SIGNALS
+ -DCATCH_CONFIG_EXPERIMENTAL_REDIRECT
+                              )
+
 #include(GoogleTest PUBLIC)
 #  find_package(PkgConfig)
 #  pkg_search_module(GTEST REQUIRED gtest_main)

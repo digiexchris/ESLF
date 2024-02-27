@@ -26,6 +26,7 @@ TEST_CASE_METHOD(LoggerTest, "create_and_destroy_logger", "[Logger]")
 {
   MockLogBackend<ELSF_LOG_MAX_MESSAGE_LENGTH> mockLogBackend;
   LogSingleton::create(mockLogBackend);
+  REQUIRE(LogSingleton::is_valid());
   LogSingleton::destroy();
 }
 

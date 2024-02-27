@@ -5,25 +5,25 @@ namespace Machine
 {
 namespace Planner
 {
-    template <typename MainSpindleEncoder, typename ZAxisEncoder, typename ZAxisMotor>
-    ZOnly<MainSpindleEncoder, ZAxisEncoder, ZAxisMotor>::ZOnly(
+    template <typename MainSpindleEncoder, typename ZAxisMotor>
+    ZOnly<MainSpindleEncoder, ZAxisMotor>::ZOnly(
             MainSpindleEncoder& aMainSpindle, 
-            Device::Axis<ZAxisEncoder, ZAxisMotor>& anAxis) 
+            Device::Axis<ZAxisMotor>& anAxis) 
             : Planner<MainSpindleEncoder>(aMainSpindle),
             myZAxis(anAxis)
         {
         }
 
-    template <typename MainSpindleEncoder, typename ZAxisEncoder, typename ZAxisMotor>
-    void ZOnly<MainSpindleEncoder, ZAxisEncoder, ZAxisMotor>::Update()
+    template <typename MainSpindleEncoder, typename ZAxisMotor>
+    void ZOnly<MainSpindleEncoder, ZAxisMotor>::Update()
     {
         // Update the main spindle encoder
         this->myMainSpindleEncoder.Update();
         myZAxis.Update();
     }
 
-    template <typename MainSpindleEncoder, typename ZAxisEncoder, typename ZAxisMotor>
-    void ZOnly<MainSpindleEncoder, ZAxisEncoder, ZAxisMotor>::GenerateMoves()
+    template <typename MainSpindleEncoder, typename ZAxisMotor>
+    void ZOnly<MainSpindleEncoder, ZAxisMotor>::GenerateMoves()
     {
         switch(this->get_state_id()) {
             case FSM::MachineStateId::IDLE:
@@ -41,8 +41,8 @@ namespace Planner
         }
     }
 
-    template <typename MainSpindleEncoder, typename ZAxisEncoder, typename ZAxisMotor>
-    void ZOnly<MainSpindleEncoder, ZAxisEncoder, ZAxisMotor>::GenerateTurningMoves()
+    template <typename MainSpindleEncoder, typename ZAxisMotor>
+    void ZOnly<MainSpindleEncoder, ZAxisMotor>::GenerateTurningMoves()
     {
         //if(get_child_state_id() != FSM::MachineStateId::RUNNING)
         {
@@ -53,8 +53,8 @@ namespace Planner
         }
     }
 
-    template <typename MainSpindleEncoder, typename ZAxisEncoder, typename ZAxisMotor>
-    void ZOnly<MainSpindleEncoder, ZAxisEncoder, ZAxisMotor>::GenerateThreadingMoves()
+    template <typename MainSpindleEncoder, typename ZAxisMotor>
+    void ZOnly<MainSpindleEncoder, ZAxisMotor>::GenerateThreadingMoves()
     {
         //if(get_child_state_id() != FSM::MachineStateId::RUNNING)
         {

@@ -7,6 +7,16 @@ namespace Device
         
     }
 
+    void VirtualMotor::MoveTo(int32_t aTargetPosition)
+    {
+        myTargetPosition = aTargetPosition;
+    }
+
+    void VirtualMotor::Stop()
+    {
+        myTargetPosition = myParams.count;
+    }
+
     PositionParams& VirtualMotor::UpdateMotionParams()
     {
         if(myTargetPosition != myParams.count)

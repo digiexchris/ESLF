@@ -5,13 +5,13 @@ namespace Machine
 {
 namespace Planner
 {
-template <typename MainSpindleEncoder, typename ZAxisEncoder, typename ZAxisMotor>
+template <typename MainSpindleEncoder, typename ZAxisMotor>
 class ZOnly : public Planner<MainSpindleEncoder>
 {
     public:
         ZOnly(
             MainSpindleEncoder& aMainSpindle, 
-            Device::Axis<ZAxisEncoder, ZAxisMotor>& anAxis);
+            Device::Axis<ZAxisMotor>& anAxis);
 
         void Update() override;
         void GenerateMoves() override;
@@ -21,7 +21,7 @@ class ZOnly : public Planner<MainSpindleEncoder>
         void GenerateThreadingMoves();
         void GenerateTurningMoves();
 
-        Device::Axis<ZAxisEncoder, ZAxisMotor>& myZAxis;
+        Device::Axis<ZAxisMotor>& myZAxis;
 };
 
 }} // namespace Machine::Planner

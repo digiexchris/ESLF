@@ -27,6 +27,7 @@ class MachineRouter
 public:
     explicit MachineRouter(Machine::FSM::MachineFSM& fsm);
 
+    void Start();
     virtual void on_receive(const etl::imessage& msg);
     virtual void on_receive_unknown(const etl::imessage& msg);
 

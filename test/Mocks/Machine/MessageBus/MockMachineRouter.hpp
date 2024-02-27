@@ -25,4 +25,10 @@ public:
     MAKE_MOCK1(on_receive_unknown, void(const etl::imessage&));
 };
 
+class TestQueuedRouter : public QueuedRouter<TestQueuedRouter,10,StartMessage> {
+        //MAKE_MOCK1(emplace, void(const etl::imessage&));
+        MAKE_MOCK1(on_receive, void(const StartMessage&));
+        MAKE_MOCK1(on_receive_unknown, void(const etl::imessage&));
+    };
+
 } // namespace Mocks
