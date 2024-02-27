@@ -1,9 +1,10 @@
 #pragma once
 
+#include <etl/message.h>
 #include <etl/queue.h>
 #include <etl/message_packet.h>
 #include <etl/message_router.h>
-#include "Machine/MessageBus/Subscription.hpp"
+#include "Subscription.hpp"
 #include "Logging/Logger.hpp"
 
 namespace Machine
@@ -49,7 +50,26 @@ class QueuedRouter : public Router<TDerived, Messages...>
 public:
     virtual void receive(const etl::imessage& msg_) override
     {
-        myQueue.emplace(msg_);
+        try
+        {
+            myQueue.emplace(msg_);
+        }
+        catch (const etl::queue_full&)
+        {
+            ELSF_LOG_ERROR("Queue full, message %d dropped\n", msg_.get_message_id());
+            return;
+        }
+        catch (const etl::unhandled_message_exception&)
+        {
+            ELSF_LOG_ERROR("Unexpected message for this router, message %d dropped\n", msg_.get_message_id());
+            return;
+        }
+        catch (...)
+        {
+            ELSF_LOG_ERROR("Unknown error, message %d dropped\n", msg_.get_message_id());
+            return;
+        }
+
         ELSF_LOG_INFO("Received message %d\n", msg_.get_message_id());
     }
 

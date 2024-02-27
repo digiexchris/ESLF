@@ -30,7 +30,8 @@
             "derivitec-ltd.cmake-test-adapter",
             "tenninebt.vscode-koverage",
             "rherrmannr.code-coverage-lcov",
-            "SbastienLevy.covertops-cmake-llvm"
+            "SbastienLevy.covertops-cmake-llvm",
+            "piotrkosek.vscode-gtest-test-adapter-with-code-lens"
         ]
       }
     },

@@ -1,4 +1,4 @@
-#include "State/Position.hpp"
+#include "Position.hpp"
 
 #include <etl/absolute.h>
 #include <etl/atomic.h>
@@ -81,10 +81,14 @@ bool Position::operator==(const Position& aPosition) const
     return GetPosition() == aPosition.GetPosition();
 }
 
-int32_t Position::Diff(const Position& aPosition) const
+int32_t Position::operator-(const Position& aPosition) const
 {
-    int32_t diff = GetPosition() - aPosition.GetPosition();
-    return diff;
+    return GetPosition() - aPosition.GetPosition();
+}
+
+int32_t Position::operator+(const Position& aPosition) const
+{
+    return GetPosition() + aPosition.GetPosition();
 }
 
 uint16_t Position::GetCountPeriod() const

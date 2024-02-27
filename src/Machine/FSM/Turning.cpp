@@ -2,7 +2,7 @@
 #include "etl/queue.h"
 #include "etl/fsm.h"
 #include "Machine/FSM/Machine.hpp"
-#include "Machine/FSM/Running.hpp"
+#include "Machine/FSM/Turning.hpp"
 #include "Logging/Logger.hpp"
 
 namespace Machine
@@ -10,26 +10,26 @@ namespace Machine
 namespace FSM
 {
 
-  etl::fsm_state_id_t RunningState::on_enter_state()
+  etl::fsm_state_id_t TurningState::on_enter_state()
   {
     ELSF_LOG_INFO(" S1 : Enter state RUNNING\n");
     return etl::ifsm_state::No_State_Change; //This MUST return No_State_Change using etl::hfsm
   }
 
   //***************************************************************************
-  void RunningState::on_exit_state()
+  void TurningState::on_exit_state()
   {
     ELSF_LOG_INFO("  S1 : Exit state RUNNING\n");
   }
 
-  etl::fsm_state_id_t RunningState::on_event(const StopMessage& msg)
+  etl::fsm_state_id_t TurningState::on_event(const StopMessage& msg)
   {
     get_fsm_context().ExecuteStop();
     ELSF_LOG_INFO("  S1 : Received message STOP\n");
     return MachineStateId::IDLE;
   }
 
-  etl::fsm_state_id_t RunningState::on_event(const StopAtMessage& msg)
+  etl::fsm_state_id_t TurningState::on_event(const StopAtMessage& msg)
   {
     get_fsm_context().ExecuteStopAt();
     ELSF_LOG_INFO("  S1 : Received message STOP AT\n");
@@ -37,7 +37,7 @@ namespace FSM
   }
 
   //***************************************************************************
-  etl::fsm_state_id_t RunningState::on_event(const EStopMessage& msg)
+  etl::fsm_state_id_t TurningState::on_event(const EStopMessage& msg)
   {
     get_fsm_context().ExecuteEStop();
     ELSF_LOG_INFO("  S1 : Received message ESTOP\n");
@@ -45,7 +45,7 @@ namespace FSM
   }
 
   //***************************************************************************
-  etl::fsm_state_id_t RunningState::on_event(const ResetMessage& msg)
+  etl::fsm_state_id_t TurningState::on_event(const ResetMessage& msg)
   {
     get_fsm_context().ExecuteReset();
     ELSF_LOG_INFO("  S1 : Received message RESET\n");
@@ -53,7 +53,7 @@ namespace FSM
   }
 
   //***************************************************************************
-  etl::fsm_state_id_t RunningState::on_event_unknown(const etl::imessage& msg)
+  etl::fsm_state_id_t TurningState::on_event_unknown(const etl::imessage& msg)
   {
     ELSF_LOG_INFO("  S1 : Received unknown message %d\n", msg.get_message_id());
     return etl::ifsm_state::No_State_Change;

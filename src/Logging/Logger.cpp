@@ -1,4 +1,4 @@
-#include "Logging/Logger.hpp"
+#include "Logger.hpp"
 
 LoggerInitException::LoggerInitException(const char* reason, const char* file, int line)
     : etl::exception(reason, file, line) {}

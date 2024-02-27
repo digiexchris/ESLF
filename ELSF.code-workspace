@@ -39,12 +39,9 @@
 			"runTestCoverage": "npm run test"
 		  },
 		  
-		"cmake.ctestArgs": [
-			"--output-on-failure",
-			"--gtest_break_on_failure",
-			"--gtest_stack_trace_depth=10", 
-			"--gmock_verbose=info"
-		],
+		// "cmake.ctestArgs": [
+		// 	"--output-on-failure"
+		// ],
 		"cmake.allowCommentsInPresetsFile": true,
 		"cmake.allowUnsupportedPresetsVersions": true,
 		"C_Cpp.default.compileCommands": "c:\\Users\\chris\\Documents\\repos\\els\\LeadscrewWarrantyVoider\\lib\\ESLF\\build/compile_commands.json",
@@ -64,6 +61,31 @@
 		"cmakeExplorer.buildConfig": "ELSFTest",
 		"covertops-cmake-llvm.additionalCmakeOptions": [
 			"-DENABLE_COVERAGE=ON"
+		],
+		"testMate.cpp.discovery.loadOnStartup": false,
+		"testMate.cpp.test.parallelExecutionLimit": 4,
+		"testMate.cpp.test.parallelExecutionOfExecutableLimit": 4,
+		"testMate.cpp.test.advancedExecutables": 
+		[
+			{
+				"pattern": "{build,Build,BUILD,out,Out,OUT}/**/*{test,Test,TEST}*",
+				"catch2": {
+					"testGrouping": {
+						"groupByExecutable": {
+							"label": "${filename}",
+							"description": "${relDirpath}/",
+							
+							"groupBySource": {
+								"label": "${sourceRelPath[1:]}",
+								"groupUngroupedTo": "unknown source file"
+							}
+							
+						}
+						
+					}
+				}
+			
+			}
 		]
 	},
 	"tasks":
@@ -99,7 +121,7 @@
 				"request": "launch",
 				"name": "Launch LLDB",
 				"program": "${workspaceFolder}/build/test/elsf_tests",
-				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_break_on_failure", "--gtest_stack_trace_depth=10", "--gmock_verbose=info"],
+				"args": ["${cmake.testArgs}", ],
 				"cwd": "${workspaceFolder}"
 			},
 			{
@@ -107,7 +129,7 @@
 				"request": "launch",
 				"name": "Launch -no-break-on-failure",
 				"program": "${workspaceFolder}/build/test/elsf_tests",
-				"args": ["${cmake.testArgs}", "--output-on-failure", "--gtest_stack_trace_depth=20", "--gmock_verbose=warn"],
+				"args": ["${cmake.testArgs}", "--output-on-failure"],
 				"cwd": "${workspaceFolder}"
 			}
 		],

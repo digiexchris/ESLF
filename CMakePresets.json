@@ -2,64 +2,6 @@
     "version": 3,
     "configurePresets": [
         {
-            "name": "windows-base",
-            "hidden": true,
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "installDir": "${sourceDir}/out/install/${presetName}",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "C:/Program Files/LLVM/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
-                "CMAKE_CXX_FLAGS": "-O0 -g -fsanitize=address -fno-omit-frame-pointer -static",
-                "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address -static"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
-            }
-        },
-        {
-            "name": "x64-debug",
-            "displayName": "x64 Debug",
-            "inherits": "windows-base",
-            "architecture": {
-                "value": "x64",
-                "strategy": "external"
-            },
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "x64-debug-test",
-            "displayName": "x64 Debug Tests Enabled",
-            "architecture": {
-                "value": "x64",
-                "strategy": "external"
-            },
-            "inherits": "x64-debug",
-            "cacheVariables": {
-                "BUILD_ESLF_TESTS": "ON"
-            }
-        },
-        {
-            "name": "x64-release",
-            "displayName": "x64 Release",
-            "inherits": "x64-debug",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
-            "name": "x64-release-test",
-            "displayName": "x64 Release TGest",
-            "inherits": "x64-debug-test",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
             "name": "clang-base",
             "hidden": true,
             "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu",
@@ -100,9 +42,7 @@
             "cacheVariables": {
                 "BUILD_ESLF_TESTS": "ON",
                 "CMAKE_CXX_FLAGS": "-O0 -g",
-                "ENABLE_COVERAGE": "ON",
                 "EXPOSE_COVERAGE_TARGET": "ON"
-                //"CMAKE_VERBOSE_MAKEFILE": "ON"
             }
         },
         {
@@ -110,8 +50,8 @@
             "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu Debug Tests Enabled ASAN Enabled",
             "inherits": "clang-debug-test",
             "cacheVariables": {
-                "CMAKE_CXX_FLAGS": "-O0 -g -fsanitize=address -fno-omit-frame-pointer",
-                "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address"
+                "CMAKE_CXX_FLAGS": "-O0 -g -fsanitize=address -fno-omit-frame-pointer -fcxx-exceptions",
+                "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address -fcxx-exceptions"
             }
         }
     ],

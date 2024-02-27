@@ -22,7 +22,7 @@ project ("ELSF")
 file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 add_library(${PROJECT_NAME} ${SOURCES})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 # This allows users which use the add_subdirectory or FetchContent
 # to use the same target as users which use find_package
 add_library(elsf::elsf ALIAS ${PROJECT_NAME})
@@ -39,7 +39,7 @@ if(BUILD_ESLF_TESTS)
 endif()
 
 target_include_directories(${PROJECT_NAME} ${INCLUDE_SPECIFIER} INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
         )
 

@@ -7,9 +7,7 @@ namespace Machine
 namespace MessageBus
 {
     MachineRouter::MachineRouter(Machine::FSM::MachineFSM& fsm) : myFsm(fsm)
-    {
-        myFsm.start();
-    }
+    {}
 
     void MachineRouter::on_receive(const etl::imessage& msg)
     {
@@ -20,6 +18,11 @@ namespace MessageBus
     void MachineRouter::on_receive_unknown(const etl::imessage& msg)
     {
         ELSF_LOG_WARN("MachineRouter received unknown message. This shouldn't happen because of the broker.");
+    }
+
+    void MachineRouter::Start()
+    {
+        myFsm.start();
     }
 
 } // namespace Machine

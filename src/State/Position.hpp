@@ -63,9 +63,11 @@ public:
      */
     virtual uint16_t GetCountPeriod() const final;
 
-    bool operator>(const Position& aPosition) const;
-    bool operator<(const Position& aPosition) const;
-    bool operator==(const Position& aPosition) const;
+    virtual bool operator>(const Position& aPosition) const;
+    virtual bool operator<(const Position& aPosition) const;
+    virtual bool operator==(const Position& aPosition) const;
+    virtual int32_t operator-(const Position& aPosition) const;
+    virtual int32_t operator+(const Position& aPosition) const;
 
 protected:
     

@@ -1,15 +1,16 @@
-#include <gtest/gtest.h>
-#include "Logging/Logger.hpp"
 
-class LoggerTest : public testing::Test {
+#include "Logging/Logger.hpp"
+#include "etl_profile.h"
+
+class LoggerTest {
 protected:
-    void SetUp() override {
+    LoggerTest() {
         if(LogSingleton::is_valid()) {
             LogSingleton::destroy();
         }
     }
 
-    void TearDown() override {
+    ~LoggerTest() {
         if(LogSingleton::is_valid()) {
             LogSingleton::destroy();
         }

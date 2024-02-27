@@ -2,7 +2,7 @@
 
 #include <etl/fsm.h>
 #include "Machine/MessageBus/Messages.hpp"
-#include "Machine/FSM/Machine.hpp"
+#include "Machine.hpp"
 
 namespace Machine
 {
@@ -10,8 +10,11 @@ namespace FSM
 {
 
 using namespace MessageBus;
-
-class RunningState : public etl::fsm_state<MachineFSM, RunningState, MachineStateId::RUNNING, StopMessage, StopAtMessage, EStopMessage, ResetMessage>
+  //TODO rename from RunnmingState to TurningState or ThreadingState.
+  //TODO the states should extend from Planner or planner from the states or maybe it's in the FSM itself? Yes, maybe the fsm.
+  //The states maybe should only handle transitions and events.
+  //TODO the states should have child states containing Running, Stopped, EStop, etc.
+class TurningState : public etl::fsm_state<MachineFSM, TurningState, MachineStateId::TURNING, StopMessage, StopAtMessage, EStopMessage, ResetMessage>
 {
 public:
 

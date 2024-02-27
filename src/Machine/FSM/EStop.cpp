@@ -2,8 +2,8 @@
 #include <etl/queue.h>
 #include <etl/fsm.h>
 #include <etl/message_packet.h>
-#include "Machine/FSM/Machine.hpp"
-#include "Machine/FSM/EStop.hpp"
+#include "Machine.hpp"
+#include "EStop.hpp"
 #include "Logging/Logger.hpp"
 
 namespace Machine
