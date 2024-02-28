@@ -4,9 +4,9 @@ name: CMake on multiple platforms
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
 
 jobs:
   build:
@@ -61,8 +61,10 @@ jobs:
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DBUILD_ESLF_TESTS=ON
+        -DCMAKE_CXX_FLAGS="-Werror -Wextra -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-private-field"
+        -DEXPOSE_COVERAGE_TARGET=ON
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
-        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -S ${{ github.workspace }}
 
     - name: Build

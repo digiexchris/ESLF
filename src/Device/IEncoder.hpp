@@ -9,11 +9,7 @@ namespace Device
 
 class IEncoder : public State::Position
 {
-    public:
-        explicit IEncoder(float aNormalizedScaleFactor = 1.0f) : State::Position(aNormalizedScaleFactor){
-
-        };
-        virtual ~IEncoder() = default; // Ensure proper destruction of derived classes
+    using State::Position::Position;
 };
 
 } // namespace Device
