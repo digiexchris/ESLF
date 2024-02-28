@@ -1,4 +1,4 @@
-#include "Machine/MessageBus/Messages.hpp"
+#include "Messages.hpp"
 
 namespace Machine
 {

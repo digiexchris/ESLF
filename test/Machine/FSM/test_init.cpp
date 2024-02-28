@@ -1,7 +1,7 @@
-#define GTEST_CATCH_EXCEPTIONS 0
-#include <gtest/gtest.h>
+#include "catch2/catch_test_macros.hpp"
+
 #include "Machine/FSM/Machine.hpp"
-#include "Machine/FSM/Running.hpp"
+#include "Machine/FSM/Turning.hpp"
 #include "Machine/FSM/Idle.hpp"
 #include "Machine/FSM/EStop.hpp"
 #include "Machine/MessageBus/Messages.hpp"
@@ -20,7 +20,7 @@ class TransitionFromInitTest : public DefaultUnitTest {
 protected:
 };
 
-TEST_F(TransitionFromInitTest, one_transition_from_reset) {
+TEST_CASE_METHOD(TransitionFromInitTest, "one_transition_from_reset", "[Machine][FSM][Init]") {
     MachineFSM fsm;
     fsm.start();
 
@@ -30,7 +30,7 @@ TEST_F(TransitionFromInitTest, one_transition_from_reset) {
     };
 
     const Transition transitions[] = {
-        { std::make_shared<StartMessage>(), MachineStateId::RUNNING },
+        { std::make_shared<StartMessage>(), MachineStateId::TURNING },
         { std::make_shared<StartAtMessage>(100), MachineStateId::IDLE },
         { std::make_shared<StopMessage>(), MachineStateId::IDLE },
         { std::make_shared<StopAtMessage>(200), MachineStateId::IDLE },
@@ -43,14 +43,14 @@ TEST_F(TransitionFromInitTest, one_transition_from_reset) {
         fsm.start();
 
         etl::fsm_state_id_t currentState = fsm.get_state_id();
-        ASSERT_EQ(currentState, static_cast<int>(MachineStateId::IDLE)) << "State is not IDLE after reset for transition";
+        REQUIRE(currentState == static_cast<int>(MachineStateId::IDLE));// << "State is not IDLE after reset for transition";
 
         std::shared_ptr<etl::imessage> message = transition.message;
 
         fsm.receive(*message);
 
         currentState = fsm.get_state_id();
-        ASSERT_EQ(currentState, static_cast<int>(transition.expectedState)) << "Transition failed";
+        REQUIRE(currentState == static_cast<int>(transition.expectedState));// << "Transition failed";
 
     }
 }

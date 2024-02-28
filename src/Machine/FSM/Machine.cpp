@@ -2,11 +2,11 @@
 #include "etl/hfsm.h"
 #include "etl/message_packet.h"
 
-#include "Machine/FSM/Machine.hpp"
-#include "Machine/FSM/Idle.hpp"
-#include "Machine/FSM/Running.hpp"
-#include "Machine/FSM/EStop.hpp"
-
+#include "Machine.hpp"
+#include "Idle.hpp"
+#include "Turning.hpp"
+#include "EStop.hpp"
+#include "Logging/Logger.hpp"
 
 namespace Machine
 {
@@ -14,10 +14,10 @@ namespace FSM
 {
 
   IdleState MachineFSM::idleState;
-  RunningState MachineFSM::runningState;
+  TurningState MachineFSM::turningState;
   EStopState MachineFSM::eStopState;
-  etl::ifsm_state* MachineFSM::myStateList[] = { &idleState, &runningState, &eStopState };
-
+  etl::ifsm_state* MachineFSM::myStateList[] = { &idleState, &turningState, &eStopState };
+  
   MachineFSM::MachineFSM()
     : hfsm(MACHINE_ROUTER_ID)
   {

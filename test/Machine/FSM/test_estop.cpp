@@ -1,10 +1,10 @@
 #include <etl/message.h>
-#define GTEST_CATCH_EXCEPTIONS 0
-#include <gtest/gtest.h>
+#include <catch2/catch_test_macros.hpp>
+
 #include "Machine/FSM/Machine.hpp"
 #include "Machine/FSM/EStop.hpp"
 #include "Machine/FSM/Idle.hpp"
-#include "Machine/FSM/Running.hpp"
+#include "Machine/FSM/Turning.hpp"
 #include "Machine/MessageBus/Messages.hpp"
 #include <etl/vector.h>
 #include <etl/utility.h>
@@ -31,16 +31,16 @@ namespace test_EStop {
     }
 }
 
-TEST_F(TransitionFromEStopTest, one_transition_from_idle) {
+TEST_CASE_METHOD(TransitionFromEStopTest, "one_transition_from_idle", "[Machine][FSM][EStop]") {
         MachineFSM fsm;
-        RunningState runningState;
-        IdleState idleState;
-        EStopState eStopState;
+        // TurningState turningState;
+        // IdleState idleState;
+        // EStopState eStopState;
 
-        // The list of states.
-        etl::ifsm_state* stateList[] = { &idleState,  &runningState, &eStopState };
+        // // The list of states.
+        // etl::ifsm_state* stateList[] = { &idleState,  &turningState, &eStopState };
 
-        fsm.set_states(stateList, 3);
+        // fsm.set_states(stateList, 3);
 
         auto initialStateMessage= EStopMessage();
        
@@ -64,12 +64,12 @@ TEST_F(TransitionFromEStopTest, one_transition_from_idle) {
         test_EStop::Reset(fsm, &initialStateMessage);
 
         etl::fsm_state_id_t currentState = fsm.get_state_id();
-        ASSERT_EQ(currentState, static_cast<int>(MachineStateId::ESTOP)) << "State is not EStop after reset for transition";
+        REQUIRE(currentState == static_cast<int>(MachineStateId::ESTOP));// << "State is not EStop after reset for transition");
 
         std::shared_ptr<etl::imessage> message = transition.message;
 
         fsm.receive(*message);
         currentState = fsm.get_state_id();
-        ASSERT_EQ(currentState, static_cast<int>(transition.expectedState)) << "Transition failed";
+        REQUIRE(currentState == static_cast<int>(transition.expectedState));// << "Transition failed";
     }
 }

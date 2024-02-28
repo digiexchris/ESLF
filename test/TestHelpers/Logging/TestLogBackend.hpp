@@ -5,40 +5,36 @@
 #include <stdarg.h>
 #include "Helpers.hpp"
 
-template <size_t MaxMessageLength, size_t MaxPrefixLength>
-class TestLogBackend : public ILogBackend<MaxMessageLength>
+#ifdef APPLICATION_LOGGING_OUTPUT
+    #include <fmt/core.h>
+#endif
+
+class TestLogBackend : public ILogBackend
 {
 public:
 
-    virtual void Info(etl::string<MaxMessageLength> message, ...) const override
+    
+    virtual void Info(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const override
     {
-        va_list args;
-        va_start(args, message);
-        PrintLog("INFO: ", message, args);
+        PrintLog("INFO: ", message);
     }
 
-    virtual void Warn(etl::string<MaxMessageLength> message, ...) const override
+    virtual void Warn(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const override
     {
-        va_list args;
-        va_start(args, message);
-        PrintLog("WARN: ", message, args);
+        PrintLog("WARN: ", message);
     }
 
-    virtual void Error(etl::string<MaxMessageLength> message, ...) const override
+    virtual void Error(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const override
     {
-        va_list args;
-        va_start(args, message);
-        PrintLog("ERROR: ", message, args);
+        PrintLog("ERROR: ", message);
     }
 
     //allow each log function to add up to 32 characters of prefix (eg. ERROR: WARN: FILENAME:, etc...)
-    void PrintLog(etl::string<MaxPrefixLength> prefix, etl::string<MaxMessageLength> message, va_list args) const
+    void PrintLog(etl::string<8> prefix, etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const
     {
         
         #ifdef APPLICATION_LOGGING_OUTPUT
-            etl::string<MaxMessageLength+MaxPrefixLength> output;
-            snprintf(output.data(), output.max_size(), message.c_str(), args);
-            printf("%s%s",prefix.c_str(), message.c_str());
+            fmt::print("{}{}\n", prefix.c_str(), message.c_str());
         #else
             ELSF_UNUSED(prefix);
             ELSF_UNUSED(message);

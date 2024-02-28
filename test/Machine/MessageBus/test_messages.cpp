@@ -10,8 +10,7 @@
 #include "Machine/MessageBus/MachineRouter.hpp"
 #include "Mocks/Machine/FSM/MockMachine.hpp"
 
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
+#include <catch2/catch_test_macros.hpp>
 
 using namespace Machine::MessageBus;
 
@@ -19,10 +18,10 @@ class MessagesTest : public DefaultUnitTest {
     
 };
 
-TEST_F(MessagesTest, messages_with_params_store_corectly) {
+TEST_CASE_METHOD(MessagesTest, "messages_with_params_store_corectly", "[Machine][MessageBus][Messages]") {
     StartAtMessage startAtMessage(100);
     StopAtMessage stopAtMessage(200);
 
-    ASSERT_EQ(startAtMessage.position, 100);
-    ASSERT_EQ(stopAtMessage.position, 200);
+    REQUIRE(startAtMessage.position == 100);
+    REQUIRE(stopAtMessage.position == 200);
 }

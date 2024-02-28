@@ -1,8 +1,8 @@
 
 #include "etl/fsm.h"
 #include "etl/message_packet.h"
-#include "Machine/FSM/Machine.hpp"
-#include "Machine/FSM/Idle.hpp"
+#include "Machine.hpp"
+#include "Idle.hpp"
 #include "Logging/Logger.hpp"
 
 namespace Machine
@@ -27,7 +27,7 @@ namespace FSM
   {
     get_fsm_context().ExecuteStart();
     ELSF_LOG_INFO("  S1 : Received message START\n");
-    return MachineStateId::RUNNING;
+    return MachineStateId::TURNING;
   }
 
   etl::fsm_state_id_t IdleState::on_event(const StartAtMessage& msg)
