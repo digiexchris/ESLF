@@ -7,9 +7,7 @@
 #include "Subscription.hpp"
 #include "Logging/Logger.hpp"
 
-namespace Machine
-{
-namespace MessageBus
+namespace Machine::MessageBus
 {
 
 template <typename... Messages>
@@ -25,17 +23,12 @@ template <typename TDerived, typename... Messages>
 class Router : public etl::message_router<TDerived, Messages...>
 {
 public:
-    Router() : myValidMessagesList({Messages::ID...})
-    {
-        
-    }
-
     const std::vector<etl::message_id_t>& GetValidMessagesList() const
     {
         return myValidMessagesList;
     }
-protected:
-    std::vector<etl::message_id_t> myValidMessagesList;
+private:
+    std::vector<etl::message_id_t> myValidMessagesList{Messages::ID...};
 };
 
 
@@ -48,7 +41,7 @@ template <typename TDerived, size_t QueueSize, typename... Messages>
 class QueuedRouter : public Router<TDerived, Messages...>
 {
 public:
-    virtual void receive(const etl::imessage& msg_) override
+    void receive(const etl::imessage& msg_) override
     {
         try
         {
@@ -93,5 +86,4 @@ private:
     etl::queue<RouterMessagePacket<Messages...>, QueueSize> myQueue;
 };
 
-} // namespace Machine
-} // namespace State
+} // namespace Machine::MessageBus

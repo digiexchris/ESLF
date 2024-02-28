@@ -8,17 +8,20 @@ using State::PositionParams;
 
 /**
  * @brief An encoder simulator. Increments the count and time every time UpdateMotionParams is called*/
- //TODO figure out a platform agnostic way of getting an RTOS/thread equivalent tick for use as a timestamp.
 class VirtualEncoder : public IEncoder
 {
     public:
-        VirtualEncoder(float aNormalizedScaleFactor = 1.0);
+        explicit VirtualEncoder(float aNormalizedScaleFactor = 1.0);
         void SetCountIncrement(int32_t aCountIncrement);
         void SetDirection(bool aDirection);
-
+        
     protected:
-        PositionParams myParams;
-        virtual PositionParams& UpdateMotionParams() override;
+    
+        PositionParams& UpdateMotionParams() override;
+
+    private:
+        PositionParams myParams {0, false, 0};
+        
         int32_t mySimulatedCount;
         uint32_t mySimulatedTimestamp;
         bool mySimulatedDirection;

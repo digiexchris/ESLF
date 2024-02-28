@@ -6,9 +6,7 @@
 
 #include <etl/hfsm.h>
 
-namespace Machine
-{
-namespace MessageBus
+namespace Machine::MessageBus
 {
 
 
@@ -35,5 +33,4 @@ private:
     etl::hfsm& myFsm;
 };
 
-} // namespace Machine
-} // namespace State
+} // namespace Machine::MessageBus

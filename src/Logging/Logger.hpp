@@ -20,7 +20,7 @@
 #include <stdarg.h>
 #include <fmt/core.h>
 
-#define ELSF_LOG_MAX_MESSAGE_LENGTH 256
+constexpr uint16_t ELSF_LOG_MAX_MESSAGE_LENGTH = 256;
 
 #define ELSF_LOG_INIT(BackendPTR) LogSingleton::create(std::move(BackendPTR))
 #define ELSF_LOG_INFO(...) LogSingleton::instance().Info(__VA_ARGS__)
@@ -32,8 +32,7 @@
 class LoggerInitException : public etl::exception
 {
 public:
-    LoggerInitException(const char* reason, const char* file, int line)
-    :etl::exception(reason, file, line) {}
+    using exception::exception;
 };
 
 class ILogBackend
@@ -47,8 +46,7 @@ public:
     virtual void Error(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const = 0;
 
     virtual ~ILogBackend() = default;
-
-    protected:
+    
 };
 
 
@@ -73,13 +71,13 @@ public:
         return myLogBackend.get();
     }
 
-    Logger(ILogBackend* aBackend) {
+    explicit Logger(ILogBackend* aBackend) {
         SetBackend(aBackend);
     }
 protected:
 
     template <typename... Args>
-    etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> ApplyFormat(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
+    etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> ApplyFormat(const etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH>& message, Args&&... args) const;
 
 private:
     etl::unique_ptr<ILogBackend> myLogBackend;
@@ -107,7 +105,7 @@ void Logger::Error(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... a
 }
 
 template <typename... Args>
-etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> Logger::ApplyFormat(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args)
+etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> Logger::ApplyFormat(const etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH>& message, Args&&... args) const
 {
     return fmt::format(message.c_str(), etl::forward<Args>(args)...).c_str();
 }

@@ -7,9 +7,7 @@
 #include <etl/vector.h>
 #include "Machine/FSM/Machine.hpp"
 
-namespace Machine
-{
-namespace Planner
+namespace Machine::Planner
 {
 /**
 The main sync state and motion functionality*/
@@ -20,7 +18,7 @@ class Planner: public Machine::FSM::MachineFSM
     //static_assert((Device::IsEncoder<MainSpindleEncoder>::value), "The planner template type MainSpindleEncoder must derive from IEncoder"); 
 
     public:
-        Planner(MainSpindleEncoder& aMainSpindleEncoder) : myMainSpindleEncoder(aMainSpindleEncoder)
+        explicit Planner(MainSpindleEncoder& aMainSpindleEncoder) : myMainSpindleEncoder(aMainSpindleEncoder)
         {}
         virtual void Update() = 0;
         virtual void GenerateMoves() = 0;
@@ -31,4 +29,4 @@ class Planner: public Machine::FSM::MachineFSM
 
 
 
-}} // namespace Machine::Planner
+} // namespace Machine::Planner

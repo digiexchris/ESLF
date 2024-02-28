@@ -8,9 +8,7 @@
 #include "EStop.hpp"
 #include "Logging/Logger.hpp"
 
-namespace Machine
-{
-namespace FSM
+namespace Machine::FSM
 {
 
   IdleState MachineFSM::idleState;
@@ -26,27 +24,32 @@ namespace FSM
 
   void MachineFSM::ExecuteStart()
   {
+    //will be implemented later
   }
 
   void MachineFSM::ExecuteStartAt()
   {
+    //will be implemented later
   }
 
   void MachineFSM::ExecuteStop()
   {
+    //will be implemented later
   }
 
   void MachineFSM::ExecuteStopAt()
   {
+    //will be implemented later
   }
 
   void MachineFSM::ExecuteEStop()
   {
+    //will be implemented later
   }
 
   void MachineFSM::ExecuteReset()
   {
+    //will be implemented later
   }
 
-} // namespace Machine
-} // namespace State
+} // namespace Machine::FSM

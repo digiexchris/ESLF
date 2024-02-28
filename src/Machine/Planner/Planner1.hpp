@@ -2,9 +2,7 @@
 #include "Planner.hpp"
 #include "State/Position.hpp"
 
-namespace Machine
-{
-namespace Planner
+namespace Machine::Planner
 {
 template <typename MainSpindleEncoder, typename ZAxisMotor>
 class Planner1 : public Planner<MainSpindleEncoder>
@@ -25,15 +23,6 @@ class Planner1 : public Planner<MainSpindleEncoder>
         Device::Axis<ZAxisMotor>& myZAxis;
 };
 
-}} // namespace Machine::Planner
-
-
-
-
-namespace Machine
-{
-namespace Planner
-{
     template <typename MainSpindleEncoder, typename ZAxisMotor>
     Planner1<MainSpindleEncoder, ZAxisMotor>::Planner1(
             MainSpindleEncoder& aMainSpindle, 
@@ -62,9 +51,6 @@ namespace Planner
             case FSM::MachineStateId::TURNING:
                 GenerateTurningMoves();
                 break;
-            // case FSM::MachineStateId::THREADING:
-            //     GenerateThreadingMoves();
-            //     break;
             default:
                 break;
         }
@@ -74,24 +60,23 @@ namespace Planner
     void Planner1<MainSpindleEncoder, ZAxisMotor>::GenerateTurningMoves()
     {
         //if(get_child_state_id() != FSM::MachineStateId::RUNNING)
-        {
-            // if(static_cast<State::Position>(myZAxis) != static_cast<State::Position>(this->myMainSpindleEncoder))
-            // {
+        // {
+        //     // if(static_cast<State::Position>(myZAxis) != static_cast<State::Position>(this->myMainSpindleEncoder))
+        //     // {
                     
-            // }
-        }
+        //     // }
+        // }
     }
 
     template <typename MainSpindleEncoder, typename ZAxisMotor>
     void Planner1<MainSpindleEncoder, ZAxisMotor>::GenerateThreadingMoves()
     {
         //if(get_child_state_id() != FSM::MachineStateId::RUNNING)
-        {
-            if(myZAxis != this->myMainSpindleEncoder)
-            {
+        // {
+        //     if(myZAxis != this->myMainSpindleEncoder)
+        //     {
                     
-            }
-        }
+        //     }
+        // }
     }
-} // namespace Planner
-} // namespace Machine
+} // namespace Machine::Planner

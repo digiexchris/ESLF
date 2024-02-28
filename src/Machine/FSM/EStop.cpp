@@ -6,9 +6,7 @@
 #include "EStop.hpp"
 #include "Logging/Logger.hpp"
 
-namespace Machine
-{
-namespace FSM
+namespace Machine::FSM
 {
 
 etl::fsm_state_id_t EStopState::on_enter_state()
@@ -23,7 +21,7 @@ etl::fsm_state_id_t EStopState::on_enter_state()
   }
 
   //***************************************************************************
-  etl::fsm_state_id_t EStopState::on_event(const ResetMessage& msg)
+  etl::fsm_state_id_t EStopState::on_event(const MessageBus::ResetMessage& msg)
   {
     get_fsm_context().ExecuteReset();
     ELSF_LOG_INFO("  S1 : Received message RESET\n");
@@ -38,5 +36,4 @@ etl::fsm_state_id_t EStopState::on_enter_state()
   }
 
 
-} // namespace Machine
-} // namespace State
+} // namespace Machine::FSM

@@ -7,7 +7,6 @@ namespace Device
 
     VirtualEncoder::VirtualEncoder(float aNormalizedScaleFactor) : IEncoder(aNormalizedScaleFactor)
     {
-        myParams = {0, false, 0};
     }
 
     void VirtualEncoder::SetCountIncrement(int32_t aCountIncrement)

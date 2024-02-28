@@ -1,10 +1,7 @@
 #include "Messages.hpp"
 
-namespace Machine
-{
-namespace MessageBus
+namespace Machine::MessageBus
 {
     StartAtMessage::StartAtMessage(uint32_t aPosition) :position(aPosition) {}
     StopAtMessage::StopAtMessage(uint32_t aPosition) :position(aPosition) {}
-} // namespace MessageBus
-} // namespace State
+} // namespace Machine::MessageBus

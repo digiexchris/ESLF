@@ -1,12 +1,8 @@
 #pragma once
 #include <etl/message_broker.h>
 #include "Logging/Logger.hpp"
-//TODO eventually this will route messages to all subscribed routers
-//eg. stop message goes to UI and Machine routers.
 
-namespace Machine
-{
-namespace MessageBus
+namespace Machine::MessageBus
 {
 // Custom broker.
 class Broker : public etl::message_broker
@@ -22,5 +18,4 @@ public:
   }
 };
 
-} // namespace MessageBus
-} // namespace State
+} // namespace Machine::MessageBus

@@ -24,7 +24,7 @@ public:
     * Note: Ideally to avoid losing precision as much as possible, choose a scale factor
     * that will result in a normalized position that is an integer.
     */
-    Position(float aNormalizedScaleFactor = 1.0f);
+    explicit Position(float aNormalizedScaleFactor = 1.0f);
 
     /**
     * @brief Update the internal position.
@@ -63,11 +63,13 @@ public:
      */
     virtual uint16_t GetCountPeriod() const final;
 
-    virtual bool operator>(const Position& aPosition) const;
-    virtual bool operator<(const Position& aPosition) const;
-    virtual bool operator==(const Position& aPosition) const;
-    virtual int32_t operator-(const Position& aPosition) const;
-    virtual int32_t operator+(const Position& aPosition) const;
+    bool operator>(const Position& aPosition) const;
+    bool operator<(const Position& aPosition) const;
+    bool operator==(const Position& aPosition) const;
+    int32_t operator-(const Position& aPosition) const;
+    int32_t operator+(const Position& aPosition) const;
+
+    virtual ~Position() = default;
 
 protected:
     
@@ -78,6 +80,7 @@ protected:
      */
     virtual PositionParams& UpdateMotionParams() = 0;
 
+private:
     //normalized
     int32_t myCount;
 
