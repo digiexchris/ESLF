@@ -41,7 +41,7 @@
             "inherits": "clang-debug",
             "cacheVariables": {
                 "BUILD_ESLF_TESTS": "ON",
-                "CMAKE_CXX_FLAGS": "-O0 -g",
+                "CMAKE_CXX_FLAGS": "-O0 -g -Werror -Wextra -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-private-field",
                 "EXPOSE_COVERAGE_TARGET": "ON"
             }
         },

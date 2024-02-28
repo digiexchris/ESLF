@@ -2,9 +2,7 @@
 #include "Logging/Logger.hpp"
 #include "Machine/MessageBus/Messages.hpp"
 
-namespace Machine
-{
-namespace MessageBus
+namespace Machine::MessageBus
 {
     MachineRouter::MachineRouter(Machine::FSM::MachineFSM& fsm) : myFsm(fsm)
     {}
@@ -25,6 +23,5 @@ namespace MessageBus
         myFsm.start();
     }
 
-} // namespace Machine
-} // namespace State
+} // namespace Machine::MessageBus
 

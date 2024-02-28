@@ -31,7 +31,8 @@
             "tenninebt.vscode-koverage",
             "rherrmannr.code-coverage-lcov",
             "SbastienLevy.covertops-cmake-llvm",
-            "piotrkosek.vscode-gtest-test-adapter-with-code-lens"
+            "piotrkosek.vscode-gtest-test-adapter-with-code-lens",
+            "SonarSource.sonarlint-vscode"
         ]
       }
     },

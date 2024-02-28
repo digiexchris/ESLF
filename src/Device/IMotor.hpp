@@ -9,7 +9,7 @@ namespace Device
 class IMotor : public State::Position
 {
     public:
-        IMotor(float aNormalizedScaleFactor) : State::Position(aNormalizedScaleFactor) {};
+        explicit IMotor(float aNormalizedScaleFactor) : State::Position(aNormalizedScaleFactor) {};
         virtual ~IMotor() = default;
 
         //Move to a target position, if possible.

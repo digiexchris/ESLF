@@ -5,9 +5,7 @@
 
 #define MACHINE_ROUTER_ID 0
 
-namespace Machine
-{
-namespace FSM
+namespace Machine::FSM
 {
 
 class TurningState;
@@ -42,11 +40,9 @@ protected:
   void Init();
   static IdleState idleState;
   static TurningState turningState;
-  //static ThreadingState threadingState;
   static EStopState eStopState;
   //note, these need to be in the same order as in the enum MachineStateId
-  static etl::ifsm_state* myStateList[3];//= { &idleState, &runningState, &eStopState };
+  static etl::ifsm_state* myStateList[3];
 };
 
-  } // namespace Machine
-} // namespace State
+  } // namespace Machine::FSM
