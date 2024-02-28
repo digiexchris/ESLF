@@ -1,0 +1,6 @@
+[submodule "lib/etl"]
+	path = lib/etl
+	url = https://github.com/ETLCPP/etl
+[submodule "lib/fmt"]
+	path = lib/fmt
+	url = https://github.com/fmtlib/fmt.git

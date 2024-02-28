@@ -34,68 +34,54 @@ public:
     LoggerInitException(const char* reason, const char* file, int line);
 };
 
-template <typename Derived_t, typename LogMessage_t>
+template <typename Derived_t>
 class ILogBackend
 {
 public:
-    virtual ~ILogBackend() {};
+    // virtual ~ILogBackend() {};
 
-    template<typename... Args>
-    void Info(LogMessage_t message, Args&&... args) const;
+    // template<typename... Args>
+    // void Info(LogMessage_t message, Args&&... args) const;
 
-    template<typename... Args>
-    void Warn(LogMessage_t message, Args&&... args) const;
+    // template<typename... Args>
+    // void Warn(LogMessage_t message, Args&&... args) const;
 
-    template<typename... Args>
-    void Error(LogMessage_t message, Args&&... args) const;
+    // template<typename... Args>
+    // void Error(LogMessage_t message, Args&&... args) const;
 };
 
-template <typename DerivedBackend_t, typename LogMessage_t>
-class Log
-{
-public:
-    Log(const ILogBackend<DerivedBackend_t, LogMessage_t>& aBackend) : backend(aBackend) {}
-    Log() = delete;
-    template<typename... Args>
-    void Info(LogMessage_t message, Args&&... args);
-
-    template<typename... Args>
-    void Warn(LogMessage_t message, Args&&... args);
-
-    template<typename... Args>
-    void Error(LogMessage_t message, Args&&... args);
-private:
-    const ILogBackend<DerivedBackend_t, LogMessage_t>& backend;
-};
-
-template <typename T>
-using LogSingleton = etl::singleton<Log<T,etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH>>>;
+// template <typename T>
+// using LogSingleton = etl::singleton<Log<T,etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH>>>;
 
 
 /**
 This is the frontend to the macro, used for intermediate checks
 to see if the singleton is in a good state before executing
 the log call to it*/
-template <typename DerivedBackend_t, typename LogMessage_t>
-class Logger
+template <typename DerivedBackend_t>
+class Logger: public etl::singleton<Logger<DerivedBackend_t>>
 {
 public:
     template<typename... Args>
-    static void Info(LogMessage_t message, ...);
+    void Info(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
 
     template<typename... Args>
-    static void Warn(LogMessage_t message, ...);
+    void Warn(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
 
     template<typename... Args>
-    static void Error(LogMessage_t message, ...);
+    void Error(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
+
+    void SetBackend(ILogBackend<DerivedBackend_t>* aBackend) {
+        myLogBackend.reset(aBackend) = ;
+    }
+
+    ILogBackend<DerivedBackend_t>* GetBackend() const {
+        return myLogBackend;
+    }
+
+protected:
+    Logger(ILogBackend<DerivedBackend_t>* aBackend) : myLogBackend(aBackend) {}
 
 private:
-    static void ThrowIfInvalid();
-};
-
-template <typename DerivedBackend_t, typename LogMessage_T>
-class LogFactory
-{   
-public:
-    static bool Create(const ILogBackend<DerivedBackend_t, LogMessage_T>& backend);
+    etl::unique_ptr<ILogBackend<DerivedBackend_t>> myLogBackend;
 };

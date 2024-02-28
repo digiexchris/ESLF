@@ -46,6 +46,8 @@ enable_testing()
 
 include_directories(./)
 
+add_subdirectory(${CMAKE_SOURCE_DIR}/lib/fmt fmt_build)
+
 if(EXPOSE_COVERAGE_TARGET AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 target_link_libraries(
   elsf_tests PRIVATE -fprofile-instr-generate
@@ -57,7 +59,7 @@ target_link_libraries(
   etl
   elsf::elsf
   atomic
-  
+  fmt::fmt
 )
 else()
 target_link_libraries(
@@ -70,8 +72,11 @@ target_link_libraries(
   etl
   elsf::elsf
   atomic
+  fmt::fmt
 )
 endif()
+
+
 
 target_compile_definitions(elsf_tests PRIVATE
  #-DCATCH_CONFIG_FAST_COMPILE
