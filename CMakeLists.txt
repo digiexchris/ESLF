@@ -58,7 +58,8 @@ endif()
 subdirs("coverage")
 
 add_subdirectory(lib/etl)
-target_link_libraries(ELSF PRIVATE etl)
+add_subdirectory(lib/fmt)
+target_link_libraries(ELSF PRIVATE etl fmt::fmt)
 
 # TODO: Add tests and install targets if needed.
 if (BUILD_ESLF_TESTS)

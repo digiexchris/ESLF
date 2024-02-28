@@ -16,16 +16,12 @@ public:
   MAKE_MOCK1(ExecuteStopAt,void(int));
   MAKE_MOCK0(ExecuteEStop, void());
   MAKE_MOCK0(ExecuteReset,void());
-  
-  // virtual void ExecuteStart() override {
-  //   ExecuteStartMock();
-  // }
+
 };
 
 class MockBaseMachine : public MockMachine
 {
 public :
-  MAKE_MOCK2(set_states, void(etl::ifsm_state** states, size_t number_of_states));
 
 };
 } // namespace State::Machine

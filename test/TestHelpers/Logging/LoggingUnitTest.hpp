@@ -2,15 +2,15 @@
 #include "Logging/Logger.hpp"
 #include "etl_profile.h"
 
-class LoggerTest {
+class LoggerBaseTest {
 protected:
-    LoggerTest() {
+    LoggerBaseTest() {
         if(LogSingleton::is_valid()) {
             LogSingleton::destroy();
         }
     }
 
-    ~LoggerTest() {
+    ~LoggerBaseTest() {
         if(LogSingleton::is_valid()) {
             LogSingleton::destroy();
         }

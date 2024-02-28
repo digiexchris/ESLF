@@ -18,48 +18,41 @@
 #include <etl/string.h>
 #include <etl/singleton.h>
 #include <stdarg.h>
+#include <fmt/core.h>
 
 #define ELSF_LOG_MAX_MESSAGE_LENGTH 256
 
-#define ELSF_LOG_INIT(...) LogFactory<ELSF_LOG_MAX_MESSAGE_LENGTH>::Create(__VA_ARGS__)
-#define ELSF_LOG_INFO(...) Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>::Info(__VA_ARGS__)
-#define ELSF_LOG_WARN(...) Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>::Warn(__VA_ARGS__)
-#define ELSF_LOG_ERROR(...) Logger<ELSF_LOG_MAX_MESSAGE_LENGTH>::Error(__VA_ARGS__)
+#define ELSF_LOG_INIT(BackendPTR) LogSingleton::create(std::move(BackendPTR))
+#define ELSF_LOG_INFO(...) LogSingleton::instance().Info(__VA_ARGS__)
+#define ELSF_LOG_WARN(...) LogSingleton::instance().Warn(__VA_ARGS__)
+#define ELSF_LOG_ERROR(...) LogSingleton::instance().Error(__VA_ARGS__)
 
 #define LOGGER_INIT_EXCEPTION(reason) LoggerInitException((reason), __FILE__, __LINE__)
 
 class LoggerInitException : public etl::exception
 {
 public:
-    LoggerInitException(const char* reason, const char* file, int line);
+    LoggerInitException(const char* reason, const char* file, int line)
+    :etl::exception(reason, file, line) {}
 };
 
-template <typename Derived_t>
 class ILogBackend
 {
 public:
-    // virtual ~ILogBackend() {};
+    //NOTE: any taking in of formatting params happens in the Logger.
+    virtual void Info(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const = 0;
 
-    // template<typename... Args>
-    // void Info(LogMessage_t message, Args&&... args) const;
+    virtual void Warn(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const = 0;
+    
+    virtual void Error(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const = 0;
 
-    // template<typename... Args>
-    // void Warn(LogMessage_t message, Args&&... args) const;
+    virtual ~ILogBackend() = default;
 
-    // template<typename... Args>
-    // void Error(LogMessage_t message, Args&&... args) const;
+    protected:
 };
 
-// template <typename T>
-// using LogSingleton = etl::singleton<Log<T,etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH>>>;
 
-
-/**
-This is the frontend to the macro, used for intermediate checks
-to see if the singleton is in a good state before executing
-the log call to it*/
-template <typename DerivedBackend_t>
-class Logger: public etl::singleton<Logger<DerivedBackend_t>>
+class Logger
 {
 public:
     template<typename... Args>
@@ -71,17 +64,50 @@ public:
     template<typename... Args>
     void Error(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
 
-    void SetBackend(ILogBackend<DerivedBackend_t>* aBackend) {
-        myLogBackend.reset(aBackend) = ;
+    void SetBackend(ILogBackend* aBackend) {
+        ETL_ASSERT(aBackend != nullptr, LOGGER_INIT_EXCEPTION("Log not initialized, call ESP_LOG_INIT"));
+        myLogBackend.reset(aBackend);
     }
 
-    ILogBackend<DerivedBackend_t>* GetBackend() const {
-        return myLogBackend;
+    ILogBackend* GetBackend() const {
+        return myLogBackend.get();
     }
 
+    Logger(ILogBackend* aBackend) {
+        SetBackend(aBackend);
+    }
 protected:
-    Logger(ILogBackend<DerivedBackend_t>* aBackend) : myLogBackend(aBackend) {}
+
+    template <typename... Args>
+    etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> ApplyFormat(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
 
 private:
-    etl::unique_ptr<ILogBackend<DerivedBackend_t>> myLogBackend;
+    etl::unique_ptr<ILogBackend> myLogBackend;
 };
+
+using LogSingleton = etl::singleton<Logger>;
+
+
+template<typename... Args>
+void Logger::Info(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args)
+{
+    myLogBackend->Info(ApplyFormat(message, etl::forward<Args>(args)...));
+}
+
+template<typename... Args>
+void Logger::Warn(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args)
+{
+    myLogBackend->Warn(ApplyFormat(message, etl::forward<Args>(args)...));
+}
+
+template<typename... Args>
+void Logger::Error(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args)
+{
+    myLogBackend->Error(ApplyFormat(message, etl::forward<Args>(args)...));
+}
+
+template <typename... Args>
+etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> Logger::ApplyFormat(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args)
+{
+    return fmt::format(message.c_str(), etl::forward<Args>(args)...).c_str();
+}

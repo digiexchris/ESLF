@@ -46,7 +46,7 @@ enable_testing()
 
 include_directories(./)
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/lib/fmt fmt_build)
+# add_subdirectory(${CMAKE_SOURCE_DIR}/lib/fmt fmt_build)
 
 if(EXPOSE_COVERAGE_TARGET AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 target_link_libraries(
@@ -79,7 +79,6 @@ endif()
 
 
 target_compile_definitions(elsf_tests PRIVATE
- #-DCATCH_CONFIG_FAST_COMPILE
  -DCATCH_CONFIG_POSIX_SIGNALS
  -DCATCH_CONFIG_EXPERIMENTAL_REDIRECT
                               )
