@@ -81,5 +81,28 @@ class Planner1 : public Planner<MainSpindleEncoder>
         }
     }
 
-    
+    template <typename MainSpindleEncoder, typename ZAxisMotor>
+    void Planner1<MainSpindleEncoder, ZAxisMotor>::GenerateTurningMoves()
+    {
+
+        if(myZAxis != this->myMainSpindleEncoder)
+        {
+            //NOTE: both positions should be ints at this point, scaled internally
+            //TODO this is a 1:1 ratio, no gearing.
+            myZAxis.Move(myZAxis.Diff(this->myMainSpindleEncoder));
+        }
+
+    }
+
+    template <typename MainSpindleEncoder, typename ZAxisMotor>
+    void Planner1<MainSpindleEncoder, ZAxisMotor>::GenerateThreadingMoves()
+    {
+        //if(get_child_state_id() != FSM::MachineStateId::RUNNING)
+        // {
+        //     if(myZAxis != this->myMainSpindleEncoder)
+        //     {
+                    
+        //     }
+        // }
+    }
 } // namespace Machine::Planner

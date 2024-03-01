@@ -31,6 +31,14 @@ struct SetTurningMode : public etl::message<MessageId::SET_TURNING_MODE, Machine
 {
 };
 
+/** Starts the mode that will wait until the encoder is at
+ * a specific position before starting the position tracking
+*/
+struct StartAtMessage : public etl::message<MessageId::START_RUNNING_AT, MachineMessageInterface>
+
+{
+};
+
 struct StopMessage : public etl::message<MessageId::STOP, MachineMessageInterface>
 {
 };
