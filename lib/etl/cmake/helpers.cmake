@@ -16,7 +16,7 @@ function(determine_version_with_git)
         if(PROJECT_IS_TOP_LEVEL)
             # only warn if this is the top-level project, since we may be
             # building from a tarball as a subproject
-            message(WARNING "Version string ${VERSION} retrieved with git describe is invalid")
+            #message(WARNING "Version string ${VERSION} retrieved with git describe is invalid")
         endif()
         return()
     endif()

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Device/Axis.hpp"
+#include "Machine/MessageBus/MachineRouter.hpp"
 #include "State/Position.hpp"
 #include "Device/IEncoder.hpp"
 #include <cstdarg>
@@ -13,7 +14,7 @@ namespace Machine::Planner
 The main sync state and motion functionality*/
 
 template <typename MainSpindleEncoder>
-class Planner: public Machine::FSM::MachineFSM
+class Planner: public Machine::MessageBus::MachineRouter
 {
     //static_assert((Device::IsEncoder<MainSpindleEncoder>::value), "The planner template type MainSpindleEncoder must derive from IEncoder"); 
 

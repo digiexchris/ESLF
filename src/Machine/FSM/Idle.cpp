@@ -1,4 +1,5 @@
 
+#include "Machine/MessageBus/Messages.hpp"
 #include "etl/fsm.h"
 #include "etl/message_packet.h"
 #include "Machine.hpp"
@@ -21,18 +22,11 @@ namespace Machine::FSM
   }
 
   //***************************************************************************
-  etl::fsm_state_id_t IdleState::on_event(const MessageBus::StartMessage& msg)
+  etl::fsm_state_id_t IdleState::on_event(const MessageBus::SetTurningMode& msg)
   {
-    get_fsm_context().ExecuteStart();
-    ELSF_LOG_INFO("  S1 : Received message START\n");
-    return MachineStateId::TURNING;
-  }
-
-  etl::fsm_state_id_t IdleState::on_event(const MessageBus::StartAtMessage& msg)
-  {
-    get_fsm_context().ExecuteStartAt();
-    ELSF_LOG_INFO("  S1 : Received message START AT\n");
-    return etl::ifsm_state::No_State_Change;
+    get_fsm_context().ExecuteSetTurnMode();
+    ELSF_LOG_INFO("  S1 : Received message TURNING\n");
+    return MachineStateId::STOPPED;
   }
 
   //***************************************************************************

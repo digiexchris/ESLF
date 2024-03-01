@@ -3,10 +3,13 @@
 #include "Device/VirtualEncoder.hpp"
 #include "Device/VirtualMotor.hpp"
 #include "Logging/Logger.hpp"
+#include "Machine/FSM/Machine.hpp"
 #include "Machine/Planner/Planner1.hpp"
 #include "Device/Axis.hpp"
 #include "Mocks/Logging/MockLogBackend.hpp"
 #include "TestHelpers/DefaultUnitTest.hpp"
+#include "TestHelpers/Logging/TestLogBackend.hpp"
+#include "Machine/MessageBus/Messages.hpp"
 
 using namespace Machine::Planner;
 
@@ -20,6 +23,8 @@ public:
     Device::Axis<Device::VirtualMotor> zAxis;
     PlannerTest() : zAxisMotor(), zAxis('z', zAxisMotor), mainSpindle(), Planner1(mainSpindle, zAxis)
     {
+        myTestLogBackend = new TestLogBackend();
+        ELSF_LOG_INIT(myTestLogBackend);
 
     }
 
@@ -27,12 +32,19 @@ public:
     {
 
     }
+
+    private:
+        TestLogBackend* myTestLogBackend;
 };
 
-// TEST_CASE_METHOD(PlannerTest, "Planner: Planner1: Constructor", "[Planner]")
-// {
+TEST_CASE_METHOD(PlannerTest, "Planner: Planner1: Constructor", "[Planner]")
+{
 
-//     // start();
-//     // Update();
-//     //REQUIRE(planner.GetState() == Machine::Planner::State::Idle);
-// }
+    //start();
+    mainSpindle.SetCountIncrement(1);
+    zAxis.
+    Update();
+    REQUIRE(myZAxis.GetPosition() == 1);
+    //REQUIRE(get_state_id() == Machine::FSM::MachineStateId::IDLE);
+    
+}
