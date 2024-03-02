@@ -23,43 +23,86 @@ protected:
 
 };
 
-namespace test_turning {
-    void Reset(MachineFSM& fsm, etl::imessage* message) {
-        fsm.reset();
-        fsm.start();
-        fsm.receive(*message);
-    }
-}
+// namespace test_turning {
+//     void Reset(MachineFSM& fsm, etl::imessage* message) {
+//         fsm.reset();
+//         fsm.start();
+//         fsm.receive(*message);
+//     }
+// }
 
-TEST_CASE_METHOD(TransitionFromTurningTest, "one_transition_from_idle", "[Machine][FSM][Turning]") {
+TEST_CASE_METHOD(TransitionFromTurningTest, "moving_from_turning", "[Machine][FSM][Turning]") {
     MachineFSM fsm;
-    auto initialStateMessage= StartMessage();
-    test_turning::Reset(fsm, &initialStateMessage);
+    fsm.start();
+    REQUIRE(fsm.get_state_id() == MachineStateId::IDLE);
 
-    struct Transition {
-        std::shared_ptr<etl::imessage> message;
-        MachineStateId expectedState;
-    };
+    StartMessage startMessage;
+    fsm.receive(startMessage);
 
-    const Transition transitions[] = {
-        { std::make_shared<StartMessage>(), MachineStateId::TURNING },
-        { std::make_shared<StartAtMessage>(100), MachineStateId::TURNING },
-        { std::make_shared<StopMessage>(), MachineStateId::IDLE },
-        { std::make_shared<StopAtMessage>(200), MachineStateId::TURNING },
-        { std::make_shared<EStopMessage>(), MachineStateId::ESTOP },
-        { std::make_shared<ResetMessage>(), MachineStateId::IDLE }
-    };
+    REQUIRE(fsm.get_state_id() == MachineStateId::IDLE); //it should not change to Moving from Idle
 
-    for (const auto& transition : transitions) {
-        test_turning::Reset(fsm, &initialStateMessage);
+    //REQUIRE(fsm.get_state_id() == MachineStateId::TURNING);
+    auto turnModeMessage = SetTurningMode();
+    fsm.receive(turnModeMessage);
 
-        etl::fsm_state_id_t currentState = fsm.get_state_id();
-        REQUIRE(currentState == static_cast<int>(MachineStateId::TURNING));// << "State is not RUNNING after reset for transition";
+    REQUIRE(fsm.get_state_id() == MachineStateId::STOPPED);
 
-        std::shared_ptr<etl::imessage> message = transition.message;
+    auto start2 = StartMessage();
+    fsm.receive(start2);
+    REQUIRE(fsm.get_state_id() == MachineStateId::MOVING);
 
-        fsm.receive(*message);
-        currentState = fsm.get_state_id();
-        REQUIRE(currentState == static_cast<int>(transition.expectedState));// << "Transition failed";
-    }
+    //TODO add requirement to not be able to switch from turn to thread while moving
+
+    auto stopMessage = StopMessage();
+
+    fsm.receive(stopMessage);
+
+    REQUIRE(fsm.get_state_id() == MachineStateId::STOPPED);
+
+    fsm.receive(startMessage);
+    REQUIRE(fsm.get_state_id() == MachineStateId::MOVING);
+
+    auto resetMessage = ResetMessage();
+
+    fsm.receive(resetMessage);
+    
+    REQUIRE(fsm.get_state_id() == MachineStateId::IDLE);
 }
+
+// TEST_CASE_METHOD(TransitionFromTurningTest, "moving to stopped", "[Machine][FSM][Turning]") {
+//     MachineFSM fsm;
+//     auto initialStateMessage= SetTurningMode();
+//     test_turning::Reset(fsm, &initialStateMessage);
+
+//     REQUIRE(fsm.get_state_id() == MachineStateId::TURNING);
+
+//     StartMessage startMessage;
+//     StopMessage stopMessage;
+
+//     fsm.receive(startMessage);
+
+//     REQUIRE(fsm.get_state_id() == MachineStateId::MOVING);
+
+//     fsm.receive(stopMessage);
+
+//     REQUIRE(fsm.get_state_id() == MachineStateId::STOPPED);
+// }
+
+// TEST_CASE_METHOD(TransitionFromTurningTest, "moving to reset", "[Machine][FSM][Turning]") {
+//     MachineFSM fsm;
+//     auto initialStateMessage= SetTurningMode();
+//     test_turning::Reset(fsm, &initialStateMessage);
+
+//     REQUIRE(fsm.get_state_id() == MachineStateId::TURNING);
+
+//     StartMessage startMessage;
+//     ResetMessage resetMessage;
+
+//     fsm.receive(startMessage);
+
+//     REQUIRE(fsm.get_state_id() == MachineStateId::MOVING);
+
+//     fsm.receive(resetMessage); //this SHOULD halt any further moves because the update() checks state before moving.
+
+//     REQUIRE(fsm.get_state_id() == MachineStateId::IDLE);
+// }

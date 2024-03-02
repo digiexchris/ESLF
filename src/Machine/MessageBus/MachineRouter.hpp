@@ -19,6 +19,7 @@ class MachineRouter
     StartAtMessage, 
     StopMessage, 
     StopAtMessage, 
+    SetTurningMode,
     EStopMessage, 
     ResetMessage>
 {

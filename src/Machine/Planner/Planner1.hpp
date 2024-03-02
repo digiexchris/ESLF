@@ -38,6 +38,7 @@ class Planner1 : public Planner<MainSpindleEncoder>
         // Update the main spindle encoder
         this->myMainSpindleEncoder.Update();
         myZAxis.Update();
+        GenerateMoves();
     }
 
     template <typename MainSpindleEncoder, typename ZAxisMotor>
@@ -48,7 +49,7 @@ class Planner1 : public Planner<MainSpindleEncoder>
                 break;
             case FSM::MachineStateId::ESTOP:
                 break;
-            case FSM::MachineStateId::TURNING:
+            case FSM::MachineStateId::MOVING: //TODO figure out if we're turning moving or threading moving
                 GenerateTurningMoves();
                 break;
             default:
@@ -59,13 +60,14 @@ class Planner1 : public Planner<MainSpindleEncoder>
     template <typename MainSpindleEncoder, typename ZAxisMotor>
     void Planner1<MainSpindleEncoder, ZAxisMotor>::GenerateTurningMoves()
     {
-        //if(get_child_state_id() != FSM::MachineStateId::RUNNING)
-        // {
-        //     // if(static_cast<State::Position>(myZAxis) != static_cast<State::Position>(this->myMainSpindleEncoder))
-        //     // {
-                    
-        //     // }
-        // }
+
+        if(myZAxis != this->myMainSpindleEncoder)
+        {
+            //NOTE: both positions should be ints at this point, scaled internally
+            //TODO this is a 1:1 ratio, no gearing.
+            myZAxis.Move(myZAxis.Diff(this->myMainSpindleEncoder));
+        }
+
     }
 
     template <typename MainSpindleEncoder, typename ZAxisMotor>
