@@ -27,13 +27,6 @@ namespace Machine::FSM
     return MachineStateId::IDLE;
   }
 
-  etl::fsm_state_id_t TurningState::on_event(const MessageBus::StopAtMessage& msg)
-  {
-    get_fsm_context().ExecuteStopAt();
-    ELSF_LOG_INFO("  S1 : Received message STOP AT\n");
-    return etl::ifsm_state::No_State_Change;
-  }
-
   //***************************************************************************
   etl::fsm_state_id_t TurningState::on_event(const MessageBus::EStopMessage& msg)
   {

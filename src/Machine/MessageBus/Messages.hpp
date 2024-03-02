@@ -31,28 +31,6 @@ struct SetTurningMode : public etl::message<MessageId::SET_TURNING_MODE, Machine
 {
 };
 
-/** Starts the mode that will wait until the encoder is at
- * a specific position before starting the position tracking
-*/
-struct StartAtMessage : public etl::message<MessageId::START_RUNNING_AT, MachineMessageInterface>
-
-{
-    /**
-    * @brief Represents a message to start at a specific position.
-    * 
-    * @param position  This message is used to instruct the system to start at a specific position.
-    * The position is specified in base system units.
-    */
-    explicit StartAtMessage(uint32_t position);
-    uint32_t position;
-};
-
-struct StopAtMessage : public etl::message<MessageId::STOP_RUNNING_AT, MachineMessageInterface>
-{
-    explicit StopAtMessage(uint32_t position);
-    uint32_t position;
-};
-
 struct StopMessage : public etl::message<MessageId::STOP, MachineMessageInterface>
 {
 };

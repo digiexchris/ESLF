@@ -20,21 +20,20 @@ namespace Machine::FSM
   EStopState MachineFSM::eStopState;
   MovingState MachineFSM::movingState;
   StoppedState MachineFSM::stoppedState;
-  etl::ifsm_state* MachineFSM::myTurningChildStateList[] = {&stoppedState, &movingState};
+  etl::array<etl::ifsm_state*, 2> MachineFSM::myTurningChildStateList = {&stoppedState, &movingState};
 
   //note, these states must exist in the same order as they're defined in the enum!!!
-  etl::ifsm_state* MachineFSM::myStateList[] = { &idleState, &turningState, &eStopState, &movingState, &stoppedState  };
+etl::array<etl::ifsm_state*, 5> MachineFSM::myStateList = { &idleState, &turningState, &eStopState, &movingState, &stoppedState  };
   
   MachineFSM::MachineFSM()
     : hfsm(MACHINE_ROUTER_ID)
   {
-    turningState.set_child_states(myTurningChildStateList, 2);
-    set_states(myStateList, 5);
+    turningState.set_child_states(myTurningChildStateList.data(), 2);
+    set_states(myStateList.data(), 5);
   }
 
   void MachineFSM::ExecuteSetTurnMode()
   {
-    auto test = 0;
     //set turn mode settings appropriate, like the allowable error creep, and wether we can move along Z at any time or if it's locked until the cut is done
   }
 
@@ -43,17 +42,7 @@ namespace Machine::FSM
     //will be implemented later
   }
 
-  void MachineFSM::ExecuteStartAt()
-  {
-    //will be implemented later
-  }
-
   void MachineFSM::ExecuteStop()
-  {
-    //will be implemented later
-  }
-
-  void MachineFSM::ExecuteStopAt()
   {
     //will be implemented later
   }
@@ -66,6 +55,10 @@ namespace Machine::FSM
   void MachineFSM::ExecuteReset()
   {
     //will be implemented later
+  }
+  etl::fsm_state_id_t MachineFSM::GetStateId() const
+  {
+      return get_state_id();
   }
 
 } // namespace Machine::FSM

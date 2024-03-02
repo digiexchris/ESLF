@@ -14,18 +14,20 @@ namespace Machine::Planner
 The main sync state and motion functionality*/
 
 template <typename MainSpindleEncoder>
-class Planner: public Machine::MessageBus::MachineRouter
+class Planner // public Machine::MessageBus::MachineRouter
 {
     //static_assert((Device::IsEncoder<MainSpindleEncoder>::value), "The planner template type MainSpindleEncoder must derive from IEncoder"); 
 
     public:
-        explicit Planner(MainSpindleEncoder& aMainSpindleEncoder) : myMainSpindleEncoder(aMainSpindleEncoder)
+        explicit Planner(MainSpindleEncoder& aMainSpindleEncoder, MessageBus::MachineRouter& aMachineRouter): 
+            myMainSpindleEncoder(aMainSpindleEncoder), myRouter(aMachineRouter)
         {}
         virtual void Update() = 0;
         virtual void GenerateMoves() = 0;
 
     protected:
         MainSpindleEncoder& myMainSpindleEncoder;
+        Machine::MessageBus::MachineRouter& myRouter;
 };
 
 

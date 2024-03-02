@@ -32,7 +32,10 @@
             "rherrmannr.code-coverage-lcov",
             "SbastienLevy.covertops-cmake-llvm",
             "piotrkosek.vscode-gtest-test-adapter-with-code-lens",
-            "SonarSource.sonarlint-vscode"
+            "SonarSource.sonarlint-vscode",
+            "matepek.vscode-catch2-test-adapter",
+            "Continue.continue",
+            "spmeesseman.vscode-taskexplorer"
         ]
       }
     },

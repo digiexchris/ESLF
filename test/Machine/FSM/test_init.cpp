@@ -31,9 +31,7 @@ TEST_CASE_METHOD(TransitionFromInitTest, "one_transition_from_reset", "[Machine]
 
     const Transition transitions[] = {
         { std::make_shared<StartMessage>(), MachineStateId::IDLE },
-        { std::make_shared<StartAtMessage>(100), MachineStateId::IDLE },
         { std::make_shared<StopMessage>(), MachineStateId::IDLE },
-        { std::make_shared<StopAtMessage>(200), MachineStateId::IDLE },
         { std::make_shared<EStopMessage>(), MachineStateId::ESTOP },
         { std::make_shared<SetTurningMode>(), MachineStateId::STOPPED },
         { std::make_shared<ResetMessage>(), MachineStateId::IDLE }

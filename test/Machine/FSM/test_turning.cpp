@@ -23,14 +23,6 @@ protected:
 
 };
 
-// namespace test_turning {
-//     void Reset(MachineFSM& fsm, etl::imessage* message) {
-//         fsm.reset();
-//         fsm.start();
-//         fsm.receive(*message);
-//     }
-// }
-
 TEST_CASE_METHOD(TransitionFromTurningTest, "moving_from_turning", "[Machine][FSM][Turning]") {
     MachineFSM fsm;
     fsm.start();

@@ -15,23 +15,28 @@ class MachineRouter
     : public Machine::MessageBus::QueuedRouter<
     MachineRouter, 
     10, //Queue Depth
-    StartMessage, 
-    StartAtMessage, 
-    StopMessage, 
-    StopAtMessage, 
+    StartMessage,
+    StopMessage,
     SetTurningMode,
     EStopMessage, 
     ResetMessage>
 {
 public:
-    explicit MachineRouter(Machine::FSM::MachineFSM& fsm);
+    explicit MachineRouter(Machine::FSM::MachineFSM* fsm);
+    //warning: you must call start manually if you use the default constructor, after setting the FSM.
+    MachineRouter() = default;
+
+    void SetFsm(Machine::FSM::MachineFSM* anFsm){ 
+        myFsm.reset(anFsm);
+    };
 
     void Start();
     virtual void on_receive(const etl::imessage& msg);
     virtual void on_receive_unknown(const etl::imessage& msg);
+    FSM::MachineFSM* GetFsm() { return myFsm.get(); }
 
 private:
-    etl::hfsm& myFsm;
+    etl::unique_ptr<FSM::MachineFSM> myFsm;
 };
 
 } // namespace Machine::MessageBus
