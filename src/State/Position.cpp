@@ -3,21 +3,14 @@
 #include <etl/absolute.h>
 #include <etl/atomic.h>
 #include <Logging/Logger.hpp>
+#include <etl/math.h>
 
 namespace State
 {
     
 
 Position::Position(float myScaleFactor ) : 
-    myScaleFactor(myScaleFactor),
-    myRawCount(0),
-    myCount(0),
-    myDirection(0),
-    myTimestamp(0),
-    myLastRawCount(0),
-    myLastDirection(0),
-    myLastTimestamp(0),
-    myCarry(0)
+    myScaleFactor(myScaleFactor)
 {
 }
 
@@ -51,7 +44,7 @@ void Position::Set(PositionParams aParams) {
     // Computing carry for the next cycle.
     // Subtracts the matching floor integer version of itself (representing myCount)
     // and does not readjust with myScaleFactor - carry is kept as the unscaled extra
-    myCarry = newScaledCount - myCount;
+    myCarry = newScaledCount - static_cast<float>(myCount);
 }
 
 int32_t Position::GetPosition() const { 
@@ -91,18 +84,24 @@ int32_t Position::operator+(const Position& aPosition) const
     return GetPosition() + aPosition.GetPosition();
 }
 
-uint16_t Position::GetCountPeriod() const
+float Position::GetCountPeriod() const
 {
-    uint16_t timeDifference = myTimestamp - myLastTimestamp;
-    int32_t countDifference = etl::absolute(static_cast<int32_t>(myRawCount*myScaleFactor) - static_cast<int32_t>(myLastRawCount*myScaleFactor));
+    uint32_t timeDifference = myTimestamp - myLastTimestamp;
+    float countDifference = etl::absolute(static_cast<float>(myRawCount)*myScaleFactor) - static_cast<float>(myLastRawCount)*myScaleFactor;
 
     // Check if countDifference is not zero to avoid division by zero
     if (countDifference != 0) {
-        uint16_t averageTimeBetweenCounts = timeDifference / countDifference;
+        float averageTimeBetweenCounts = static_cast<float>(timeDifference) / countDifference;
         return averageTimeBetweenCounts;
     } else {
         return 0;
     }
 }
 
-} // namespace Position
+int32_t Position::Diff(const Position& aPosition) const
+{
+    return GetPosition() - aPosition.GetPosition();
+} 
+
+
+}// namespace Position

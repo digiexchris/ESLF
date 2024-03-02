@@ -1,9 +1,9 @@
 #include "Subscription.hpp"
 
-namespace Machine {
-namespace MessageBus {
+namespace Machine::MessageBus 
+{
 
-Subscription::Subscription(etl::imessage_router& router, std::vector<etl::message_id_t> id_list_)
+Subscription::Subscription(etl::imessage_router& router, const std::vector<etl::message_id_t>& id_list_)
     : etl::message_broker::subscription(router)
     , id_list(id_list_)
   {
@@ -14,5 +14,4 @@ Subscription::Subscription(etl::imessage_router& router, std::vector<etl::messag
     return etl::message_broker::message_id_span_t(id_list.begin(), id_list.end());
   }
 
-} // namespace MessageBus
-} // namespace Machine
+} // namespace Machine::MessageBus

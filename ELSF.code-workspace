@@ -86,7 +86,13 @@
 				}
 			
 			}
-		]
+		],
+		"sonarlint.connectedMode.project": {
+			"projectKey": "digiexchris_ELSF",
+			"connectionId": "ivoidwarranties"
+		},
+		"sonarlint.testFilePattern": "**/test/**",
+		"search.useIgnoreFiles": false
 	},
 	"tasks":
 	{

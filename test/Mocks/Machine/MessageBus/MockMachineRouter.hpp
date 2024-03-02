@@ -17,9 +17,7 @@ class MockMachineRouter : public ::Machine::MessageBus::MachineRouter
 {
 public:
     MAKE_MOCK1(on_receive, void(const StartMessage&));
-    MAKE_MOCK1(on_receive, void(const StartAtMessage&));
     MAKE_MOCK1(on_receive, void(const StopMessage&));
-    MAKE_MOCK1(on_receive, void(const StopAtMessage&));
     MAKE_MOCK1(on_receive, void(const EStopMessage&));
     MAKE_MOCK1(on_receive, void(const ResetMessage&));
     MAKE_MOCK1(on_receive_unknown, void(const etl::imessage&));

@@ -53,9 +53,7 @@ TEST_CASE_METHOD(TransitionFromEStopTest, "one_transition_from_idle", "[Machine]
 
     const Transition transitions[] = {
         { std::make_shared<StartMessage>(), MachineStateId::ESTOP },
-        { std::make_shared<StartAtMessage>(100), MachineStateId::ESTOP },
         { std::make_shared<StopMessage>(), MachineStateId::ESTOP },
-        { std::make_shared<StopAtMessage>(200), MachineStateId::ESTOP },
         { std::make_shared<EStopMessage>(), MachineStateId::ESTOP },
         { std::make_shared<ResetMessage>(), MachineStateId::IDLE }
     };

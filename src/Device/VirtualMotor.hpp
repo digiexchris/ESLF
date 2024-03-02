@@ -16,14 +16,15 @@ using State::PositionParams;
 class VirtualMotor : public IMotor
 {
     public:
-        VirtualMotor(float aNormalizedScaleFactor = 1.0);
+        explicit VirtualMotor(float aNormalizedScaleFactor = 1.0);
         void MoveTo(int32_t aTargetPosition) override;
         void Stop() override;
     protected:
 
         //from State::Position
-        virtual PositionParams& UpdateMotionParams() override;
+        PositionParams& UpdateMotionParams() override;
 
+    private:
         int32_t myTargetPosition;
         int32_t mySimulatedCount;
         uint32_t mySimulatedTimestamp;

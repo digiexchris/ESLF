@@ -9,8 +9,7 @@ namespace Device
 class IMotor : public State::Position
 {
     public:
-        IMotor(float aNormalizedScaleFactor) : State::Position(aNormalizedScaleFactor) {};
-        virtual ~IMotor() = default;
+        explicit IMotor(float aNormalizedScaleFactor) : State::Position(aNormalizedScaleFactor) {};
 
         //Move to a target position, if possible.
         virtual void MoveTo(int32_t aTargetPosition) = 0;
@@ -18,6 +17,8 @@ class IMotor : public State::Position
         //Stop now, flushing any remaining motion commands, if possible.
         //If used with a closed loop stepper, this could turn off the enable pin. E-stop style.
         virtual void Stop() = 0;
+
+        
 };
 
 // Traits to check if a type used in a template can be used as a motor

@@ -50,10 +50,7 @@ namespace etl
   {
   public:
 
-    singleton_exception(string_type reason_, string_type file_name_, numeric_type line_number_)
-      : exception(reason_, file_name_, line_number_)
-    {
-    }
+    using exception::exception;
   };
 
   //*************************************************************************

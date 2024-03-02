@@ -24,7 +24,7 @@ public:
     * Note: Ideally to avoid losing precision as much as possible, choose a scale factor
     * that will result in a normalized position that is an integer.
     */
-    Position(float aNormalizedScaleFactor = 1.0f);
+    explicit Position(float aNormalizedScaleFactor = 1.0f);
 
     /**
     * @brief Update the internal position.
@@ -61,13 +61,15 @@ public:
      intended to be used if you're using a timer based stepper, instead of a closed loop servo
      since it's intended to be used internally, it's not noralized.
      */
-    virtual uint16_t GetCountPeriod() const final;
+    virtual float GetCountPeriod() const final;
 
-    virtual bool operator>(const Position& aPosition) const;
-    virtual bool operator<(const Position& aPosition) const;
-    virtual bool operator==(const Position& aPosition) const;
-    virtual int32_t operator-(const Position& aPosition) const;
-    virtual int32_t operator+(const Position& aPosition) const;
+    bool operator>(const Position& aPosition) const;
+    bool operator<(const Position& aPosition) const;
+    bool operator==(const Position& aPosition) const;
+    int32_t operator-(const Position& aPosition) const;
+    int32_t operator+(const Position& aPosition) const;
+
+    virtual ~Position() = default;
 
 protected:
     
@@ -78,23 +80,24 @@ protected:
      */
     virtual PositionParams& UpdateMotionParams() = 0;
 
+private:
     //normalized
-    int32_t myCount;
+    int32_t myCount = 0;
 
     //in the encoder's scale
-    int32_t myRawCount;
+    int32_t myRawCount = 0;
 
-    //in the nencoder's scale. The number left over from translating it to the normalized position
-    int16_t myCarry;
+    //in the encoder's scale. The number left over from translating it to the normalized position
+    float myCarry = 0;
 
     //when the position is output, it will be multiplied by this to get the position back to the main position
-    float myScaleFactor;
+    float myScaleFactor = 0;
 
-    bool myDirection;
-    uint32_t myTimestamp;
-    uint32_t myLastRawCount;
-    bool myLastDirection;
-    uint32_t myLastTimestamp;
+    bool myDirection = true;
+    uint32_t myTimestamp = 0;
+    uint32_t myLastRawCount = 0;
+    bool myLastDirection = true;
+    uint32_t myLastTimestamp = 0;
 
 };
 

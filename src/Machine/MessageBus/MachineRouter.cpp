@@ -2,16 +2,16 @@
 #include "Logging/Logger.hpp"
 #include "Machine/MessageBus/Messages.hpp"
 
-namespace Machine
+namespace Machine::MessageBus
 {
-namespace MessageBus
-{
-    MachineRouter::MachineRouter(Machine::FSM::MachineFSM& fsm) : myFsm(fsm)
-    {}
+    MachineRouter::MachineRouter(Machine::FSM::MachineFSM* fsm) : myFsm(fsm)
+    {
+        myFsm->start();
+    }
 
     void MachineRouter::on_receive(const etl::imessage& msg)
     {
-        myFsm.receive(msg);
+        myFsm->receive(msg);
         ELSF_LOG_INFO("MachineRouter received message: $d", msg.get_message_id());
     }
 
@@ -22,9 +22,8 @@ namespace MessageBus
 
     void MachineRouter::Start()
     {
-        myFsm.start();
+        myFsm->start();
     }
 
-} // namespace Machine
-} // namespace State
+} // namespace Machine::MessageBus
 

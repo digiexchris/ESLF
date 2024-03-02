@@ -5,9 +5,7 @@
 #include "Machine/FSM/Turning.hpp"
 #include "Logging/Logger.hpp"
 
-namespace Machine
-{
-namespace FSM
+namespace Machine::FSM
 {
 
   etl::fsm_state_id_t TurningState::on_enter_state()
@@ -22,22 +20,15 @@ namespace FSM
     ELSF_LOG_INFO("  S1 : Exit state RUNNING\n");
   }
 
-  etl::fsm_state_id_t TurningState::on_event(const StopMessage& msg)
+  etl::fsm_state_id_t TurningState::on_event(const MessageBus::StopMessage& msg)
   {
     get_fsm_context().ExecuteStop();
     ELSF_LOG_INFO("  S1 : Received message STOP\n");
     return MachineStateId::IDLE;
   }
 
-  etl::fsm_state_id_t TurningState::on_event(const StopAtMessage& msg)
-  {
-    get_fsm_context().ExecuteStopAt();
-    ELSF_LOG_INFO("  S1 : Received message STOP AT\n");
-    return etl::ifsm_state::No_State_Change;
-  }
-
   //***************************************************************************
-  etl::fsm_state_id_t TurningState::on_event(const EStopMessage& msg)
+  etl::fsm_state_id_t TurningState::on_event(const MessageBus::EStopMessage& msg)
   {
     get_fsm_context().ExecuteEStop();
     ELSF_LOG_INFO("  S1 : Received message ESTOP\n");
@@ -45,7 +36,7 @@ namespace FSM
   }
 
   //***************************************************************************
-  etl::fsm_state_id_t TurningState::on_event(const ResetMessage& msg)
+  etl::fsm_state_id_t TurningState::on_event(const MessageBus::ResetMessage& msg)
   {
     get_fsm_context().ExecuteReset();
     ELSF_LOG_INFO("  S1 : Received message RESET\n");
@@ -60,5 +51,4 @@ namespace FSM
   }
 
 
-} // namespace Machine
-} // namespace State
+} // namespace Machine::FSM
