@@ -11,6 +11,7 @@ public:
   
   
   MAKE_MOCK0(ExecuteStart, void());
+  MAKE_MOCK0(ExecuteSetTurnMode, void());
   MAKE_MOCK1(ExecuteStartAt, void(int));
   MAKE_MOCK0(ExecuteStop, void());
   MAKE_MOCK1(ExecuteStopAt,void(int));

@@ -26,21 +26,21 @@ class MachineSubscriptionTest : public DefaultUnitTest {
 
 TEST_CASE_METHOD(MachineSubscriptionTest, "should_send_start_message_to_machine", "[Machine][MessageBus][Router]") {
 //GTEST_SKIP();
-    MockMachine fsm;
+    auto* fsm = new MockMachine();
     Broker broker;
 
-    REQUIRE_CALL(fsm, ExecuteStart()).TIMES(1);
+    REQUIRE_CALL(*fsm, ExecuteSetTurnMode()).TIMES(1);
 
     MachineRouter machineRouter(fsm);
     machineRouter.Start();
 
-    REQUIRE(fsm.is_started());
+    REQUIRE(fsm->is_started());
 
-    Subscription machineSubscription = Subscription(machineRouter, machineRouter.GetValidMessagesList());
+    auto machineSubscription = Subscription(machineRouter, machineRouter.GetValidMessagesList());
 
     broker.subscribe(machineSubscription);
 
-    StartMessage startMessage;
+    SetTurningMode startMessage;
 
     broker.receive(startMessage);
 
@@ -54,12 +54,12 @@ class MessageRouterLoggingTest : public LoggerBaseTest
 
 TEST_CASE_METHOD(MessageRouterLoggingTest, "MessageRouter_logs_unknown_message", "[Machine][MessageBus][Router]") 
 {
-    Mocks::Logging::MockLogBackend* mockBackend = new Mocks::Logging::MockLogBackend();
+    auto* mockBackend = new Mocks::Logging::MockLogBackend();
     LogSingleton::create(std::move(mockBackend));
     REQUIRE(LogSingleton::is_valid());
     REQUIRE_CALL(*mockBackend, Warn(trompeloeil::_)).TIMES(1);
     REQUIRE_CALL(*mockBackend, Info(trompeloeil::_)).TIMES(1); //the default Startup log
-    MockMachine fsm;
+    auto* fsm = new MockMachine();
     MachineRouter machineRouter(fsm);
     machineRouter.Start();
     StartMessage startMessage;
@@ -71,7 +71,7 @@ TEST_CASE_METHOD(MessageRouterLoggingTest, "MessageRouter_logs_unknown_message",
 TEST_CASE_METHOD(MessageRouterLoggingTest, "QueuedRouter Recieve and ProcessQueue", "[Machine][MessageBus][Router]") 
 {
     
-    Mocks::Logging::MockLogBackend* mockBackend = new Mocks::Logging::MockLogBackend();
+    auto* mockBackend = new Mocks::Logging::MockLogBackend();
     LogSingleton::create(mockBackend);
     REQUIRE(LogSingleton::is_valid());
     REQUIRE_CALL(*mockBackend, Info(trompeloeil::_)).TIMES(2); //once for starting the queue, once for emplacing the message

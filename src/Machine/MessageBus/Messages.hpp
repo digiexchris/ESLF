@@ -10,6 +10,7 @@ enum MessageId {
     START_RUNNING_AT, //queue up a timer to engage the leadscrew (START) at a specific time (time in this case is the encoder position plus the time it takes move beween the indicated position to the estimated position between encoder pulses)
     STOP_RUNNING_AT,
     STOP,
+    SET_TURNING_MODE,
     TRIGGER_ESTOP,
     RESET
 };
@@ -24,26 +25,10 @@ struct StartMessage : public etl::message<MessageId::START, MachineMessageInterf
 {
 };
 
-/** Starts the mode that will wait until the encoder is at
- * a specific position before starting the position tracking
-*/
-struct StartAtMessage : public etl::message<MessageId::START_RUNNING_AT, MachineMessageInterface>
-
+/* Starts the position tracking loop to make the tool
+* follow the encoder. */
+struct SetTurningMode : public etl::message<MessageId::SET_TURNING_MODE, MachineMessageInterface>
 {
-    /**
-    * @brief Represents a message to start at a specific position.
-    * 
-    * @param position  This message is used to instruct the system to start at a specific position.
-    * The position is specified in base system units.
-    */
-    explicit StartAtMessage(uint32_t position);
-    uint32_t position;
-};
-
-struct StopAtMessage : public etl::message<MessageId::STOP_RUNNING_AT, MachineMessageInterface>
-{
-    explicit StopAtMessage(uint32_t position);
-    uint32_t position;
 };
 
 struct StopMessage : public etl::message<MessageId::STOP, MachineMessageInterface>
