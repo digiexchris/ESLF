@@ -2,7 +2,7 @@
     "version": 3,
     "configurePresets": [
         {
-            "name": "clang-base",
+            "name": "linux-base",
             "hidden": true,
             "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu",
             "description": "Using compilers: C = /usr/bin/clang, CXX = /usr/bin/clang++",
@@ -18,9 +18,62 @@
         },
         {
             "name": "clang-debug",
-            "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu",
+            "displayName": "Clang 14.0.0 Debug",
             "description": "Using compilers: C = /usr/bin/clang, CXX = /usr/bin/clang++",
-            "inherits": "clang-base",
+            "inherits": "linux-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_STANDARD": "17",
+                "CMAKE_CXX_STANDARD_REQUIRED": "ON"
+            }
+        },
+        {
+            "name": "clang-release",
+            "displayName": "Clang 14.0.0 Release",
+            "inherits": "linux-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "clang-debug-test",
+            "displayName": "Clang 14.0.0 Debug Tests",
+            "inherits": "clang-debug",
+          "cacheVariables": {
+            "BUILD_ESLF_TESTS": "ON",
+            "CMAKE_CXX_FLAGS": "-stdlib=libc++ -O0 -g -Werror -Wextra -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-private-field",
+            "EXPOSE_COVERAGE_TARGET": "ON"
+          }
+        },
+      {
+        "name": "clang-debug-test-ASAN",
+        "displayName": "Clang 14.0.0 Debug Tests Enabled ASAN Enabled",
+        "inherits": "clang-debug-test",
+        "cacheVariables": {
+          "CMAKE_CXX_FLAGS": "-stdlib=libc++ -O0 -g -fsanitize=address -fno-omit-frame-pointer -fcxx-exceptions",
+          "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address -fcxx-exceptions"
+        }
+      },
+        {
+            "name": "windows-base",
+            "hidden": true,
+            "displayName": "Clang 14.0.0 x86_64-pc-windows-gnu",
+            "description": "Using compilers: C = C:/Program Files/LLVM/bin/clang.exe, CXX = C:/Program Files/LLVM/bin/clang++.exe",
+            "binaryDir": "${sourceDir}/build/windows/",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/",
+                "CMAKE_C_COMPILER": "C:/Program Files/LLVM/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "C:/Program Files/LLVM/bin/clang++.exe",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
+                "CMAKE_EXE_LINKER_FLAGS": "-fuse-ld=lld",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fuse-ld=lld"
+            }
+        },
+        {
+            "name": "clang-debug-windows",
+            "displayName": "Clang 14.0.0 Debug (Windows)",
+            "description": "Using compilers: C = C:/Program Files/LLVM/bin/clang.exe, CXX = C:/Program Files/LLVM/bin/clang++.exe",
+            "inherits": "windows-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_CXX_STANDARD": "20",
@@ -28,64 +81,85 @@
             }
         },
         {
-            "name": "clang-release",
-            "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu Release",
-            "inherits": "clang-base",
+            "name": "clang-release-windows",
+            "displayName": "Clang 14.0.0 Release (Windows)",
+            "inherits": "windows-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
-            "name": "clang-debug-test",
-            "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu Debug Tests",
-            "inherits": "clang-debug",
-            "cacheVariables": {
-                "BUILD_ESLF_TESTS": "ON",
-                "CMAKE_CXX_FLAGS": "-O0 -g -Werror -Wextra -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-private-field",
-                "EXPOSE_COVERAGE_TARGET": "ON"
-            }
+            "name": "clang-debug-test-windows",
+            "displayName": "Clang 14.0.0 Debug Tests (Windows)",
+            "inherits": "clang-debug-windows",
+          "cacheVariables": {
+            "BUILD_ESLF_TESTS": "ON",
+            "CMAKE_CXX_FLAGS": "-stdlib=libc++ -O0 -g -Werror -Wextra -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-private-field",
+            "EXPOSE_COVERAGE_TARGET": "ON"
+          }
         },
         {
-            "name": "clang-debug-test-ASAN",
-            "displayName": "Clang 14.0.0 x86_64-pc-linux-gnu Debug Tests Enabled ASAN Enabled",
-            "inherits": "clang-debug-test",
-            "cacheVariables": {
-                "CMAKE_CXX_FLAGS": "-O0 -g -fsanitize=address -fno-omit-frame-pointer -fcxx-exceptions",
-                "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address -fcxx-exceptions"
-            }
+            "name": "clang-debug-test-ASAN-windows",
+            "displayName": "Clang 14.0.0 Debug Tests Enabled ASAN Enabled (Windows)",
+            "inherits": "clang-debug-test-windows",
+          "cacheVariables": {
+            "CMAKE_CXX_FLAGS": "-stdlib=libc++ -O0 -g -fsanitize=address -fno-omit-frame-pointer -fcxx-exceptions",
+            "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address -fcxx-exceptions"
+          }
         }
     ],
     "buildPresets": [
         {
             "name": "ELSF",
-            "description": "",
-            "displayName": ""
+            "description": "ELSF",
+            "displayName": "ELSF",
+            "configurePreset": "clang-debug"
         },
         {
             "name": "ELSFTest",
-            "description": "",
-            "displayName": "",
+            "description": "ELSFTest",
+            "displayName": "ELSFTest",
             "configurePreset": "clang-debug-test",
-            "environment": {
-                //"LSAN_OPTIONS": "verbosity=1:log_threads=1"
-              }
+            "environment": {}
         },
         {
             "name": "ELSFTestASAN",
-            "description": "",
-            "displayName": "",
+            "description": "ELSFTestASAN",
+            "displayName": "ELSFTestASAN",
             "configurePreset": "clang-debug-test-ASAN",
             "environment": {
                 "LSAN_OPTIONS": "verbosity=1:detect_leaks=1",
                 "ASAN_OPTIONS": "verbosity=1:detect_leaks=1:halt_on_error=1:detect_stack_use_after_return=1:symbolize=1:log_path=asan.log"
             }
-            
+        },
+        {
+            "name": "ELSFWindows",
+            "description": "ELSF (Windows)",
+            "displayName": "ELSF (Windows)",
+            "configurePreset": "clang-debug-windows"
+        },
+        {
+            "name": "ELSFTestWindows",
+            "description": "ELSFTest (Windows)",
+            "displayName": "ELSFTest (Windows)",
+            "configurePreset": "clang-debug-test-windows",
+            "environment": {}
+        },
+        {
+            "name": "ELSFTestASANWindows",
+            "description": "ELSFTestASAN (Windows)",
+            "displayName": "ELSFTestASAN (Windows)",
+            "configurePreset": "clang-debug-test-ASAN-windows",
+            "environment": {
+                "LSAN_OPTIONS": "detect_leaks=1",
+                "ASAN_OPTIONS": "verbosity=1:detect_leaks=1:halt_on_error=1:detect_stack_use_after_return=1:symbolize=1"
+            }
         }
     ],
     "testPresets": [
         {
             "name": "ELSFTests",
-            "description": "",
+            "description": "ELSFTests",
             "displayName": "Test Preset",
             "execution": {
                 "stopOnFailure": true
@@ -95,13 +169,11 @@
                 "verbosity": "verbose"
             },
             "configurePreset": "clang-debug-test",
-            "environment": {
-                //"LSAN_OPTIONS": "verbosity=1:log_threads=1"
-              }
+            "environment": {}
         },
         {
             "name": "ELSFTestsASAN",
-            "description": "",
+            "description": "ELSFTestsASAN",
             "displayName": "Test Preset With ASAN",
             "execution": {
                 "stopOnFailure": true
@@ -115,7 +187,37 @@
                 "LSAN_OPTIONS": "detect_leaks=1",
                 "ASAN_OPTIONS": "verbosity=1:detect_leaks=1:halt_on_error=1:detect_stack_use_after_return=1:symbolize=1"
             }
-            
+        },
+        {
+            "name": "ELSFTestsWindows",
+            "description": "ELSFTests (Windows)",
+            "displayName": "Test Preset (Windows)",
+            "execution": {
+                "stopOnFailure": true
+            },
+            "output": {
+                "outputOnFailure": true,
+                "verbosity": "verbose"
+            },
+            "configurePreset": "clang-debug-test-windows",
+            "environment": {}
+        },
+        {
+            "name": "ELSFTestsASANWindows",
+            "description": "ELSFTestsASAN (Windows)",
+            "displayName": "Test Preset With ASAN (Windows)",
+            "execution": {
+                "stopOnFailure": true
+            },
+            "output": {
+                "outputOnFailure": true,
+                "verbosity": "verbose"
+            },
+            "configurePreset": "clang-debug-test-ASAN-windows",
+            "environment": {
+                "LSAN_OPTIONS": "detect_leaks=1",
+                "ASAN_OPTIONS": "verbosity=1:detect_leaks=1:halt_on_error=1:detect_stack_use_after_return=1:symbolize=1"
+            }
         }
     ]
 }

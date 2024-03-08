@@ -58,7 +58,7 @@ target_link_libraries(
   trompeloeil::trompeloeil
   etl
   elsf::elsf
-  atomic
+  # using clang's stdlib instead //atomic
   fmt::fmt
 )
 else()
@@ -71,7 +71,7 @@ target_link_libraries(
   trompeloeil::trompeloeil
   etl
   elsf::elsf
-  atomic
+  # using clang's stdlib instead //atomic
   fmt::fmt
 )
 endif()

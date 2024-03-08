@@ -38,13 +38,17 @@
 			"lcovFileName": "lcov.info",
 			"runTestCoverage": "npm run test"
 		  },
-		  
+
 		// "cmake.ctestArgs": [
 		// 	"--output-on-failure"
 		// ],
+		"lldb.displayFormat": "auto",
+		"lldb.showDisassembly": "auto",
+		"lldb.dereferencePointers": true,
+		"lldb.consoleMode": "evaluate",
 		"cmake.allowCommentsInPresetsFile": true,
 		"cmake.allowUnsupportedPresetsVersions": true,
-		"C_Cpp.default.compileCommands": "c:\\Users\\chris\\Documents\\repos\\els\\LeadscrewWarrantyVoider\\lib\\ESLF\\build/compile_commands.json",
+		"C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
 		"cmakeExplorer.suiteDelimiter": ".",
 		"cmakeExplorer.parallelJobs": 1,
 		"cmakeExplorer.buildDir": "${buildDirectory}",
@@ -62,29 +66,41 @@
 		"covertops-cmake-llvm.additionalCmakeOptions": [
 			"-DENABLE_COVERAGE=ON"
 		],
+		"testMate.cpp.debug.configTemplate": {
+			"type": "lldb",
+			"request": "launch",
+			"name": "Launch LLDB",
+			"program": "${workspaceFolder}/build/test/elsf_tests",
+			"args": ["${cmake.testArgs}", ],
+			"cwd": "${workspaceFolder}"
+		  },
 		"testMate.cpp.discovery.loadOnStartup": false,
-		"testMate.cpp.test.parallelExecutionLimit": 4,
-		"testMate.cpp.test.parallelExecutionOfExecutableLimit": 4,
-		"testMate.cpp.test.advancedExecutables": 
+		"testMate.cpp.test.parallelExecutionLimit": 1,
+		"testMate.cpp.test.parallelExecutionOfExecutableLimit": 1,
+		"testMate.cpp.test.advancedExecutables":
 		[
+
 			{
 				"pattern": "{build,Build,BUILD,out,Out,OUT}/**/*{test,Test,TEST}*",
+				"runTask": {
+					"before": [ "build" ]
+				  },
 				"catch2": {
 					"testGrouping": {
 						"groupByExecutable": {
 							"label": "${filename}",
 							"description": "${relDirpath}/",
-							
+
 							"groupBySource": {
 								"label": "${sourceRelPath[1:]}",
 								"groupUngroupedTo": "unknown source file"
 							}
-							
+
 						}
-						
+
 					}
 				}
-			
+
 			}
 		],
 		"sonarlint.connectedMode.project": {
@@ -92,7 +108,20 @@
 			"connectionId": "ivoidwarranties"
 		},
 		"sonarlint.testFilePattern": "**/test/**",
-		"search.useIgnoreFiles": false
+		"sonarlint.pathToCompileCommands": "${workspaceFolder}/build/compile_commands.json",
+		"search.useIgnoreFiles": false,
+		"koverage.coverageFileNames": [
+
+			"lcov.info",
+			"cov.xml",
+			"clover.xml",
+			"coverage.xml",
+			"jacoco.xml"
+		],
+		"editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+		"editor.defaultFormatter": "seaube.clang-format",
+		"editor.detectIndentation": true,
+		"testMate.cpp.log.logSentry": ""
 	},
 	"tasks":
 	{
@@ -116,6 +145,18 @@
 					 "-show-line-counts-or-regions",
 					  "-Xdemangler", "c++filt", "-n"
 				]
+			},
+			{
+
+            "label": "build",
+            "type": "shell",
+            "command": "cmake --build .",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+
 			}
 		]
 	},
@@ -145,7 +186,8 @@
 		"recommendations": [
 			"twxs.cmake",
 			"llvm-vs-code-extensions.vscode-clangd",
-			"ms-vscode.cmake-tools"
+			"ms-vscode.cmake-tools",
+			"editorconfig.editorconfig"
 		]
 	}
 }

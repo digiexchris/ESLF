@@ -42,3 +42,5 @@ coverage/*.prof*
 coverage/*.lcov
 Testing/
 coverage/lcov.info
+_deps
+.vs/

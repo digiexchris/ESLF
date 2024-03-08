@@ -1,6 +1,7 @@
 #pragma once
 
 #include <etl/message.h>
+#include <etl/vector.h>
 #include <etl/queue.h>
 #include <etl/message_packet.h>
 #include <etl/message_router.h>
@@ -23,12 +24,12 @@ template <typename TDerived, typename... Messages>
 class Router : public etl::message_router<TDerived, Messages...>
 {
 public:
-    const std::vector<etl::message_id_t>& GetValidMessagesList() const
+    etl::vector<etl::message_id_t, 10> GetValidMessagesList() const
     {
         return myValidMessagesList;
     }
 private:
-    std::vector<etl::message_id_t> myValidMessagesList{Messages::ID...};
+    etl::vector<etl::message_id_t, 10> myValidMessagesList{Messages::ID...};
 };
 
 
@@ -83,7 +84,7 @@ public:
     }
 
 private:
-    etl::queue<RouterMessagePacket<Messages...>, QueueSize> myQueue;
+    etl::queue<etl::message_packet, QueueSize> myQueue = {};
 };
 
 } // namespace Machine::MessageBus
