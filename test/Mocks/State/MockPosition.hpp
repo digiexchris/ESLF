@@ -7,6 +7,6 @@ class MockPosition : public State::Position {
 
 public:
     //MockPosition(float aScaleFactor = 1.0f) : Position(aScaleFactor) {};
-    MAKE_MOCK0(UpdateMotionParams, PositionParams&(), override);
+    MAKE_MOCK0(UpdateMotionParams, PositionParams(), override);
     
 };

@@ -14,17 +14,13 @@ class VirtualEncoder : public IEncoder
         explicit VirtualEncoder(float aNormalizedScaleFactor = 1.0);
         void SetCountIncrement(int32_t aCountIncrement);
         void SetDirection(bool aDirection);
-        
-    protected:
     
-        PositionParams& UpdateMotionParams() override;
+    protected:
+        PositionParams UpdateMotionParams() override;
 
     private:
         PositionParams myParams {0, false, 0};
         
-        int32_t mySimulatedCount;
-        uint32_t mySimulatedTimestamp;
-        bool mySimulatedDirection;
-        int32_t mySimulatedIncrement;
+        int32_t mySimulatedIncrement = 0;
 };
 } // namespace Device

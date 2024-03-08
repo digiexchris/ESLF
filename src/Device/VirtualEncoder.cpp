@@ -16,14 +16,21 @@ namespace Device
 
     void VirtualEncoder::SetDirection(bool aDirection)
     {
-        mySimulatedDirection = aDirection;
+        myParams.direction = aDirection;
     }
 
-    PositionParams& VirtualEncoder::UpdateMotionParams()
+    PositionParams VirtualEncoder::UpdateMotionParams()
     {
-        mySimulatedCount += mySimulatedIncrement;
-        mySimulatedTimestamp += 10;
-        myParams = {mySimulatedCount, mySimulatedDirection, mySimulatedTimestamp};
+        if(myParams.direction)
+        {
+            myParams.count += mySimulatedIncrement;
+        }
+        else
+        {
+            myParams.count -= mySimulatedIncrement;
+        }
+
+        myParams.timestamp += 10;
         return myParams;
     }
 } // namespace Device

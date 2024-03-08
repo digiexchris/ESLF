@@ -3,7 +3,7 @@
 namespace Machine::MessageBus 
 {
 
-Subscription::Subscription(etl::imessage_router& router, const std::vector<etl::message_id_t>& id_list_)
+Subscription::Subscription(etl::imessage_router& router, const etl::vector<etl::message_id_t, 10>& id_list_)
     : etl::message_broker::subscription(router)
     , id_list(id_list_)
   {
