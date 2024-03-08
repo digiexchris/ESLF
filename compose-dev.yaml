@@ -1,0 +1,25 @@
+services:
+  app:
+    build:
+      context: .
+      #image: eslf_tests/eslf_tests_build:latest
+      tags: 
+        - eslf_tests/eslf_tests_build:0.1.0
+      dockerfile: .devcontainer/Dockerfile
+    entrypoint:
+    - sleep
+    - infinity
+    image: eslf_tests/eslf_tests_build:0.1.0
+    init: true
+    volumes:
+    - type: bind
+      source: /var/run/docker.sock
+      target: /var/run/docker.sock
+    - type: bind
+      source: ./
+      target: /ELSF
+    expose:
+    - 22
+    ports:
+    - 2222:22
+

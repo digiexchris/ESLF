@@ -1,0 +1,14 @@
+---
+BasedOnStyle: llvm
+
+
+IndentWidth: 4
+AccessModifierOffset: -4
+PointerAlignment: Left
+Standard: Cpp11
+TabWidth: 4
+BreakBeforeBraces: Allman
+ColumnLimit: 100
+AllowShortIfStatementsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AlwaysBreakTemplateDeclarations: Yes

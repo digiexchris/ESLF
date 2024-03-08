@@ -78,7 +78,7 @@ protected:
      * 
      * @return The position, direction, speed, etc. of the encoder as a PositionParams struct.
      */
-    virtual PositionParams& UpdateMotionParams() = 0;
+    virtual PositionParams UpdateMotionParams() = 0;
 
 private:
     //normalized
@@ -93,6 +93,7 @@ private:
     //when the position is output, it will be multiplied by this to get the position back to the main position
     float myScaleFactor = 0;
 
+//I wonder if we need to mutex this... maybe not, only one thread. Unless interrupts... maybe we do need to store this in a struct. Do that if we do anything more than comparison operators.
     bool myDirection = true;
     uint32_t myTimestamp = 0;
     uint32_t myLastRawCount = 0;

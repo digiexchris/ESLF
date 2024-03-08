@@ -1,9 +1,6 @@
-FROM ubuntu:22.04
-LABEL Description="ELSF Build environment"
-
-ENV HOME /root
-
-SHELL ["/bin/bash", "-c"]
+ARG VARIANT=ubuntu-22.04
+FROM mcr.microsoft.com/devcontainers/cpp:${VARIANT}
+LABEL Description="ELSF Build environment clang 14"
 
 RUN apt-get update && apt-get -y --no-install-recommends install \
     build-essential \
@@ -16,22 +13,25 @@ RUN apt-get update && apt-get -y --no-install-recommends install \
     git \
     ninja-build \
     python3 \
-    python3-pip 
+    llvm-14 llvm-14-tools curl clang-format-14 ca-certificates openssl ssh libc++-dev libc++abi-dev && rm -rf /var/lib/apt/lists/*
 
-run apt install llvm-14 llvm-14-tools curl -y
+RUN update-alternatives --install /usr/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-14 100
+RUN update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-14 100
+RUN update-alternatives --install /usr/bin/llvm-profdata llvm-profdata /usr/bin/llvm-profdata-14 100
+RUN echo 'vscode:vscode!' | chpasswd
 
-run update-alternatives --install /usr/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-14 100
-run update-alternatives --install /usr/bin/llvm-profdata llvm-profdata /usr/bin/llvm-profdata-14 100
+# Configure SSHD.
+# SSH login fix. Otherwise user is kicked off after login
+#RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+#RUN mkdir /var/run/sshd
+#RUN bash -c 'install -m755 <(printf "#!/bin/sh\nexit 0") /usr/sbin/policy-rc.d'
+#RUN ex +'%s/^#\zeListenAddress/\1/g' -scwq /etc/ssh/sshd_config
+#RUN ex +'%s/^#\zeHostKey .*ssh_host_.*_key/\1/g' -scwq /etc/ssh/sshd_config
+#RUN RUNLEVEL=1 dpkg-reconfigure openssh-server
+#RUN ssh-keygen -A -v
+RUN update-rc.d ssh defaults
 
-# uncomment to use code completion using continue.dev extension run curl -fsSL https://ollama.com/install.sh | sh
+# Configure sudo.
+RUN ex +"%s/^%sudo.*$/%sudo ALL=(ALL:ALL) NOPASSWD:ALL/g" -scwq! /etc/sudoers
 
-# Let us add some heavy dependency
-# RUN cd ${HOME} && \
-#     wget --no-check-certificate --quiet \
-#         https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source/boost_1_77_0.tar.gz && \
-#         tar xzf ./boost_1_77_0.tar.gz && \
-#         cd ./boost_1_77_0 && \
-#         ./bootstrap.sh && \
-#         ./b2 install && \
-#         cd .. && \
-#         rm -rf ./boost_1_77_0
+EXPOSE 22

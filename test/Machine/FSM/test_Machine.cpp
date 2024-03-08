@@ -1,21 +1,21 @@
 #include "Logging/Logger.hpp"
-#include "Machine/FSM/Machine.hpp"
+#include "Machine/FSM/Base.hpp"
 #include "Mocks/Logging/MockLogBackend.hpp"
 #include "trompeloeil/mock.hpp"
 #include <catch2/catch_all.hpp>
 
-#include <Mocks/Machine/FSM/MockMachine.hpp>
+#include <Mocks/Machine/FSM/MockFSM.hpp>
 #include <TestHelpers/DefaultUnitTest.hpp>
 
 // using Mocks::Machine::FSM::MockBaseMachine;
 using trompeloeil::_;
-class MachineFSMTest : public Machine::FSM::MachineFSM, DefaultUnitTest   {
-    public:
-
+class BaseFSMTest : public Machine::FSM::BaseFSM, DefaultUnitTest
+{
+public:
     MAKE_MOCK2(set_states, void(etl::ifsm_state**, size_t));
 };
 
-// TEST_CASE_METHOD(MachineFSMTest, "Constructor Exceptions", "[Machine][FSM][MachineFSM]") {
+// TEST_CASE_METHOD(BaseFSMTest, "Constructor Exceptions", "[Machine][FSM][BaseFSM]") {
 //   // SECTION("Constructor Exceptions") {
 
 //     // Mock the behavior of the getState() function
