@@ -1,0 +1,46 @@
+{{#if Guard}}
+//::::{{{path}}}::::Guard::::
+else if ( {{{Guard}}} ) {
+  _root->log("\033[37mGUARD [ {{{Guard}}} ] for EXTERNAL TRANSITION:{{{path}}} evaluated to TRUE\033[0m");
+{{else}}
+else if ( true ) {
+  _root->log("\033[37mNO GUARD on EXTERNAL TRANSITION:{{{path}}}\033[0m");
+{{/if}}
+  {{#if nextState.isChoice}}
+  // Going into a choice pseudo-state, let it handle its
+  // guards and perform the state transition
+  if (false) { } // makes geneeration easier :)
+  {{#each nextState.ExternalTransitions}}
+  {{#addTransition trans=.. previous=../previousTransitions}}
+  {{> ExternalTransitionTempl }}
+  {{/addTransition}}
+  {{~/each}}
+  {{else if nextState.endTransition}}
+  // Going into an end pseudo-state that is not the root end state,
+  // follow its parent end transition
+  if (false) { }
+  {{#nextState.endTransition}}
+  {{#addTransition trans=.. previous=../previousTransitions}}
+  {{> ExternalTransitionTempl }}
+  {{/addTransition}}
+  {{~/nextState.endTransition}}
+  {{else}}
+  // Transitioning states!
+  {{#renderTransition exit="true" entry="true" transition=.}}{{/renderTransition}}
+  {{#if nextState.isState}}
+  // going into regular state
+  _root->{{{nextState.pointerName}}}.initialize();
+  {{else if nextState.isEnd}}
+  // going into end pseudo-state THIS SHOULD BE TOP LEVEL END STATE
+  _root->{{{nextState.pointerName}}}.makeActive();
+  {{else if nextState.isDeepHistory}}
+  // going into deep history pseudo-state
+  _root->{{{nextState.parent.pointerName}}}.setDeepHistory();
+  {{else if nextState.isShallowHistory}}
+  // going into shallow history pseudo-state
+  _root->{{{nextState.parent.pointerName}}}.setShallowHistory();
+  {{/if}}
+  // make sure nothing else handles this event
+  handled = true;
+  {{/if}}
+}

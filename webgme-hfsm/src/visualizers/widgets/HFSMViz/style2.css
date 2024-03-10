@@ -1,0 +1,218 @@
+
+core {
+    active-bg-color: #fff;
+    active-bg-opacity: 0.333;
+}
+
+edge {
+    content: data(label);
+    line-color: #000;
+    line-style: solid; /* dotted, dashed */
+    curve-style: bezier; /* bezier, haystack, unbundled-bezier, segments */
+    source-endpoint: outside-to-line;
+    target-endpoint: outside-to-line;
+    /*control-point-step-size: 25;*/
+    target-arrow-shape: triangle-backcurve;
+    target-arrow-color: #000;
+    target-arrow-fill: filled; /* hollow */
+    opacity: 1.0;
+    width: 1;
+    arrow-scale: 1;
+    z-index: 0;
+    overlay-opacity: 0;
+
+    font-size: 8;
+    font-weight: normal;
+    text-opacity: 1;
+    text-outline-width: 1;
+    text-outline-color: #fff;
+    text-outline-opacity: 1;
+    text-wrap: wrap;
+    text-max-width: 90px;
+    color: black;
+}
+
+node {
+    background-color: #fff;
+    background-opacity: 1;
+    border-style: solid; /* dotted, dashed, double */
+    border-color: #000;
+    border-width: 1;
+    border-opacity: 1;
+
+    shape: roundrectangle;
+    text-wrap: wrap;
+    text-max-width: 90px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+    text-valign: top;
+    text-halign: center;
+    font-weight: bold;
+
+
+    width: 10;
+    height: 10;
+    z-index: 10;
+    font-size: 10;
+    font-weight: bold;
+    min-zoomed-font-size: 4;
+    content: data(name);
+    color: #000;
+    text-opacity: 1;
+    text-outline-width: 1;
+    text-outline-color: #fff;
+    text-outline-opacity: 1;
+    overlay-color: #fff;
+}
+
+node[NodeType = "Initial"] {
+    width: 2;
+    height: 2;
+    content: ;
+    shape: ellipse;
+    background-color: black;
+    color: black;
+}
+
+node[NodeType = "Internal Transition"] {
+    content: data(label);
+    width: 2;
+    height: 2;
+    shape: polygon;
+    shape-polygon-points: -1, 0.5,  0.5, 0.5,  1, 0,  0.5, -0.5,  -1, -0.5,  -0.5, 0;
+
+    font-size: 8;
+    text-outline-width: 1;
+    text-outline-color: #fff;
+    text-outline-opacity: 1;
+    text-wrap: none;
+
+    text-valign: center;
+    text-halign: right;
+
+    padding-right: 8px;
+    text-margin-x: 2px;
+
+    text-events: yes;
+}
+
+node[NodeType = "End State"] {
+    background-image: assets/DecoratorSVG/svgs/endState.svg;
+    background-image-opacity: 1.0;
+    border-width: 1;
+    shape: ellipse;
+    width: 6;
+    height: 6;
+    content: ;
+}
+
+node[NodeType = "Documentation"] {
+    background-image: assets/DecoratorSVG/svgs/information.svg;
+    background-image-opacity: 1.0;
+    border-width: 0;
+    shape: ellipse;
+    width: 6;
+    height: 6;
+    content: ;
+}
+
+node[NodeType = "Choice Pseudostate"] {
+    width: 5;
+    height: 5;
+    content: ;
+    shape: diamond;
+}
+
+node[NodeType = "Shallow History Pseudostate"] {
+    shape: ellipse;
+    background-color: white;
+    color: black;
+    width: 5;
+    height: 5;
+    text-valign: center;
+    text-halign: center;
+    content: H;
+}
+
+node[NodeType = "Deep History Pseudostate"] {
+    shape: ellipse;
+    background-color: white;
+    color: black;
+    width: 5;
+    height: 5;
+    text-valign: center;
+    text-halign: center;
+    content: H*;
+}
+
+node[ActiveState] {
+    /* width: 40; */
+    /* height: 40; */
+    border-color: rgb(0, 0, 255);
+    border-width: 4;
+}
+
+node[ValidDrop] {
+    background-color: rgb(0, 255, 0);
+    background-opacity: 0.2;
+}
+
+node[InvalidDrop] {
+    background-color: rgb(255, 0, 0);
+    background-opacity: 0.2;
+}
+
+node[isIncomplete = "True"]{
+    border-style : dotted;
+}
+
+node:selected {
+    /* width: 40; */
+    /* height: 40; */
+    border-color: #F88;/*rgb(187, 219, 247);*/
+    /* border-width: 4;    */
+}
+
+.edgehandles-target {
+    background-color: rgb(0, 0, 0);
+    background-opacity: 0.2;
+}
+
+edge:selected {
+    /* width: 40; */
+    /* height: 40; */
+    /* width: 4; */
+    font-weight: bold;
+    line-color: #F88; /*rgb(187, 219, 247);/*#000;*/
+    target-arrow-color: #F08; /*rgb(187, 219, 247);/*#000;*/
+    /* arrow-scale: 2; */
+}
+
+edge[Enabled = "False"] {
+    line-style: dashed;
+}
+
+edge[type = "Local Transition"] {
+    target-arrow-fill: hollow;
+}
+
+.filtered {
+    display: none;
+}
+
+.notified {
+    border-width: 4;
+	width: 4;
+    font-weight: bold;
+}
+
+.active {
+    color: blue;
+    line-color: blue;
+    border-color: blue;
+    target-arrow-color: blue;
+    border-width: 2;
+    font-weight: bold;
+}

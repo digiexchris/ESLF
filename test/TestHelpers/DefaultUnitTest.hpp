@@ -7,16 +7,16 @@ struct DefaultUnitTest {
     public:
     TestLogBackend* testLogBackend;
 
-    DefaultUnitTest() {
-        if(LogSingleton::is_valid()) {
-            LogSingleton::destroy();
-        }
-        testLogBackend = new TestLogBackend();
-        ELSF_LOG_INIT(testLogBackend);
-    }
-    ~DefaultUnitTest() {
-        if(LogSingleton::is_valid()) {
-            LogSingleton::destroy();
-        }
-    }
+    // DefaultUnitTest() {
+    //     if(LogSingleton::is_valid()) {
+    //         LogSingleton::destroy();
+    //     }
+    //     testLogBackend = new TestLogBackend();
+    //     ELSF_LOG_INIT(testLogBackend);
+    // }
+    // ~DefaultUnitTest() {
+    //     if(LogSingleton::is_valid()) {
+    //         LogSingleton::destroy();
+    //     }
+    // }
 };

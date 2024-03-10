@@ -1,0 +1,20 @@
+case EventType::{{{name}}}:
+  if ( false ) {  // makes generation easier :)
+  }
+  {{#each Transitions}}
+  {{#if Guard}}
+  //::::{{{path}}}::::Guard::::
+  else if ( {{{Guard}}} ) {
+    _root->log("\033[37mGUARD [ {{{Guard}}} ] for INTERNAL TRANSITION:{{{path}}} evaluated to TRUE\033[0m");
+  {{else}}
+  else if (true) {
+    _root->log("\033[37mNO GUARD on INTERNAL TRANSITION:{{{path}}}\033[0m");
+  {{/if}}
+    // run transition action
+    //::::{{{path}}}::::Action::::
+    {{{Action}}}
+    // make sure nothing else handles this event
+    handled = true;
+  }
+  {{/each}}
+  break;

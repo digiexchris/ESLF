@@ -1,17 +1,17 @@
-#pragma once
+// #pragma once
 
-#include "Machine/FSM/Base.hpp"
-class TestFSM : public Machine::FSM::BaseFSM
-{
+// #include "Machine/FSM/Base.hpp"
+// class TestFSM : public Machine::FSM::BaseFSM
+// {
 
-public:
-    void EnableMotors() override
-    {
-        // Do nothing
-    }
+// public:
+//     void EnableMotors() override
+//     {
+//         // Do nothing
+//     }
 
-    void DisableMotors() override
-    {
-        // Do nothing
-    }
-};
+//     void DisableMotors() override
+//     {
+//         // Do nothing
+//     }
+// };

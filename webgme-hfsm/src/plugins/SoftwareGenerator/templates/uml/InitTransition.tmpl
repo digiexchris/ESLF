@@ -1,0 +1,24 @@
+{{#if Guard}}
+//::::{{{path}}}::::Guard::::
+else if ( {{{Guard}}} ) {
+  _root->log("\033[37mGUARD [ {{{Guard}}} ] for EXTERNAL TRANSITION:{{{path}}} evaluated to TRUE\033[0m");
+{{else}}
+else if ( true ) {
+  _root->log("\033[37mNO GUARD on EXTERNAL TRANSITION:{{{path}}}\033[0m");
+{{/if}}
+{{#if nextState.isChoice}}
+  // Going into a choice pseudo-state, let it handle its
+  // guards and perform the state transition
+  if (false) { } // makes generation easier :)
+{{#each nextState.ExternalTransitions}}
+{{#addTransition trans=.. previous=../previousTransitions}}
+{{> InitTransitionTempl }}
+{{/addTransition}}
+{{~/each}}
+{{else}}
+  // Transitioning states!
+{{#renderTransition exit="false" entry="true" transition=.}}{{/renderTransition}}
+  // now initialize the actual next state
+  _root->{{{nextState.pointerName}}}.initialize();
+{{/if}}
+}

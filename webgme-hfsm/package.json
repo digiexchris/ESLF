@@ -1,0 +1,42 @@
+{
+  "name": "webgme-hfsm",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node ./node_modules/mocha/bin/mocha --recursive test",
+    "postinstall": "bower install"
+  },
+  "version": "1.6.0",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/finger563/webgme-hfsm.git"
+  },
+  "dependencies": {
+    "underscore": "^1.13.6",
+    "webgme": "^2.42.1",
+    "webgme-codeeditor": "^3.6.19",
+    "webgme-to-json": "^1.0.4",
+    "webgme-ui-replay": "^1.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "mocha": "^10.1.0",
+    "rimraf": "^2.7.1"
+  },
+  "description": "WebGME Domain for creating Executable Heirarchical Finite State Machines (HFSMs). Contains metamodel, visualization, simulation, and code generation for Heirarchical Finite State Machines (HFSMs) following the UML State Machine specification.",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "webgme",
+    "domain",
+    "webgme-domain",
+    "Hierarchical",
+    "UML",
+    "State Chart",
+    "State Machine",
+    "HFSM",
+    "code generation"
+  ],
+  "license": "MIT"
+}

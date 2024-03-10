@@ -1,0 +1,30 @@
+@import "Colors";
+
+$diagram-min-width: 120px;
+$diagram-max-width: 120px;
+$diagram-height: auto;
+$diagram-border: 1px solid #000000;
+$diagram-name-padding: 5px;
+$diagram-background-color: #FCFCFC;
+$diagram-name-height: 16px;
+$diagram-border-radius: 13px;
+
+@mixin Diagram {
+  .diagram {
+    min-width: $diagram-min-width;
+    /*    max-width: $diagram-max-width;*/
+    width: auto;
+    height: $diagram-height;
+    background-color: $diagram-background-color;
+    border: $diagram-border;
+    border-radius: $diagram-border-radius;
+    text-align: center;
+  }
+}
+
+@mixin SelectedDiagram {
+  .diagram {
+    background-color: $selected-background-color;
+    border-color: $selected-border-color;
+  }
+}

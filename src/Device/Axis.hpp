@@ -4,7 +4,9 @@
 #include "Device/IEncoder.hpp"
 #include "Device/IMotor.hpp"
 #include <cstdarg>
-#include <etl/utility.h>
+#include <utility>
+
+#include <boost/functional/lightweight_forward_adapter.hpp>
 
 namespace Device 
 {
@@ -14,7 +16,7 @@ class Axis : public MotorType
 {
     public:
         template <typename... MotorTypeArgs>
-        Axis(const char anId, MotorTypeArgs&&... args): myId(anId), MotorType(etl::forward<MotorTypeArgs>(args)...) {
+        Axis(const char anId, MotorTypeArgs&&... args): myId(anId), MotorType(boost::lightweight_forward_adapter<MotorTypeArgs>(args)...) {
         };
     protected:
         

@@ -1,7 +1,6 @@
 #pragma once
 #include "State/Position.hpp"
 #include <cstdint>
-#include <etl/type_traits.h>
 
 namespace Device
 {
@@ -19,17 +18,6 @@ public:
     virtual void Enable() = 0;
     virtual void Disable() = 0;
     virtual bool IsEnabled() = 0;
-};
-
-// Traits to check if a type used in a template can be used as a motor
-template <typename T, typename = void>
-struct IsMotor : etl::false_type
-{
-};
-
-template <typename T>
-struct IsMotor<T, etl::void_t<decltype(etl::declval<T>().MoveTo())>> : etl::true_type
-{
 };
 
 } // namespace Device

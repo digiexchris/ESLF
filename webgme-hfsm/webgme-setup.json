@@ -1,0 +1,63 @@
+{
+  "components": {
+    "plugins": {
+      "SoftwareGenerator": {
+        "src": "src/plugins/SoftwareGenerator",
+        "test": "test/plugins/SoftwareGenerator"
+      }
+    },
+    "seeds": {},
+    "decorators": {
+      "UMLStateMachineDecorator": {
+        "src": "src/decorators/UMLStateMachineDecorator"
+      },
+      "UMLDecorator": {
+        "src": "src/decorators/UMLDecorator"
+      }
+    },
+    "visualizers": {
+      "HFSMViz": {
+        "src": "panels/HFSMViz/HFSMVizPanel",
+        "title": "HFSMViz",
+        "panel": "src/visualizers/panels/HFSMViz",
+        "secondary": false,
+        "widget": "src/visualizers/widgets/HFSMViz"
+      }
+    },
+    "addons": {},
+    "layouts": {},
+    "routers": {}
+  },
+  "dependencies": {
+    "plugins": {},
+    "seeds": {},
+    "decorators": {},
+    "visualizers": {
+      "CodeEditor": {
+        "src": "panels/CodeEditor/CodeEditorPanel",
+        "title": "CodeEditor",
+        "panel": "src/visualizers/panels/CodeEditor",
+        "secondary": false,
+        "widget": "src/visualizers/widgets/CodeEditor",
+        "project": "webgme-codeeditor"
+      },
+      "UIReplay": {
+        "src": "panels/UIReplay/UIReplayControllers",
+        "title": "UIReplay",
+        "panel": "src/visualizers/panels/UIReplay",
+        "secondary": true,
+        "widget": "src/visualizers/widgets/UIReplay",
+        "project": "webgme-ui-replay"
+      }
+    },
+    "addons": {},
+    "layouts": {},
+    "routers": {
+      "UIRecorder": {
+        "project": "webgme-ui-replay",
+        "path": "node_modules/webgme-ui-replay/src/routers/UIRecorder",
+        "mount": "routers/UIRecorder"
+      }
+    }
+  }
+}

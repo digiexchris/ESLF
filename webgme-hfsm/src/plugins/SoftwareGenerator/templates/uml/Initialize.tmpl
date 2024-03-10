@@ -1,0 +1,21 @@
+{{#if Initial_list}}
+{{#each Initial_list.[0].ExternalTransitions}}
+{{#if nextState.isChoice}}
+// Going into a choice pseudo-state, let it handle its
+// guards and perform the state transition
+if (false) { } // makes generation easier :)
+{{#each nextState.ExternalTransitions}}
+{{#addTransition trans=.. previous=../previousTransitions}}
+{{> InitTransitionTempl }}
+{{/addTransition}}
+{{~/each}}
+{{else}}
+{{#renderTransition exit="false" entry="true" transition=.}}{{/renderTransition}}
+// initialize our new active state
+_root->{{{nextState.pointerName}}}.initialize();
+{{/if}}
+{{~/each}}
+{{else}}
+// if we're a leaf state, make sure we're active
+makeActive();
+{{/if}}

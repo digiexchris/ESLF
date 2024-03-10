@@ -1,0 +1,6 @@
+case EventType::{{{name}}}:
+  if ( false ) { }  // makes generation easier :)
+  {{#each Transitions}}
+  {{> ExternalTransitionTempl}}
+  {{~/each}}
+  break;

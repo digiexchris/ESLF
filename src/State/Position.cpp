@@ -1,9 +1,6 @@
 #include "Position.hpp"
 
-#include <etl/absolute.h>
-#include <etl/atomic.h>
 #include <Logging/Logger.hpp>
-#include <etl/math.h>
 
 namespace State
 {
@@ -87,7 +84,7 @@ int32_t Position::operator+(const Position& aPosition) const
 float Position::GetCountPeriod() const
 {
     uint32_t timeDifference = myTimestamp - myLastTimestamp;
-    float countDifference = etl::absolute(static_cast<float>(myRawCount)*myScaleFactor) - static_cast<float>(myLastRawCount)*myScaleFactor;
+    float countDifference = std::abs(static_cast<float>(myRawCount)*myScaleFactor) - static_cast<float>(myLastRawCount)*myScaleFactor;
 
     // Check if countDifference is not zero to avoid division by zero
     if (countDifference != 0) {

@@ -2,8 +2,6 @@
 
 #include "State/Position.hpp"
 
-#include <etl/type_traits.h>
-
 namespace Device
 {
 

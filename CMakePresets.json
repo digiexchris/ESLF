@@ -32,7 +32,8 @@
             "displayName": "Clang 14.0.0 Release",
             "inherits": "linux-base",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Release",
+                "BOOST_ENABLE_ASSERT_HANDLER": "1"
             }
         },
         {
@@ -42,7 +43,8 @@
           "cacheVariables": {
             "BUILD_ESLF_TESTS": "ON",
             "CMAKE_CXX_FLAGS": "-stdlib=libc++ -O0 -g -Werror -Wextra -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-private-field",
-            "EXPOSE_COVERAGE_TARGET": "ON"
+            "EXPOSE_COVERAGE_TARGET": "ON",
+            "BOOST_ENABLE_ASSERT_DEBUG_HANDLER": "1"
           }
         },
       {
@@ -51,7 +53,9 @@
         "inherits": "clang-debug-test",
         "cacheVariables": {
           "CMAKE_CXX_FLAGS": "-stdlib=libc++ -O0 -g -fsanitize=address -fno-omit-frame-pointer -fcxx-exceptions",
-          "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address -fcxx-exceptions"
+          "CMAKE_LINKER_FLAGS": "-fno-omit-frame-pointer -fsanitize=address -fcxx-exceptions",
+          "EXPOSE_COVERAGE_TARGET": "ON",
+          "BOOST_ENABLE_ASSERT_DEBUG_HANDLER": "1"
         }
       },
         {

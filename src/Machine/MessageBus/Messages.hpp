@@ -1,6 +1,5 @@
 #pragma once
 
-#include "etl/message.h"
 
 namespace Machine::MessageBus
 {

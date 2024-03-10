@@ -15,10 +15,15 @@
 
 #pragma once
 
-#include <etl/string.h>
-#include <etl/singleton.h>
+#include "boost/assert/source_location.hpp"
+#include <config.hpp>
 #include <stdarg.h>
 #include <fmt/core.h>
+#include <boost/static_string.hpp>
+#include <boost/assert.hpp>
+#include <exception>
+
+using LogCallback = std::function<void (std::string_view)>;
 
 constexpr uint16_t ELSF_LOG_MAX_MESSAGE_LENGTH = 256;
 
@@ -29,21 +34,21 @@ constexpr uint16_t ELSF_LOG_MAX_MESSAGE_LENGTH = 256;
 
 #define LOGGER_INIT_EXCEPTION(reason) LoggerInitException((reason), __FILE__, __LINE__)
 
-class LoggerInitException : public etl::exception
+class LoggerInitException : public std::exception
 {
-public:
-    using exception::exception;
+
+
 };
 
 class ILogBackend
 {
 public:
     //NOTE: any taking in of formatting params happens in the Logger.
-    virtual void Info(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const = 0;
+    virtual void Info(boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const = 0;
 
-    virtual void Warn(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const = 0;
+    virtual void Warn(boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const = 0;
     
-    virtual void Error(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const = 0;
+    virtual void Error(boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH> message) const = 0;
 
     virtual ~ILogBackend() = default;
     
@@ -54,16 +59,16 @@ class Logger
 {
 public:
     template<typename... Args>
-    void Info(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
+    void Info(boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
 
     template<typename... Args>
-    void Warn(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
+    void Warn(boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
 
     template<typename... Args>
-    void Error(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
+    void Error(boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args);
 
     void SetBackend(ILogBackend* aBackend) {
-        ETL_ASSERT(aBackend != nullptr, LOGGER_INIT_EXCEPTION("Log not initialized, call ESP_LOG_INIT"));
+        BOOST_ASSERT_MSG(aBackend != nullptr, "Log not initialized, call ESP_LOG_INIT");
         myLogBackend.reset(aBackend);
     }
 
@@ -77,35 +82,35 @@ public:
 protected:
 
     template <typename... Args>
-    etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> ApplyFormat(const etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH>& message, Args&&... args) const;
+    boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH> ApplyFormat(const boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH>& message, Args&&... args) const;
 
 private:
-    etl::unique_ptr<ILogBackend> myLogBackend;
+    std::unique_ptr<ILogBackend> myLogBackend;
 };
 
-using LogSingleton = etl::singleton<Logger>;
+//using LogSingleton = std::singleton<Logger>;
 
 
 template<typename... Args>
-void Logger::Info(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args)
+void Logger::Info(boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args)
 {
-    myLogBackend->Info(ApplyFormat(message, etl::forward<Args>(args)...));
+    myLogBackend->Info(ApplyFormat(message, std::forward<Args>(args)...));
 }
 
 template<typename... Args>
-void Logger::Warn(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args)
+void Logger::Warn(boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args)
 {
-    myLogBackend->Warn(ApplyFormat(message, etl::forward<Args>(args)...));
+    myLogBackend->Warn(ApplyFormat(message, std::forward<Args>(args)...));
 }
 
 template<typename... Args>
-void Logger::Error(etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args)
+void Logger::Error(boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH> message, Args&&... args)
 {
-    myLogBackend->Error(ApplyFormat(message, etl::forward<Args>(args)...));
+    myLogBackend->Error(ApplyFormat(message, std::forward<Args>(args)...));
 }
 
 template <typename... Args>
-etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH> Logger::ApplyFormat(const etl::string<ELSF_LOG_MAX_MESSAGE_LENGTH>& message, Args&&... args) const
+boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH> Logger::ApplyFormat(const boost::static_string<ELSF_LOG_MAX_MESSAGE_LENGTH>& message, Args&&... args) const
 {
-    return fmt::format(message.c_str(), etl::forward<Args>(args)...).c_str();
+    return fmt::format(message.c_str(), std::forward<Args>(args)...).c_str();
 }

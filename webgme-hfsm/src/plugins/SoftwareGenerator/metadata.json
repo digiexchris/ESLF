@@ -1,0 +1,41 @@
+{
+    "id": "SoftwareGenerator",
+    "name": "SoftwareGenerator",
+    "version": "0.1.0",
+    "description": "",
+    "icon": {
+	"class": "glyphicon glyphicon-cog",
+	"src": ""
+    },
+    "disableServerSideExecution": false,
+    "disableBrowserSideExecution": false,
+    "writeAccessRequired": false,
+    "configStructure": [
+	{
+	    "name": "language",
+	    "displayName": "Language",
+	    "description": "Select generated code language.",
+	    "value": "c++",
+	    "valueType": "string",
+	    "valueItems": [
+		"c++",
+		"c"
+	    ]
+	},
+	{
+	    "name": "namespace",
+	    "displayName": "Namespace",
+	    "description": "Put the generated code into a namespace.",
+	    "value": "state_machine",
+	    "valueType": "string"
+	},
+	{
+	    "name": "generateTestCode",
+	    "displayName": "Generate Test Bench",
+	    "description": "Do you want to generate a simple test bench program for your HFSM?",
+	    "value": false,
+	    "valueType": "boolean",
+	    "readOnly": false
+	}
+    ]
+}

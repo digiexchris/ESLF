@@ -1,0 +1,23 @@
+// Going into a choice pseudo-state, let it handle its
+// guards and perform the state transition
+if (false) { } // makes geneeration easier :)
+{{#each ExternalTransitions}}
+{{#addTransition trans=.. previous=../previousTransitions}}
+{{#if Guard}}
+//::::{{{path}}}::::Guard::::
+else if ( {{{Guard}}} ) {
+  _root->log("\033[37mGUARD [ {{{Guard}}} ] for EXTERNAL TRANSITION:{{{path}}} evaluated to TRUE\033[0m");
+{{else}}
+else if ( true ) {
+  _root->log("\033[37mNO GUARD on EXTERNAL TRANSITION:{{{path}}}\033[0m");
+{{/if}}
+  //:::{{{path}}}:::Action
+  {{{Action}}}
+  {{#if nextState.isChoice}}
+  {{> ChoiceStateTempl nextState}}
+  {{else if nextState.isState}}
+  _root->{{nextState.pointerName}}.initialize();
+  {{/if}}
+}
+{{/addTransition}}
+{{~/each}}

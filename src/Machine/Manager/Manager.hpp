@@ -2,11 +2,8 @@
 
 #include "Device/Axis.hpp"
 #include "Device/IEncoder.hpp"
-#include "Machine/FSM/Base.hpp"
-#include "Machine/MessageBus/MachineRouter.hpp"
 #include "State/Position.hpp"
 #include <cstdarg>
-#include <etl/vector.h>
 
 namespace Machine::Manager
 {
@@ -14,7 +11,7 @@ namespace Machine::Manager
 The main sync state and motion functionality*/
 
 template <typename MainSpindleEncoder>
-class Manager : public Machine::FSM::BaseFSM
+class Manager //: public Machine::FSM::BaseFSM
 {
     // static_assert((Device::IsEncoder<MainSpindleEncoder>::value), "The Manager template type
     // MainSpindleEncoder must derive from IEncoder");
@@ -24,7 +21,7 @@ public:
         : myMainSpindleEncoder(aMainSpindleEncoder)
     {
         // start the fsm
-        start();
+        //start();
     }
     virtual void Update() = 0;
     virtual void GenerateMoves() = 0;
