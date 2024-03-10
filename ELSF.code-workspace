@@ -121,7 +121,10 @@
 		"editor.bracketPairColorization.independentColorPoolPerBracketType": true,
 		"editor.defaultFormatter": "seaube.clang-format",
 		"editor.detectIndentation": true,
-		"testMate.cpp.log.logSentry": ""
+		"testMate.cpp.log.logSentry": "",
+		"[cpp]": {
+			"editor.defaultFormatter": "seaube.clangformat"
+		}
 	},
 	"tasks":
 	{
