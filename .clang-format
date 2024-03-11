@@ -10,5 +10,5 @@ TabWidth: 4
 BreakBeforeBraces: Allman
 ColumnLimit: 100
 AllowShortIfStatementsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: None
+AllowShortFunctionsOnASingleLine: true
 AlwaysBreakTemplateDeclarations: Yes

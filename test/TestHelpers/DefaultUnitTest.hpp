@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Logging/Logger.hpp"
-#include "TestHelpers/Logging/TestLogBackend.hpp"
+// #include "Logging/Logger.hpp"
+// #include "TestHelpers/Logging/TestLogBackend.hpp"
 
-struct DefaultUnitTest {
-    public:
-    TestLogBackend* testLogBackend;
+struct DefaultUnitTest
+{
+public:
+    // TestLogBackend* testLogBackend;
 
     // DefaultUnitTest() {
     //     if(LogSingleton::is_valid()) {
