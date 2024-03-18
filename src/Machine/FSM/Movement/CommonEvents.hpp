@@ -1,9 +1,21 @@
 #pragma once
 
-struct ExitEvent
+struct BaseEvent
 {
 };
 
-struct EStopEvent
+struct ExitEvent : public BaseEvent
+{
+};
+
+struct StopEvent : public BaseEvent
+{
+};
+
+struct MoveDoneEvent : public BaseEvent
+{
+};
+
+struct EStopEvent : public BaseEvent
 {
 };

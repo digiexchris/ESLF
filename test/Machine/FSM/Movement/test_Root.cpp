@@ -1,11 +1,21 @@
-#include "../src/Machine/FSM/Movement/Root.hpp"
+#include "Machine/FSM/Movement/Root.hpp"
+#include "Machine/FSM/Movement/SM.hpp"
+#include "Machine/FSM/sml.hpp"
 #include <catch2/catch_all.hpp>
+
+using namespace boost;
+
+// sml::sm<example, sml::thread_safe<std::recursive_mutex>> sm; // thread safe policy
+// sml::sm<example, sml::logger<my_logger>> sm; // logger policy
+// sml::sm<example, sml::thread_safe<std::recursive_mutex>, sml::logger<my_logger>> sm; // thread
+// safe and logger policy sml::sm<example, sml::logger<my_logger>,
+// sml::thread_safe<std::recursive_mutex>> sm; // thread safe and logger policy
 
 TEST_CASE("MovementTest - Set Turning Mode", "[Machine][FSM][Root]")
 {
     // Arrange
-    Movement movement;
-    sml::sm<Movement> sm{movement};
+    MovementSM m;
+    sml::sm<MovementSM, sml::thread_safe<std::recursive_mutex>> sm{m}; // thread safe policy
 
     // Act
     sm.process_event(Movement::SetTurningModeEvent{});
@@ -16,12 +26,10 @@ TEST_CASE("MovementTest - Set Turning Mode", "[Machine][FSM][Root]")
 
 TEST_CASE("MovementTest - SetSlottingModeEvent", "[Machine][FSM][Root]")
 {
-    // Arrange
-    Movement movement;
-    sml::sm<Movement> sm{movement};
+    sml::sm<MovementSM> sm;
 
     // Act
-    sm.process_event(Movement::SetSlottingModeEvent{});
+    sm.process_event(Movement::SetSlottingModeEvent());
 
     // Assert
     REQUIRE(sm.is(sml::state<Slotting>));
@@ -30,8 +38,7 @@ TEST_CASE("MovementTest - SetSlottingModeEvent", "[Machine][FSM][Root]")
 TEST_CASE("MovementTest - ExitEventFromTurning", "[Machine][FSM][Root]")
 {
     // Arrange
-    Movement movement;
-    sml::sm<Movement> sm{movement};
+    sml::sm<MovementSM> sm;
     sm.process_event(Movement::SetTurningModeEvent{});
 
     // Act
@@ -44,8 +51,7 @@ TEST_CASE("MovementTest - ExitEventFromTurning", "[Machine][FSM][Root]")
 TEST_CASE("MovementTest - ExitEventFromSlotting", "[Machine][FSM][Root]")
 {
     // Arrange
-    Movement movement;
-    sml::sm<Movement> sm{movement};
+    sml::sm<MovementSM> sm;
     sm.process_event(Movement::SetSlottingModeEvent{});
 
     // Act
@@ -58,8 +64,7 @@ TEST_CASE("MovementTest - ExitEventFromSlotting", "[Machine][FSM][Root]")
 TEST_CASE("MovementTest - ResetEventFromEStop", "[Machine][FSM][Root]")
 {
     // Arrange
-    Movement movement;
-    sml::sm<Movement> sm{movement};
+    sml::sm<MovementSM> sm;
     sm.process_event(EStop::ResetEvent{});
 
     // Assert

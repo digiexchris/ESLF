@@ -35,7 +35,8 @@
         "Continue.continue",
         "spmeesseman.vscode-taskexplorer",
         "markis.code-coverage",
-        "EditorConfig.EditorConfig"
+        "EditorConfig.EditorConfig",
+        "bierner.markdown-mermaid"
       ]
     }
   },
