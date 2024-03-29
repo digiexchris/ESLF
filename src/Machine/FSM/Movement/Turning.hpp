@@ -3,6 +3,7 @@
 #include "../sml.hpp"
 #include "Base.hpp"
 #include "CommonEvents.hpp"
+#include "Turning.hpp"
 #include <iostream>
 #include <map>
 
@@ -11,6 +12,9 @@ using namespace boost::sml;
 struct EStop;
 struct Idle;
 
+Action action;
+
+template <class = class Dummy>
 class Turning : public BaseState
 {
 public:
@@ -28,75 +32,146 @@ public:
         std::map<SettingsKey, int32_t> settings;
     };
 
-    // child states
-    struct WaitForUser
-        : public BaseState // needs 2 sub states, retracting, and unretracting, and waiting
-    { // wait for user needs to unretract when transitioning to wait for sync via NextPassEvent
-        struct Waiting : public BaseState
-        {
-            struct NextPassEvent : public BaseEvent
-            {
-            };
+    // class WaitForUser
+    //     : public BaseState // needs 2 sub states, retracting, and unretracting, and waiting
+    // { // wait for user needs to unretract when transitioning to wait for sync via NextPassEvent
 
-            struct ReturnToStartEvent : public BaseEvent
-            {
-            };
+    // public:
+    //     // auto operator()() const noexcept
+    //     // {
+    //     //     // clang-format off
+    //     // return make_transition_table(
+    //     //     //WaitForuser
+    //     //     *state<Turning<>::WaitForUser::Waiting> +
+    //     //     event<Turning<>::WaitForUser::Waiting::ReturnToStartEvent> / action =
+    //     //     state<Turning<>>//::ReturnToStart>
+    //     //     //,state<Turning<>::WaitForUser::Waiting> +
+    //     //     event<Turning<>::WaitForUser::Waiting::NextPassEvent> / action =
+    //     //     state<Turning<>::TurningPass>
+    //     // );
+    //     // }
 
-            void OnEvent(const NextPassEvent&);
-            void OnEvent(const ReturnToStartEvent&);
-        };
-    };
+    //     struct Waiting : public BaseState
+    //     {
+    //         struct NextPassEvent : public BaseEvent
+    //         {
+    //         };
 
-    struct TurningPass : public BaseState
-    {
-        struct Unretracting : public BaseState
-        {
-            void OnEvent(const MoveDoneEvent&);
-        };
+    //         struct ReturnToStartEvent : public BaseEvent
+    //         {
+    //         };
 
-        struct WaitForSync : public BaseState
-        {
-            struct InSyncEvent : public BaseEvent
-            {
-            };
-            void OnEvent(const InSyncEvent&);
-        };
+    //         void OnEvent(const NextPassEvent&);
+    //         void OnEvent(const ReturnToStartEvent&);
+    //     };
+    // };
 
-        struct Moving : public BaseState
-        {
-            void OnEvent(const MoveDoneEvent&);
+    // class TurningPass : public BaseState
+    // {
+    // public:
 
-            struct Retracting : public BaseState
-            {
-                void OnEvent(const MoveDoneEvent&);
-            };
+    //     auto operator()() const noexcept
+    //     {
+    //         // clang-format off
+    //         return make_transition_table(
+    //             //*state<Turning<>::TurningPass> / action =
+    //             state<Turning<>::TurningPass::Unretracting>
+    //             *state<Turning<>::TurningPass::Unretracting> + event<MoveDoneEvent> / action =
+    //             state<Turning<>::TurningPass::WaitForSync>
+    //             ,state<Turning<>::TurningPass::WaitForSync> +
+    //             event<Turning<>::TurningPass::WaitForSync::InSyncEvent> / action =
+    //             state<Turning<>::TurningPass::Moving> ,state<Turning<>::TurningPass::Moving> +
+    //             event<MoveDoneEvent> / action = state<Turning<>::TurningPass::Retracting>
+    //             ,state<Turning<>::TurningPass::Retracting> + event<MoveDoneEvent> / action =
+    //             state<Turning<>::WaitForUser::Waiting>
 
-            void OnEvent(const StopEvent&);
-        };
+    //         );
+    //     }
 
-        // void OnEvent(const EStopEvent&); //this might be able to bubble up to the parent
-    };
+    //     struct Unretracting : public BaseState
+    //     {
+    //         void OnEvent(const MoveDoneEvent&);
+    //     };
 
-    struct ReturnToStart : public BaseState
-    {
-        struct Retracting : public BaseState
-        {
-            void OnEvent(const MoveDoneEvent&);
-        };
+    //     struct WaitForSync : public BaseState
+    //     {
+    //         struct InSyncEvent : public BaseEvent
+    //         {
+    //         };
+    //         void OnEvent(const InSyncEvent&);
+    //     };
 
-        struct MovingToStart : public BaseState
-        {
-            void OnEvent(const MoveDoneEvent&); // Transition back to WaitForUser::Waiting
-        };
+    //     struct Moving : public BaseState
+    //     {
+    //         void OnEvent(const MoveDoneEvent&);
 
-        void OnEvent(const MoveDoneEvent&);
-    };
+    //         void OnEvent(const StopEvent&);
+    //     };
+
+    //     struct Retracting : public BaseState
+    //     {
+    //         void OnEvent(const MoveDoneEvent&);
+    //     };
+
+    //     // void OnEvent(const EStopEvent&); //this might be able to bubble up to the parent
+    // };
+
+    // class ReturnToStart : public BaseState
+    // {
+    // public:
+    //     auto operator()() const noexcept
+    //     {
+    //         // clang-format off
+    //         return make_transition_table(
+    //             *state<Turning<>::ReturnToStart> / action =
+    //             state<Turning<>::ReturnToStart::Retracting>
+    //             ,state<Turning<>::ReturnToStart::Retracting> + event<MoveDoneEvent> / action =
+    //             state<Turning<>::ReturnToStart::MovingToStart>
+    //             ,state<Turning<>::ReturnToStart::MovingToStart> + event<MoveDoneEvent> / action =
+    //             state<Turning<>::WaitForUser::Waiting>
+
+    //         );
+    //     }
+    //     struct Retracting : public BaseState
+    //     {
+    //         void OnEvent(const MoveDoneEvent&);
+    //     };
+
+    //     struct MovingToStart : public BaseState
+    //     {
+    //         void OnEvent(const MoveDoneEvent&); // Transition back to WaitForUser::Waiting
+    //     };
+
+    //     void OnEvent(const MoveDoneEvent&);
+    // };
 
     void OnEvent(const ExitEvent&);
     void OnEvent(const EStopEvent&);
     void OnEvent(const SetSettingsEvent&);
 
+    auto operator()() const noexcept
+    {
+
+        return make_transition_table(
+            // root and inherited actions
+            //*state<Turning<>> / action = state<Turning<>::WaitForUser> //::Waiting>
+            *state<Turning<>> + event<EStopEvent> / action = state<EStop>
+            // ,state<Turning<>> + event<StopEvent> / action =
+            // state<Turning<>::WaitForUser::Waiting> ,state<Turning<>> + event<ExitEvent> / action
+            // = state<Idle> ,state<Turning<>> + event<Turning<>::SetSettingsEvent> / action =
+            // state<Turning<>::WaitForUser::Waiting>
+
+        );
+    }
+    // clang-format on
+public:
+    // sm<>* GetCurrentSM() { return &WaitForUserSM; }
+
 private:
+    // sm<WaitForUser> WaitForUserSM;
+    // sm<TurningPass> TurningPassSM;
+    // sm<ReturnToStart> ReturnToStartSM;
+
     bool myRequiresSync = false; // false for turning modes, true for threading modes
     bool myForwardPass = true;   // true for to take a pass towards the destination, false for
                                  // towards the start. for reversing the cut direction without

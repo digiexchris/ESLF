@@ -20,5 +20,6 @@ public:
     void operator()(BaseState& sm, const TEvent& event)
     {
         sm.OnEvent(event);
+        return;
     }
 };
